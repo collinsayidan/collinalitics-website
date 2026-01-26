@@ -1,0 +1,76 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="64"
+  height="64"
+  viewBox="0 0 64 64"
+>
+  <defs>
+    <!-- Soft navy background tint -->
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0A2540" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#0A2540" stop-opacity="0.02" />
+    </linearGradient>
+
+    <!-- Grid line color (very subtle) -->
+    <pattern
+      id="grid"
+      x="0"
+      y="0"
+      width="16"
+      height="16"
+      patternUnits="userSpaceOnUse"
+    >
+      <path
+        d="M 16 0 L 0 0 0 16"
+        fill="none"
+        stroke="#0A2540"
+        stroke-width="0.5"
+        stroke-opacity="0.18"
+      />
+    </pattern>
+
+    <!-- Accent dots using teal + lightTeal -->
+    <pattern
+      id="dots"
+      x="0"
+      y="0"
+      width="64"
+      height="64"
+      patternUnits="userSpaceOnUse"
+    >
+      <!-- Teal dot -->
+      <circle
+        cx="12"
+        cy="12"
+        r="1.2"
+        fill="#0FB5BA"
+        fill-opacity="0.55"
+      />
+      <!-- LightTeal dot -->
+      <circle
+        cx="40"
+        cy="32"
+        r="1.2"
+        fill="#6EDAD5"
+        fill-opacity="0.55"
+      />
+      <!-- Navy dot -->
+      <circle
+        cx="52"
+        cy="52"
+        r="1.1"
+        fill="#0A2540"
+        fill-opacity="0.45"
+      />
+    </pattern>
+  </defs>
+
+  <!-- Background wash -->
+  <rect width="64" height="64" fill="url(#bg)" />
+
+  <!-- Grid lines -->
+  <rect width="64" height="64" fill="url(#grid)" />
+
+  <!-- Accent dots overlay -->
+  <rect width="64" height="64" fill="url(#dots)" />
+</svg>

@@ -1,0 +1,51 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" rx="24" fill="#F7FAFC"/>
+  <!-- Header bar -->
+  <rect x="40" y="40" width="1520" height="64" rx="12" fill="#E6EFF8"/>
+  <rect x="64" y="56" width="180" height="32" rx="8" fill="#1A3E5F"/>
+  <rect x="268" y="56" width="140" height="32" rx="8" fill="#80DEEA" opacity="0.9"/>
+  <rect x="428" y="56" width="140" height="32" rx="8" fill="#0097A7" opacity="0.9"/>
+  <!-- KPI Cards -->
+  <rect x="40" y="128" width="360" height="140" rx="16" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <rect x="420" y="128" width="360" height="140" rx="16" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <rect x="800" y="128" width="360" height="140" rx="16" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <rect x="1180" y="128" width="360" height="140" rx="16" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <!-- KPI text -->
+  <rect x="64" y="148" width="180" height="16" rx="8" fill="#4A4A4A" opacity="0.35"/>
+  <rect x="64" y="176" width="120" height="28" rx="8" fill="#1A3E5F"/>
+  <rect x="444" y="148" width="200" height="16" rx="8" fill="#4A4A4A" opacity="0.35"/>
+  <rect x="444" y="176" width="120" height="28" rx="8" fill="#0097A7"/>
+  <rect x="824" y="148" width="180" height="16" rx="8" fill="#4A4A4A" opacity="0.35"/>
+  <rect x="824" y="176" width="120" height="28" rx="8" fill="#80DEEA"/>
+  <rect x="1204" y="148" width="200" height="16" rx="8" fill="#4A4A4A" opacity="0.35"/>
+  <rect x="1204" y="176" width="120" height="28" rx="8" fill="#1A3E5F"/>
+  <!-- Left chart card -->
+  <rect x="40" y="296" width="740" height="520" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <rect x="64" y="320" width="200" height="18" rx="9" fill="#4A4A4A" opacity="0.4"/>
+  <rect x="64" y="352" width="140" height="12" rx="6" fill="#4A4A4A" opacity="0.2"/>
+  <!-- Line chart -->
+  <polyline points="80,760 150,720 220,740 290,680 360,700 430,620 500,640 570,560 640,600 710,520"
+            fill="none" stroke="#0097A7" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="710" cy="520" r="6" fill="#0097A7"/>
+  <!-- Axis -->
+  <line x1="64" y1="760" x2="740" y2="760" stroke="#E2E8F0"/>
+  <line x1="64" y1="400" x2="64" y2="760" stroke="#E2E8F0"/>
+  <!-- Right column -->
+  <rect x="820" y="296" width="720" height="240" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <rect x="844" y="320" width="220" height="18" rx="9" fill="#4A4A4A" opacity="0.4"/>
+  <!-- Bar chart -->
+  <rect x="860" y="380" width="60" height="110" rx="8" fill="#1A3E5F" opacity="0.9"/>
+  <rect x="940" y="410" width="60" height="80" rx="8" fill="#0097A7" opacity="0.9"/>
+  <rect x="1020" y="430" width="60" height="60" rx="8" fill="#80DEEA" opacity="0.9"/>
+  <rect x="1100" y="360" width="60" height="130" rx="8" fill="#1A3E5F" opacity="0.9"/>
+  <rect x="1180" y="450" width="60" height="40" rx="8" fill="#0097A7" opacity="0.9"/>
+  <!-- Table -->
+  <rect x="820" y="560" width="720" height="256" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <rect x="844" y="584" width="120" height="14" rx="7" fill="#4A4A4A" opacity="0.35"/>
+  <rect x="844" y="616" width="620" height="14" rx="7" fill="#E6EFF8"/>
+  <rect x="844" y="646" width="620" height="14" rx="7" fill="#F0F7FB"/>
+  <rect x="844" y="676" width="620" height="14" rx="7" fill="#E6EFF8"/>
+  <rect x="844" y="706" width="620" height="14" rx="7" fill="#F0F7FB"/>
+</svg>
