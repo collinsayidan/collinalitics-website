@@ -2,10 +2,11 @@
 
 import BlogLayout from "@/components/insights/BlogLayout";
 import BlogHero from "@/components/insights/BlogHero";
-import ReadingProgress from "@/components/insights/ReadingProgress";
+import ReadingProgress from "@/components/insights/Readingprogress"; 
 import BlogCard from "@/components/insights/BlogCard";
-import { authors } from "@/data/authors";
-import { getReadingTime } from "@/utils/readingTime";
+import { authors } from "@/components/data/authors";
+import { getReadingTime } from "@/components/utils/readingTime";
+
 
 export default function BlogArticle({ params }) {
   const { slug } = params;
