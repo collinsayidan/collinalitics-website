@@ -1,4 +1,5 @@
-import nodemailer from "nodemailer";
+// app/api/contact/route.js
+export const dynamic = "force-dynamic"; // prevents static analysis
 
 export async function POST(req) {
   try {
@@ -6,6 +7,9 @@ export async function POST(req) {
     const name = formData.get("name");
     const email = formData.get("email");
     const message = formData.get("message");
+
+    // Import nodemailer ONLY at runtime on the server
+    const nodemailer = (await import("nodemailer")).default;
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
