@@ -8,6 +8,8 @@ import CookieConsentProvider from "../components/CookieConsentProvider";
 import CookieBanner from "../components/CookieBanner";
 import CookiePreferencesModal from "../components/CookiePreferencesModal";
 import AnalyticsLoader from "../components/AnalyticsLoader";
+import ScrollHomeButton from "../components/ScrollHomeButton";
+import AssistantTeaser from "../components/AssistantTeaser";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -60,25 +62,25 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" dir="ltr">
       <body className={`${roboto.className} ${robotoCondensed.variable} bg-white text-gray-900`}>
-        {/* Skip to content */}
         <a href="#main" className="skip-link">Skip to content</a>
 
-        {/* This is a SERVER component, but rendering CLIENT children is OK */}
         <CookieConsentProvider>
-          {/* Ensure SmoothScrollProvider is a client component */}
-          <SmoothScrollProvider>
-            <main id="main">{children}</main>
-            <AssistantButton />
-          </SmoothScrollProvider>
 
-          {/* These must be client components */}
+          {/* Cookie UI must be ABOVE all floating UI */}
           <CookieBanner />
           <CookiePreferencesModal />
 
-          {/* Optional GA loader (client) */}
+          <SmoothScrollProvider>
+            <main id="main">{children}</main>
+            <ScrollHomeButton />
+            <AssistantTeaser />
+            <AssistantButton />
+          </SmoothScrollProvider>
+
           <AnalyticsLoader />
         </CookieConsentProvider>
       </body>
     </html>
   );
 }
+

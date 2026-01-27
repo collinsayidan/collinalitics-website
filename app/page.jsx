@@ -10,6 +10,8 @@ import Footer from '../components/Footer.jsx';
 import ClientLogos from "../components/sections/ClientLogos";
 import StatsRow from "../components/sections/StatsRow";
 import BeforeAfter from "../components/sections/BeforeAfter";
+import CaseStudiesPreview from "../components/CaseStudiesPreview";
+
 
 export default function Page() {
   return (
@@ -21,7 +23,7 @@ export default function Page() {
         <Services />
         <HowWeWork />
         <UseCase />
-        {/*<ClientLogos /> */}
+        <CaseStudiesPreview />
         <BeforeAfter />
         <WhyUs />
         <StatsRow />

@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
@@ -35,7 +34,7 @@ export default function AssistantButton() {
     setOpen(false);
   }, [pathname]);
 
-  /* Detect voice recognition support (browser) */
+  /* Detect voice recognition support */
   useEffect(() => {
     if (typeof window !== "undefined") {
       const SpeechRecognition =
@@ -44,7 +43,7 @@ export default function AssistantButton() {
     }
   }, []);
 
-  /* Always scroll to latest message or typing indicator */
+  /* Scroll to latest message */
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typing, open]);
@@ -115,7 +114,6 @@ export default function AssistantButton() {
   };
 
   const handleInputKeyDown = (e) => {
-    // Enter to send; Shift+Enter ignored as it's a single-line input
     if (e.key === "Enter") {
       e.preventDefault();
       sendMessage();
@@ -136,7 +134,9 @@ export default function AssistantButton() {
       ...prev,
       {
         sender: "user",
-        text: `Uploaded file: **${file.name}** (${Math.round(file.size / 1024)} KB)`,
+        text: `Uploaded file: **${file.name}** (${Math.round(
+          file.size / 1024
+        )} KB)`,
       },
     ]);
     setTyping(true);
@@ -220,7 +220,7 @@ export default function AssistantButton() {
         "
         aria-label={open ? "Close assistant" : "Open assistant"}
       >
-        {/* Lightning icon */}
+        {/* Chat Bubble Icon */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -230,11 +230,7 @@ export default function AssistantButton() {
           className="h-7 w-7 text-white"
           aria-hidden="true"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M13 3L4 14h7l-1 7 9-11h-7l1-7z"
-          />
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z" />
         </svg>
       </button>
 
@@ -256,7 +252,7 @@ export default function AssistantButton() {
           <div className="p-3 sm:p-4 border-b border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-md bg-collin-teal flex items-center justify-center">
-                {/* Spark icon */}
+                {/* Chat Bubble Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -266,11 +262,7 @@ export default function AssistantButton() {
                   className="h-5 w-5 text-white"
                   aria-hidden="true"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 3v3m0 12v3m9-9h-3M6 12H3m14.95 5.95l-2.12-2.12M7.17 7.17 5.05 5.05m12.02 0-2.12 2.12M7.17 16.83l-2.12 2.12"
-                  />
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z" />
                 </svg>
               </div>
               <h3 className="text-collin-navy font-semibold text-sm">

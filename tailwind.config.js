@@ -19,7 +19,7 @@ export default {
         collin: {
           navy: '#0A2540',
           teal: '#0FB5BA',
-          'teal-light': '#6EDAD5',   // ✔ FIXED — kebab-case
+          'teal-light': '#6EDAD5',
           slate: '#4A4A4A',
           white: '#FFFFFF',
         },
@@ -30,6 +30,13 @@ export default {
           error: '#D64545',
           info: '#1AA7D1',
         }
+      },
+
+      /* ============================
+         Backgrounds (Gradient Fix)
+         ============================ */
+      backgroundImage: {
+        'collin-navy-gradient': 'linear-gradient(135deg, #0A2540 0%, #0D315A 100%)',
       },
 
       /* ============================
