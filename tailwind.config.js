@@ -5,6 +5,7 @@ export default {
     "./app/**/*.{js,jsx,ts,tsx}",
     "./components/**/*.{js,jsx,ts,tsx}"
   ],
+
   theme: {
     extend: {
       fontFamily: {
@@ -18,10 +19,11 @@ export default {
         collin: {
           navy: '#0A2540',
           teal: '#0FB5BA',
-          lightTeal: '#6EDAD5',
+          'teal-light': '#6EDAD5',   // ✔ FIXED — kebab-case
           slate: '#4A4A4A',
           white: '#FFFFFF',
         },
+
         semantic: {
           success: '#0FB5BA',
           warning: '#F5A623',
@@ -40,6 +42,7 @@ export default {
         h3: ['1.875rem', { lineHeight: '1.2', fontWeight: '600' }],
         h4: ['1.5rem', { lineHeight: '1.2', fontWeight: '600' }],
         h5: ['1.25rem', { lineHeight: '1.3', fontWeight: '600' }],
+
         bodyxl: ['1.25rem', { lineHeight: '1.6', fontWeight: '400' }],
         bodylg: ['1.125rem', { lineHeight: '1.6', fontWeight: '400' }],
         body: ['1rem', { lineHeight: '1.6', fontWeight: '400' }],

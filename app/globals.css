@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,13 +6,11 @@
    Root Variables (shared)
    ============================ */
 :root {
-  /* Sync with your sticky header height; used by CSS and JS provider */
   --header-offset: 96px;
 }
 
 /* ============================
    Smooth scrolling
-   (OPTION: keep for non-hash; JS handles hash links with offset)
    ============================ */
 html { scroll-behavior: smooth; }
 
@@ -21,9 +18,9 @@ html { scroll-behavior: smooth; }
    Layout Utilities
    ============================ */
 .container-wrapper { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
-.section { @apply py-12 sm:py-16 md:py-20; } /* slightly tighter base on mobile */
+.section { @apply py-12 sm:py-16 md:py-20; }
 
-/* Safe-area padding (iOS notch) */
+/* Safe-area padding */
 @layer utilities {
   .safe-px {
     padding-left: max(1rem, env(safe-area-inset-left));
@@ -51,9 +48,10 @@ html { scroll-behavior: smooth; }
 /* ============================
    Cards
    ============================ */
-.card { @apply bg-white/90 backdrop-blur border border-gray-200 rounded-xl shadow-sm transition hover:shadow-md; }
+.card { 
+  @apply bg-white/90 backdrop-blur border border-gray-200 rounded-xl shadow-sm transition hover:shadow-md; 
+}
 
-/* Responsive padding helper for cards */
 @layer utilities {
   .card-pad { @apply p-5 sm:p-6 md:p-8 lg:p-10; }
 }
@@ -66,6 +64,7 @@ html { scroll-behavior: smooth; }
          bg-collin-teal hover:bg-collin-navy text-white font-semibold
          px-5 py-3 shadow transition;
 }
+
 .cta-secondary {
   @apply inline-flex items-center justify-center gap-2 rounded-lg
          bg-white text-collin-teal border border-collin-teal/30 hover:border-collin-teal
@@ -73,14 +72,19 @@ html { scroll-behavior: smooth; }
 }
 
 @layer utilities {
-  /* full width on mobile, auto on larger screens */
   .cta-full { @apply w-full sm:w-auto; }
 }
 
 @layer components {
-  .ctaConsultation { @apply inline-block bg-collin-teal text-white font-semibold px-7 py-3 rounded-lg shadow-md transition; }
+  .ctaConsultation { 
+    @apply inline-block bg-collin-teal text-white font-semibold px-7 py-3 rounded-lg shadow-md transition; 
+  }
   .ctaConsultation:hover { @apply bg-collin-navy; }
-  .ctaConsultation:focus-visible { @apply outline-none ring-2 ring-collin-lightTeal ring-offset-2; }
+
+  /* FIXED: now uses kebab-case color */
+  .ctaConsultation:focus-visible { 
+    @apply outline-none ring-2 ring-collin-teal-light ring-offset-2; 
+  }
 }
 
 @layer components {
@@ -94,7 +98,7 @@ html { scroll-behavior: smooth; }
    HERO BACKGROUND (NAVY BASE)
    ============================ */
 .hero-bg {
-  background-color: #0A2540; /* Collinalitics Navy */
+  background-color: #0A2540;
   background-image: radial-gradient(circle at center, #0d315a 0%, #0A2540 70%);
   background-size: cover;
   background-position: center;
@@ -110,13 +114,13 @@ html { scroll-behavior: smooth; }
   50% { transform: translate(40px, -40px) scale(1.1); }
   100% { transform: translate(0px, 0px) scale(1); }
 }
+
 .animate-gradientMove { animation: gradientMove 12s ease-in-out infinite; will-change: transform; }
 
 @media (max-width: 640px) {
   .animate-gradientMove { animation-duration: 16s; }
 }
 
-/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .animate-gradientMove { animation: none !important; }
 }
@@ -127,9 +131,14 @@ html { scroll-behavior: smooth; }
 section { scroll-margin-top: var(--header-offset, 6rem); }
 
 /* ============================
-   Optional Premium Utilities
+   Premium Utilities
    ============================ */
-.text-gradient { @apply bg-clip-text text-transparent bg-gradient-to-r from-collin-teal to-collin-lightTeal; }
+
+/* FIXED: now uses kebab-case color */
+.text-gradient { 
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-collin-teal to-collin-teal-light; 
+}
+
 .divider { @apply w-full h-px bg-gray-200 my-8; }
 
 /* A11y helpers */
@@ -140,6 +149,7 @@ section { scroll-margin-top: var(--header-offset, 6rem); }
   overflow: hidden; clip: rect(0, 0, 0, 0);
   white-space: nowrap; border: 0;
 }
+
 .skip-link {
   position: fixed;
   top: 0.5rem; left: 0.5rem;
@@ -151,6 +161,7 @@ section { scroll-margin-top: var(--header-offset, 6rem); }
   transition: transform 150ms ease;
   box-shadow: 0 8px 24px rgba(2,12,27,0.12);
 }
+
 .skip-link:focus { transform: translateY(0); outline: none; }
 
 /* ============================
@@ -160,12 +171,14 @@ section { scroll-margin-top: var(--header-offset, 6rem); }
   from { transform: translateY(20px); opacity: 0; }
   to   { transform: translateY(0);   opacity: 1; }
 }
+
 .animate-slide-up { animation: slide-up 0.25s ease-out; will-change: transform, opacity; }
 
 @keyframes bounce {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(-4px); }
 }
+
 .animate-bounce { animation: bounce 0.6s infinite; will-change: transform; }
 
 .font-condensed { font-family: var(--font-roboto-condensed), sans-serif; }
@@ -175,38 +188,39 @@ section { scroll-margin-top: var(--header-offset, 6rem); }
    ============================ */
 @layer utilities {
   @keyframes hwwIn {
-    0%   { opacity: 0; transform: translateY(16px) scale(0.98) rotate(0deg); }
-    60%  { opacity: 1; transform: translateY(0px) scale(1.01) rotate(0deg); }
-    100% { opacity: 1; transform: translateY(0px) scale(1)    rotate(0deg); }
+    0%   { opacity: 0; transform: translateY(16px) scale(0.98); }
+    60%  { opacity: 1; transform: translateY(0px) scale(1.01); }
+    100% { opacity: 1; transform: translateY(0px) scale(1); }
   }
+
   .animate-hww-in {
     animation: hwwIn 600ms ease-out forwards;
     will-change: transform, opacity;
   }
-}
 
-@layer utilities {
-  /* Navy gradient utility (optional reuse) */
-  .bg-collin-navy-gradient { @apply bg-gradient-to-b from-collin-navy to-[#122a40]; }
-
-  /* Squeeze-in (fade + translate + slight overshoot) */
   @keyframes hwwSqueezeIn {
-    0%   { opacity: 0; transform: translateY(16px) scale(0.975) rotate(0deg); }
-    55%  { opacity: 1; transform: translateY(0px)  scale(1.03)  rotate(0deg); }
-    100% { opacity: 1; transform: translateY(0px)  scale(1)     rotate(0deg); }
+    0%   { opacity: 0; transform: translateY(16px) scale(0.975); }
+    55%  { opacity: 1; transform: translateY(0px) scale(1.03); }
+    100% { opacity: 1; transform: translateY(0px) scale(1); }
   }
+
   .animate-hww-squeeze-in {
     animation: hwwSqueezeIn 600ms cubic-bezier(0.2, 0.65, 0.25, 1) forwards;
     will-change: transform, opacity;
   }
 
-  /* Fade-in utility */
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .animate-fade-in { animation: fadeIn 800ms ease-out forwards; will-change: opacity; }
 
-  /* Respect reduced motion */
+  .animate-fade-in {
+    animation: fadeIn 800ms ease-out forwards;
+    will-change: opacity;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .animate-hww-squeeze-in, .animate-hww-in, .animate-slide-up, .animate-bounce {
+    .animate-hww-squeeze-in,
+    .animate-hww-in,
+    .animate-slide-up,
+    .animate-bounce {
       animation: none !important;
       opacity: 1 !important;
       transform: none !important;
@@ -215,7 +229,7 @@ section { scroll-margin-top: var(--header-offset, 6rem); }
 }
 
 /* ============================
-   Print Styles (optional)
+   Print Styles
    ============================ */
 @media print {
   .hero-bg, .bg-collin-navy-gradient { background: #fff !important; }
