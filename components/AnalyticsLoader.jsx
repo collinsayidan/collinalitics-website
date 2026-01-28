@@ -1,7 +1,7 @@
 
 "use client";
 import { useEffect, useRef } from "react";
-import { useCookieConsent } from "./CookieConsentProvider";
+import { useCookieConsent } from "./cookies/CookieConsentProvider";
 
 /**
  * Loads Google Analytics (gtag.js) only after the user has consented to analytics.

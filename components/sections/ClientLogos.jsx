@@ -1,3 +1,6 @@
+import React from "react";
+import Image from "next/image";
+
 export default function ClientLogos() {
   const logos = [
     {
@@ -19,46 +22,70 @@ export default function ClientLogos() {
   ];
 
   return (
-    <section className="relative py-24 bg-white overflow-hidden">
-
+    <section
+      className="section section-pad relative overflow-hidden bg-white"
+      aria-label="Client logos"
+    >
       {/* Background pattern */}
-      <div className="absolute inset-0 opacity-[0.04] bg-[url('/patterns/grid.svg')] pointer-events-none" />
+      <div
+        className="absolute inset-0 opacity-[0.04] bg-[url('/patterns/grid.svg')] pointer-events-none"
+        aria-hidden="true"
+      />
+
+      {/* Ambient accents */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 right-[-6rem] h-64 w-64 rounded-full bg-collin-teal-light/16 blur-3xl" />
+        <div className="absolute -bottom-28 left-[-6rem] h-64 w-64 rounded-full bg-collin-teal/10 blur-3xl" />
+      </div>
 
       <div className="container-wrapper relative z-10">
-
-        {/* Top Divider */}
-        <div className="mx-auto h-px w-32 bg-collin-lightTeal/40 mb-12" />
+        {/* Top divider */}
+        <div
+          className="mx-auto h-px w-40 bg-gradient-to-r from-transparent via-collin-teal-light/50 to-transparent mb-12"
+          aria-hidden="true"
+        />
 
         {/* Headline */}
-        <div className="text-center mb-14">
-          <h3 className="text-collin-navy text-xl font-semibold tracking-wide">
-            Trusted by UK Organisations
-          </h3>
-          <p className="text-collin-slate text-sm mt-2">
-            From public‑sector teams to private‑sector operations
+        <header className="text-center mb-12 sm:mb-14">
+          <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">
+            Trusted partners
           </p>
-        </div>
+          <h3 className="mt-3 text-h3 text-collin-navy">
+            Trusted by UK organisations
+          </h3>
+          <p className="mt-3 text-body text-collin-slate">
+            From public-sector teams to private-sector operations — clarity and outcomes first.
+          </p>
+        </header>
 
         {/* Logos */}
-        <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-12 items-center">
+        <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 items-center">
           {logos.map((logo) => (
             <div
               key={logo.name}
-              className="flex justify-center p-5 rounded-xl bg-white border border-gray-200 shadow-sm hover:shadow-lg hover:border-collin-teal/40 transition-all duration-300"
-              data-aos="fade-up"
+              className={[
+                "card bg-white/95",
+                "p-5 sm:p-6",
+                "flex items-center justify-center",
+                "hover:border-collin-teal/30",
+              ].join(" ")}
             >
-              <img
+              <Image
                 src={logo.src}
                 alt={logo.name}
-                className="h-12 w-auto grayscale opacity-70 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+                width={160}
+                height={60}
+                className="h-10 sm:h-11 md:h-12 w-auto grayscale opacity-70 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
               />
             </div>
           ))}
         </div>
 
-        {/* Bottom Divider */}
-        <div className="mx-auto h-px w-32 bg-collin-lightTeal/40 mt-16" />
-
+        {/* Bottom divider */}
+        <div
+          className="mx-auto h-px w-40 bg-gradient-to-r from-transparent via-collin-teal-light/50 to-transparent mt-14 sm:mt-16"
+          aria-hidden="true"
+        />
       </div>
     </section>
   );

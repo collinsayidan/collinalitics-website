@@ -1,180 +1,355 @@
 "use client";
-import React from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 
 export default function Hero() {
+  const sectionRef = useRef(null);
+  const cardRef = useRef(null);
+  const rafBgRef = useRef(null);
+  const rafTiltRef = useRef(null);
 
-  const openCalendly = () => {
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const [finePointer, setFinePointer] = useState(false);
+
+  // Motion preferences + pointer type
+  useEffect(() => {
     if (typeof window === "undefined") return;
 
-    if (!window.Calendly && !document.getElementById("calendly-script")) {
+    const mqReduce = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    const mqPointer = window.matchMedia?.("(pointer: fine)");
+
+    const update = () => {
+      setReduceMotion(!!mqReduce?.matches);
+      setFinePointer(!!mqPointer?.matches);
+    };
+
+    update();
+    mqReduce?.addEventListener?.("change", update);
+    mqPointer?.addEventListener?.("change", update);
+
+    return () => {
+      mqReduce?.removeEventListener?.("change", update);
+      mqPointer?.removeEventListener?.("change", update);
+    };
+  }, []);
+
+  const calendlyUrl = useMemo(() => "https://calendly.com/collinsayidan-collinalitics/30min", []);
+
+  const ensureCalendly = useCallback(async () => {
+    if (typeof window === "undefined") return;
+
+    const openWidget = () => {
+      window.Calendly?.initPopupWidget({ url: calendlyUrl });
+    };
+
+    if (window.Calendly) {
+      openWidget();
+      return;
+    }
+
+    // Load Calendly assets once (shared with Navbar)
+    if (!document.getElementById("calendly-widget-script")) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://assets.calendly.com/assets/external/widget.css";
+      link.id = "calendly-widget-css";
+      document.head.appendChild(link);
+
       const script = document.createElement("script");
-      script.id = "calendly-script";
+      script.id = "calendly-widget-script";
       script.src = "https://assets.calendly.com/assets/external/widget.js";
       script.async = true;
-      script.onload = () => {
-        window.Calendly?.initPopupWidget({
-          url: "https://calendly.com/YOUR-LINK",
-        });
-      };
+      script.onload = openWidget;
       document.body.appendChild(script);
-    } else {
-      window.Calendly?.initPopupWidget({
-        url: "https://calendly.com/YOUR-LINK",
-      });
+      return;
     }
-  };
 
-  // 3D Tilt Effect
-  const handleTilt = (e) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    // Script exists but may not be ready yet
+    setTimeout(openWidget, 250);
+  }, [calendlyUrl]);
 
-    const rotateX = ((y - rect.height / 2) / rect.height) * 10;
-    const rotateY = ((x - rect.width / 2) / rect.width) * -10;
+  // Background parallax (desktop + fine pointer only)
+  const onPointerMoveBg = useCallback(
+    (e) => {
+      if (reduceMotion || !finePointer) return;
+      const section = sectionRef.current;
+      if (!section) return;
 
-    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  };
+      if (rafBgRef.current) cancelAnimationFrame(rafBgRef.current);
 
-  const resetTilt = (e) => {
-    e.currentTarget.style.transform = "rotateX(0deg) rotateY(0deg)";
-  };
+      rafBgRef.current = requestAnimationFrame(() => {
+        const x = (e.clientX / window.innerWidth) * 100;
+        const y = (e.clientY / window.innerHeight) * 100;
+        section.style.setProperty("--bg-x", `${x}%`);
+        section.style.setProperty("--bg-y", `${y}%`);
+      });
+    },
+    [reduceMotion, finePointer]
+  );
+
+  const onPointerLeaveBg = useCallback(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    section.style.setProperty("--bg-x", `50%`);
+    section.style.setProperty("--bg-y", `50%`);
+  }, []);
+
+  // 3D tilt (desktop + fine pointer only)
+  const onPointerMoveTilt = useCallback(
+    (e) => {
+      if (reduceMotion || !finePointer) return;
+      if (typeof window !== "undefined" && window.innerWidth < 1024) return;
+
+      const card = cardRef.current;
+      if (!card) return;
+
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const rx = ((y - rect.height / 2) / rect.height) * 8;
+      const ry = ((x - rect.width / 2) / rect.width) * -8;
+
+      if (rafTiltRef.current) cancelAnimationFrame(rafTiltRef.current);
+
+      rafTiltRef.current = requestAnimationFrame(() => {
+        card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      });
+    },
+    [reduceMotion, finePointer]
+  );
+
+  const resetTilt = useCallback(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg)";
+  }, []);
+
+  // Cleanup RAFs
+  useEffect(() => {
+    return () => {
+      if (rafBgRef.current) cancelAnimationFrame(rafBgRef.current);
+      if (rafTiltRef.current) cancelAnimationFrame(rafTiltRef.current);
+    };
+  }, []);
 
   return (
     <section
       id="top"
+      ref={sectionRef}
       role="banner"
-      className="hero-bg text-white h-screen flex items-center relative overflow-hidden"
-      onMouseMove={(e) => {
-        const x = (e.clientX / window.innerWidth) * 10;
-        const y = (e.clientY / window.innerHeight) * 10;
-        e.currentTarget.style.backgroundPosition = `${x}% ${y}%`;
-      }}
+      aria-labelledby="hero-title"
+      onPointerMove={onPointerMoveBg}
+      onPointerLeave={onPointerLeaveBg}
+      className="hero-bg relative overflow-hidden text-white min-h-[92vh] flex items-center"
+      style={{ backgroundPosition: "var(--bg-x, 50%) var(--bg-y, 50%)" }}
     >
+      {/* Ambient gradient blobs */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 right-[-6rem] h-80 w-80 rounded-full bg-collin-lightTeal/20 blur-3xl" />
+        <div className="absolute -bottom-28 left-[-6rem] h-96 w-96 rounded-full bg-collin-teal/10 blur-3xl" />
+      </div>
 
-      {/* ⭐ Animated Gradient Layer */}
+      {/* Premium overlay */}
       <div
-        className="
-          absolute inset-0 
-          bg-[radial-gradient(circle_at_20%_20%,rgba(0,255,200,0.15),transparent_60%), 
-             radial-gradient(circle_at_80%_80%,rgba(0,150,255,0.15),transparent_60%)]
-          animate-gradientMove
-          pointer-events-none
-        "
+        className="absolute inset-0 bg-gradient-to-br from-black/85 via-black/45 to-collin-navy/25 pointer-events-none"
+        aria-hidden="true"
       />
 
-      {/* Premium Gradient Overlay */}
+      {/* Subtle radial highlight */}
       <div
-        className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/40 to-collin-navy/20 pointer-events-none"
+        className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_20%_20%,rgba(0,255,200,0.18),transparent_55%),radial-gradient(circle_at_80%_70%,rgba(0,150,255,0.14),transparent_60%)]"
         aria-hidden="true"
       />
 
       <div className="container-wrapper relative z-10">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
+        <div className="grid gap-14 lg:grid-cols-12 lg:gap-12 items-center">
+          {/* Left */}
+          <div className="lg:col-span-7">
+            {/* Eyebrow */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 backdrop-blur-md">
+              <span className="h-2 w-2 rounded-full bg-collin-lightTeal" aria-hidden="true" />
+              <p className="text-xs font-semibold tracking-widest text-gray-100 uppercase">
+                Analytics Engineering • BI • Systems
+              </p>
+            </div>
 
-          {/* Left Column */}
-          <div data-aos="fade-up" data-aos-duration="800">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-              Turning Complex Data Into
-              <br />
-              <span className="text-collin-lightTeal block mt-1">
-                Clear, Confident Business Decisions
-              </span>
+            <h1
+              id="hero-title"
+              className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.05]"
+            >
+              Turn complex data into{" "}
+              <span className="text-collin-lightTeal">clear decisions</span>
+              <span className="block mt-2 text-gray-100">your team can act on.</span>
             </h1>
 
-            <p className="mt-7 text-lg sm:text-xl text-gray-100 max-w-xl leading-relaxed">
-              Analytics engineering, business intelligence, and digital solutions
-              for UK organisations that need clarity, operational efficiency,
-              and insight leaders can act on — without unnecessary complexity.
+            <p className="mt-6 text-lg sm:text-xl text-gray-100/90 max-w-2xl leading-relaxed">
+              We help UK organisations replace manual reporting with reliable metrics,
+              decision-ready dashboards, and scalable data foundations — built for long-term clarity.
             </p>
 
-            <div className="mt-10 flex flex-wrap gap-4">
+            {/* Micro-proof */}
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-100/80">
+              <span className="inline-flex items-center gap-2">
+                <CheckMini />
+                Faster reporting cycles
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <CheckMini />
+                Trusted single source of truth
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <CheckMini />
+                Less manual effort
+              </span>
+            </div>
+
+            {/* CTAs */}
+            <div className="mt-10 flex flex-col sm:flex-row gap-3">
               <button
-                onClick={openCalendly}
-                aria-label="Book a free strategy call"
-                className="cta-primary inline-flex items-center gap-2 shadow-lg shadow-black/20 hover:shadow-xl transition-all"
+                type="button"
+                onClick={ensureCalendly}
+                aria-label="Book a free strategy call (Calendly popup)"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-collin-teal px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-black/20 hover:opacity-95 transition"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.8"
-                  stroke="currentColor"
-                  className="h-4 w-4"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M8 7V3m8 4V3m-9 8h10m-12 8h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2zm9-6l-2 2-1-1"
-                  />
-                </svg>
+                <CalendarIcon />
                 Free Strategy Call
+                <ArrowIcon />
               </button>
 
               <a
-                href="/services"
-                className="cta-secondary inline-flex items-center gap-2 hover:bg-white/10 transition-all"
-                aria-label="View Services"
+                href="#services"
+                className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
+                aria-label="View services section"
               >
                 View Services
               </a>
+
+              <a
+                href="#use-case"
+                className="text-sm font-semibold text-gray-100/90 hover:text-white transition self-center sm:self-auto sm:ml-2"
+                aria-label="See demo section"
+              >
+                See demo <span aria-hidden="true">→</span>
+              </a>
+            </div>
+
+            {/* Trust strip */}
+            <div className="mt-10 flex flex-wrap items-center gap-3 text-xs text-white/75">
+              <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 backdrop-blur-md">
+                UK-based delivery
+              </span>
+              <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 backdrop-blur-md">
+                KPI frameworks & governance
+              </span>
+              <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 backdrop-blur-md">
+                Automation-first approach
+              </span>
             </div>
           </div>
 
-          {/* Right Column — Glassmorphism + 3D Tilt */}
-          <div data-aos="fade-left" data-aos-delay="150" data-aos-duration="800">
+          {/* Right */}
+          <div className="lg:col-span-5">
             <div
-              onMouseMove={handleTilt}
-              onMouseLeave={resetTilt}
-              className="
-                card p-8 
-                bg-white/10 
-                backdrop-blur-xl 
-                text-gray-900 
-                rounded-2xl 
-                shadow-2xl 
-                border border-white/20 
-                ring-1 ring-white/10
-                transition-transform duration-200 ease-out
-                hover:shadow-[0_0_40px_rgba(0,0,0,0.4)]
-                will-change-transform
-              "
+              ref={cardRef}
+              onPointerMove={onPointerMoveTilt}
+              onPointerLeave={resetTilt}
+              className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl shadow-2xl ring-1 ring-white/10 p-7 sm:p-8 transition-transform duration-200 ease-out will-change-transform"
             >
-              <h2 className="text-xl font-semibold text-collin-navy">
-                What We Deliver
-              </h2>
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold tracking-widest text-gray-100/80 uppercase">
+                    What we deliver
+                  </p>
+                  <h2 className="mt-2 text-xl font-semibold text-white">
+                    Outcomes your stakeholders feel
+                  </h2>
+                </div>
 
-              <ul className="mt-6 space-y-4 text-sm text-gray-800 leading-relaxed">
-                <li className="flex items-start gap-2">
-                  <span className="text-collin-teal text-lg">•</span>
+                <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-gray-100 border border-white/15">
+                  UK-based
+                </span>
+              </div>
+
+              <ul className="mt-6 space-y-4 text-sm text-gray-100/90 leading-relaxed">
+                <li className="flex items-start gap-3">
+                  <BulletCheck />
                   Decision-ready dashboards trusted by leadership teams
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-collin-teal text-lg">•</span>
+                <li className="flex items-start gap-3">
+                  <BulletCheck />
                   KPI frameworks aligned to real business objectives
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-collin-teal text-lg">•</span>
+                <li className="flex items-start gap-3">
+                  <BulletCheck />
                   Systems and process analysis to improve efficiency
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-collin-teal text-lg">•</span>
+                <li className="flex items-start gap-3">
+                  <BulletCheck />
                   Scalable reporting automation and digital tools
                 </li>
               </ul>
 
-              <div className="mt-7 pt-4 border-t border-white/20">
-                <p className="text-xs text-gray-700 leading-relaxed">
+              <div className="mt-7 pt-5 border-t border-white/15 flex items-center justify-between gap-4">
+                <p className="text-xs text-gray-100/75 leading-relaxed">
                   Supporting SMEs, charities, and public-sector teams across the UK.
                 </p>
+                <a href="#about" className="text-xs font-semibold text-white hover:opacity-90 transition">
+                  Why Collinalitics →
+                </a>
               </div>
             </div>
-          </div>
 
+            {/* Small helper note (optional) */}
+            <p className="mt-4 text-xs text-white/70">
+              Prefer email?{" "}
+              <a href="#contact" className="underline underline-offset-4 hover:opacity-90">
+                Send a message
+              </a>
+              .
+            </p>
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+/* Icons */
+function CalendarIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor" className="h-4 w-4">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10m-12 8h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 14l2 2 4-4" />
+    </svg>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+      <path
+        fillRule="evenodd"
+        d="M3 10a.75.75 0 0 1 .75-.75h10.69l-3.22-3.22a.75.75 0 1 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.22-3.22H3.75A.75.75 0 0 1 3 10Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+function CheckMini() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="h-4 w-4 text-collin-lightTeal">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+  );
+}
+
+function BulletCheck() {
+  return (
+    <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-lg bg-white/10 text-collin-lightTeal border border-white/15">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="h-4 w-4">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    </span>
   );
 }
