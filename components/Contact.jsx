@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useMemo, useCallback, useState } from "react";
 
-const CALENDLY_URL = "https://calendly.com/YOUR-LINK"; // TODO: replace
+const CALENDLY_URL = "https://calendly.com/collinsayidan-collinalitics/30min";
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -14,16 +14,19 @@ export default function Contact() {
 
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
-  const [errors, setErrors] = useState({ name: "", email: "", message: "", form: "" });
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    message: "",
+    form: "",
+  });
 
   const openCalendly = useCallback(() => {
     if (typeof window === "undefined") return;
 
-    const openWidget = () => {
-      window.Calendly?.initPopupWidget({ url: CALENDLY_URL });
-    };
+    const openWidget = () => window.Calendly?.initPopupWidget({ url: CALENDLY_URL });
 
-    // Load Calendly CSS if missing
+    // Load Calendly CSS once
     if (!document.getElementById("calendly-widget-css")) {
       const link = document.createElement("link");
       link.id = "calendly-widget-css";
@@ -32,18 +35,17 @@ export default function Contact() {
       document.head.appendChild(link);
     }
 
-    if (window.Calendly) {
-      openWidget();
-      return;
-    }
+    // If Calendly already available, open immediately
+    if (window.Calendly) return openWidget();
 
-    // Load Calendly script if missing
+    // Load Calendly script once
     if (!document.getElementById("calendly-widget-script")) {
       const script = document.createElement("script");
       script.id = "calendly-widget-script";
       script.src = "https://assets.calendly.com/assets/external/widget.js";
       script.async = true;
       script.onload = openWidget;
+      script.onerror = () => window.open(CALENDLY_URL, "_blank", "noopener,noreferrer");
       document.body.appendChild(script);
     } else {
       // Script exists but Calendly not ready yet
@@ -54,7 +56,6 @@ export default function Contact() {
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
-    // Clear per-field error as user edits
     setErrors((prev) => ({ ...prev, [name]: "" }));
     setStatus({ type: "", message: "" });
   }, []);
@@ -87,14 +88,12 @@ export default function Contact() {
       const nextErrors = validate(form);
       setErrors(nextErrors);
 
-      const any =
-        nextErrors.name || nextErrors.email || nextErrors.message || nextErrors.form;
-
+      const any = nextErrors.name || nextErrors.email || nextErrors.message || nextErrors.form;
       if (any) return;
 
       setSubmitting(true);
       try {
-        // Wire this to /api/contact when ready.
+        // TODO: wire to /api/contact
         await new Promise((r) => setTimeout(r, 700));
 
         setStatus({
@@ -103,7 +102,7 @@ export default function Contact() {
         });
         setForm({ name: "", email: "", message: "", company: "" });
         setErrors({ name: "", email: "", message: "", form: "" });
-      } catch (err) {
+      } catch {
         setStatus({
           type: "error",
           message:
@@ -116,47 +115,60 @@ export default function Contact() {
     [form, validate]
   );
 
+  // ✅ Navy/Blue glass inputs with visible typing
   const inputClass = (hasError) =>
     [
-      "w-full rounded-xl border bg-white px-4 py-3 text-sm text-gray-900",
-      "placeholder:text-gray-400",
+      "w-full rounded-2xl border px-4 py-3 text-sm",
+      "bg-white/10 backdrop-blur-md",
+      "text-white caret-white",
+      "placeholder:text-white/45",
       "transition focus:outline-none focus:ring-2",
       hasError
-        ? "border-red-300 focus:ring-red-200 focus:border-red-400"
-        : "border-gray-200 focus:ring-collin-teal/25 focus:border-collin-teal",
+        ? "border-red-300/60 focus:ring-red-300/30 focus:border-red-300/70"
+        : "border-white/15 focus:ring-collin-teal/25 focus:border-collin-teal/50",
     ].join(" ");
 
   return (
     <section
       id="contact"
-      className="relative overflow-hidden bg-gradient-to-b from-white to-gray-50 py-24 sm:py-32"
+      className="relative overflow-hidden py-24 sm:py-32 text-white"
       aria-labelledby="contact-heading"
     >
-      {/* Background grid + accents */}
+      {/* ✅ Same “footer-style” navy/blue background */}
+      <div aria-hidden="true" className="absolute inset-0 hero-bg" />
+
+      {/* Subtle grid + noise (optional, matches footer vibe) */}
       <div
-        className="absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)] [background-size:72px_72px] pointer-events-none"
         aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[0.12]
+        [background-image:linear-gradient(to_right,rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.10)_1px,transparent_1px)]
+        [background-size:72px_72px]"
       />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[url('/patterns/noise.png')] bg-repeat mix-blend-overlay opacity-[0.035]"
+      />
+
+      {/* Glow accents */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-24 right-[-6rem] h-72 w-72 rounded-full bg-collin-teal-light/20 blur-3xl" />
-        <div className="absolute -bottom-28 left-[-6rem] h-72 w-72 rounded-full bg-collin-teal/10 blur-3xl" />
+        <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-collin-teal/18 blur-[120px]" />
+        <div className="absolute -bottom-28 -right-28 h-72 w-72 rounded-full bg-collin-teal-light/14 blur-[120px]" />
+        <div className="absolute top-20 right-10 h-56 w-56 rounded-full bg-blue-400/10 blur-[110px]" />
       </div>
 
       <div className="container-wrapper relative z-10">
         {/* Header */}
         <header className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/70 px-4 py-2 backdrop-blur">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 backdrop-blur">
             <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" />
-            <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">
-              Contact
-            </p>
+            <p className="text-xs font-semibold tracking-widest text-white/80 uppercase">Contact</p>
           </div>
 
-          <h2 id="contact-heading" className="mt-6 text-h2 text-collin-navy">
+          <h2 id="contact-heading" className="mt-6 text-h2 text-white">
             Ready to improve how you use data?
           </h2>
 
-          <p className="mt-4 text-bodylg text-collin-slate leading-relaxed">
+          <p className="mt-4 text-bodylg text-white/80 leading-relaxed">
             Book a call or send a message — we’ll respond promptly with practical next steps.
           </p>
         </header>
@@ -164,7 +176,6 @@ export default function Contact() {
         <div className="mt-14 grid gap-10 lg:grid-cols-12 lg:gap-12 items-start">
           {/* Left: Contact actions + expectations */}
           <aside className="lg:col-span-5 space-y-6">
-            {/* Action cards */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
               <ActionCard
                 title="Email us"
@@ -190,31 +201,25 @@ export default function Contact() {
               />
             </div>
 
-            {/* What happens next */}
-            <div className="rounded-3xl border border-gray-200 bg-white/80 p-6 backdrop-blur">
-              <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
+            <div className="rounded-3xl border border-white/12 bg-white/6 p-6 backdrop-blur">
+              <p className="text-xs font-semibold tracking-widest text-white/70 uppercase">
                 What happens next
               </p>
+
               <div className="mt-4 space-y-3">
                 <MiniLine text="We respond within 1 business day (usually sooner)." />
                 <MiniLine text="We’ll clarify your goals, constraints, and current reporting." />
                 <MiniLine text="You’ll get practical next steps (no jargon, no pressure)." />
               </div>
 
-              <dl className="mt-6 grid gap-4 rounded-2xl border border-gray-200 bg-white p-5">
+              <dl className="mt-6 grid gap-4 rounded-2xl border border-white/12 bg-white/6 p-5">
                 <div>
-                  <dt className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
-                    Location
-                  </dt>
-                  <dd className="mt-1 text-sm font-medium text-collin-navy">
-                    Edinburgh, United Kingdom
-                  </dd>
+                  <dt className="text-xs font-semibold tracking-widest text-white/65 uppercase">Location</dt>
+                  <dd className="mt-1 text-sm font-semibold text-white">Edinburgh, United Kingdom</dd>
                 </div>
                 <div>
-                  <dt className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
-                    Typical work
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-700">
+                  <dt className="text-xs font-semibold tracking-widest text-white/65 uppercase">Typical work</dt>
+                  <dd className="mt-1 text-sm text-white/80">
                     Dashboards • KPI design • Automation • Analytics engineering
                   </dd>
                 </div>
@@ -224,17 +229,17 @@ export default function Contact() {
 
           {/* Right: Form */}
           <div className="lg:col-span-7">
-            <div className="rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-xl">
+            <div className="rounded-3xl border border-white/12 bg-white/6 p-7 sm:p-9 shadow-[0_18px_70px_rgba(0,0,0,0.35)] backdrop-blur">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">
+                  <p className="text-xs font-semibold tracking-widest text-white/70 uppercase">
                     Send a message
                   </p>
-                  <p className="mt-2 text-sm text-gray-600">
+                  <p className="mt-2 text-sm text-white/75">
                     Tell us what you’re trying to improve — we’ll tailor the response.
                   </p>
                 </div>
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-collin-teal/10 text-collin-teal">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-white">
                   <MailIcon className="h-6 w-6" />
                 </span>
               </div>
@@ -245,10 +250,10 @@ export default function Contact() {
                   role="status"
                   aria-live="polite"
                   className={[
-                    "mt-6 rounded-2xl border px-4 py-3 text-sm",
+                    "mt-6 rounded-2xl border px-4 py-3 text-sm backdrop-blur",
                     errors.form || status.type === "error"
-                      ? "border-red-200 bg-red-50 text-red-800"
-                      : "border-green-200 bg-green-50 text-green-800",
+                      ? "border-red-300/40 bg-red-500/10 text-red-100"
+                      : "border-emerald-300/35 bg-emerald-500/10 text-emerald-50",
                   ].join(" ")}
                 >
                   {errors.form || status.message}
@@ -270,7 +275,7 @@ export default function Contact() {
 
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-collin-navy mb-2">
+                    <label htmlFor="name" className="block text-sm font-semibold text-white mb-2">
                       Your name
                     </label>
                     <input
@@ -287,14 +292,14 @@ export default function Contact() {
                       placeholder="Collins Ayidan"
                     />
                     {errors.name && (
-                      <p id="name-error" className="mt-2 text-xs text-red-700">
+                      <p id="name-error" className="mt-2 text-xs text-red-100/90">
                         {errors.name}
                       </p>
                     )}
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-collin-navy mb-2">
+                    <label htmlFor="email" className="block text-sm font-semibold text-white mb-2">
                       Email address
                     </label>
                     <input
@@ -312,11 +317,11 @@ export default function Contact() {
                       placeholder="you@company.com"
                     />
                     {errors.email ? (
-                      <p id="email-error" className="mt-2 text-xs text-red-700">
+                      <p id="email-error" className="mt-2 text-xs text-red-100/90">
                         {errors.email}
                       </p>
                     ) : (
-                      <p id="email-help" className="mt-2 text-xs text-gray-500">
+                      <p id="email-help" className="mt-2 text-xs text-white/55">
                         We’ll only use this to reply.
                       </p>
                     )}
@@ -324,7 +329,7 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-collin-navy mb-2">
+                  <label htmlFor="message" className="block text-sm font-semibold text-white mb-2">
                     Message
                   </label>
                   <textarea
@@ -336,18 +341,15 @@ export default function Contact() {
                     required
                     aria-invalid={Boolean(errors.message)}
                     aria-describedby={errors.message ? "message-error" : "message-help"}
-                    className={[
-                      inputClass(Boolean(errors.message)),
-                      "min-h-[160px] resize-y",
-                    ].join(" ")}
+                    className={[inputClass(Boolean(errors.message)), "min-h-[160px] resize-y"].join(" ")}
                     placeholder="Tell us what you’re trying to improve (reporting, KPIs, automation, dashboards…)."
                   />
                   {errors.message ? (
-                    <p id="message-error" className="mt-2 text-xs text-red-700">
+                    <p id="message-error" className="mt-2 text-xs text-red-100/90">
                       {errors.message}
                     </p>
                   ) : (
-                    <p id="message-help" className="mt-2 text-xs text-gray-500">
+                    <p id="message-help" className="mt-2 text-xs text-white/55">
                       Include goals + timelines if you can — we’ll tailor the response.
                     </p>
                   )}
@@ -359,7 +361,7 @@ export default function Contact() {
                     disabled={submitting}
                     className={[
                       "inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold",
-                      "bg-collin-teal text-white shadow-lg shadow-collin-teal/20 transition hover:opacity-95",
+                      "bg-collin-teal text-white shadow-lg shadow-collin-teal/25 transition hover:opacity-95",
                       "disabled:opacity-60 disabled:cursor-not-allowed",
                     ].join(" ")}
                   >
@@ -376,7 +378,7 @@ export default function Contact() {
                   <button
                     type="button"
                     onClick={openCalendly}
-                    className="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-collin-navy transition hover:bg-gray-50"
+                    className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
                     aria-label="Book a free discovery call on Calendly"
                   >
                     <CalendarIcon className="h-4 w-4 mr-2" />
@@ -384,13 +386,12 @@ export default function Contact() {
                   </button>
                 </div>
 
-                <p className="text-xs text-gray-500 leading-relaxed">
+                <p className="text-xs text-white/55 leading-relaxed">
                   By sending this message, you agree we can contact you about your enquiry. No spam.
                 </p>
 
-                {/* Optional subtle note if there are any validation errors */}
                 {hasErrors && (
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-white/55">
                     Please fix the highlighted fields and try again.
                   </p>
                 )}
@@ -415,18 +416,19 @@ function ActionCard({ title, desc, href, onClick, icon, cta, newTab }) {
     <Comp
       {...props}
       className={[
-        "group w-full text-left rounded-3xl border border-gray-200 bg-white/80 p-6 backdrop-blur",
-        "transition hover:shadow-md hover:-translate-y-0.5",
+        "group w-full text-left rounded-3xl border border-white/12 bg-white/6 p-6 backdrop-blur",
+        "transition hover:shadow-[0_18px_60px_rgba(0,0,0,0.28)] hover:-translate-y-0.5",
         "focus:outline-none focus:ring-2 focus:ring-collin-teal/25",
       ].join(" ")}
     >
       <div className="flex items-start gap-4">
-        <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-collin-teal/10 text-collin-teal">
+        <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-white">
           {icon}
         </span>
+
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-collin-navy">{title}</p>
-          <p className="mt-1 text-sm text-gray-600 leading-relaxed">{desc}</p>
+          <p className="text-sm font-semibold text-white">{title}</p>
+          <p className="mt-1 text-sm text-white/70 leading-relaxed">{desc}</p>
           <p className="mt-4 inline-flex items-center text-sm font-semibold text-collin-teal">
             {cta}
             <span className="ml-2 transition-transform group-hover:translate-x-0.5" aria-hidden="true">
@@ -442,10 +444,10 @@ function ActionCard({ title, desc, href, onClick, icon, cta, newTab }) {
 function MiniLine({ text }) {
   return (
     <div className="flex items-start gap-3">
-      <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-xl bg-collin-lightTeal/25 text-collin-teal">
+      <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-xl bg-white/10 text-collin-teal">
         <IconCheck />
       </span>
-      <p className="text-sm text-gray-700 leading-relaxed">{text}</p>
+      <p className="text-sm text-white/80 leading-relaxed">{text}</p>
     </div>
   );
 }

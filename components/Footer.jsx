@@ -11,25 +11,30 @@ export default function Footer() {
     []
   );
 
+  // ✅ put your real social links here
+  const social = useMemo(
+    () => [
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/YOUR-HANDLE", icon: <LinkedInIcon className="h-5 w-5" /> },
+      { label: "GitHub", href: "https://github.com/YOUR-HANDLE", icon: <GitHubIcon className="h-5 w-5" /> },
+      { label: "Instagram", href: "https://instagram.com/YOUR-HANDLE", icon: <InstagramIcon className="h-5 w-5" /> },
+      { label: "Medium", href: "https://medium.com/@YOUR-HANDLE", icon: <MediumIcon className="h-5 w-5" /> },
+      { label: "YouTube", href: "https://www.youtube.com/@YOUR-HANDLE", icon: <YouTubeIcon className="h-5 w-5" /> },
+    ],
+    []
+  );
+
   const { setOpenPrefs, consent } = useCookieConsent();
 
   const openCalendly = useCallback(async () => {
     if (typeof window === "undefined") return;
 
-    // OPTIONAL: If you only want to allow Calendly when certain cookies are accepted,
-    // keep this. If you don't care, delete this block.
-    //
-    // Adjust based on how your consent object is shaped.
-    // Common shapes:
-    // - consent?.analytics === true
-    // - consent?.marketing === true
-    //
-    // If you’re unsure, comment this out entirely and Calendly will always open.
+    // OPTIONAL: require functional/analytics/marketing consent before opening Calendly
     const allowed =
-      consent?.analytics === true || consent?.marketing === true || consent?.functional === true;
+      consent?.analytics === true ||
+      consent?.marketing === true ||
+      consent?.functional === true;
 
     if (!allowed) {
-      // Open preferences modal so user can enable cookies
       setOpenPrefs(true);
       return;
     }
@@ -54,7 +59,7 @@ export default function Footer() {
       return;
     }
 
-    // Load Calendly script once and wait
+    // Load script once
     let script = document.getElementById("calendly-widget-script");
     if (!script) {
       script = document.createElement("script");
@@ -64,13 +69,12 @@ export default function Footer() {
 
       script.onload = () => openWidget();
       script.onerror = () => {
-        // Fallback: open Calendly in a new tab if script fails
         window.open(calendlyUrl, "_blank", "noopener,noreferrer");
       };
 
       document.body.appendChild(script);
     } else {
-      // If script exists but Calendly not ready yet, poll briefly
+      // Poll briefly if script exists but Calendly not ready
       let tries = 0;
       const t = setInterval(() => {
         tries += 1;
@@ -129,9 +133,9 @@ export default function Footer() {
 
         <div className="flex flex-col gap-12">
           {/* Top row */}
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
+          <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
             {/* Brand + pitch */}
-            <div className="max-w-xl">
+            <div className="lg:col-span-5">
               <div className="flex items-center gap-3">
                 <Link
                   href="/"
@@ -144,8 +148,8 @@ export default function Footer() {
               </div>
 
               <p className="mt-3 text-bodysm text-white/75 leading-relaxed">
-                UK-based consultancy delivering analytics engineering, BI dashboards, systems analysis,
-                AI solutions — and UX design for clear, usable digital products.
+                UK-based consultancy delivering analytics engineering, BI dashboards,
+                systems analysis, AI solutions — and UX design for clear, usable digital products.
               </p>
 
               <div className="mt-7 flex flex-wrap gap-3">
@@ -176,8 +180,37 @@ export default function Footer() {
                 </Link>
               </div>
 
+              {/* Social (UK-standard: simple, accessible icons + text) */}
+              <div className="mt-7">
+                <p className="text-xs font-semibold tracking-widest text-white/60 uppercase">
+                  Social
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {social.map((s) => (
+                    <a
+                      key={s.label}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={[
+                        "group inline-flex items-center gap-2",
+                        "rounded-xl border border-white/15 bg-white/5 px-3 py-2",
+                        "text-sm font-semibold text-white/85 hover:text-white",
+                        "hover:bg-white/10 transition",
+                        "focus:outline-none focus:ring-2 focus:ring-white/30",
+                      ].join(" ")}
+                      aria-label={`Open ${s.label} (new tab)`}
+                      title={s.label}
+                    >
+                      <span className="text-white/85 group-hover:text-white">{s.icon}</span>
+                      <span className="text-xs">{s.label}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+
               {/* Optional small helper note */}
-              <p className="mt-3 text-[11px] text-white/55">
+              <p className="mt-4 text-[11px] text-white/55">
                 Prefer a direct link?{" "}
                 <a
                   href={calendlyUrl}
@@ -190,65 +223,113 @@ export default function Footer() {
               </p>
             </div>
 
-            {/* Quick nav */}
-            <nav
-              className="grid grid-cols-2 sm:flex sm:flex-row gap-3 sm:gap-6 text-bodysm"
-              aria-label="Footer navigation"
-            >
-              <Link href="/services" className="text-white/80 hover:text-white transition-colors">
-                Services
-              </Link>
-              <Link href="/case-studies" className="text-white/80 hover:text-white transition-colors">
-                Case Studies
-              </Link>
-              <Link href="/insights" className="text-white/80 hover:text-white transition-colors">
-                Insights
-              </Link>
-              <Link href="/services/digital-solutions" className="text-white/80 hover:text-white transition-colors">
-                UX Design
-              </Link>
-            </nav>
+            {/* Quick nav (UK style: clear columns) */}
+            <div className="lg:col-span-7 grid gap-8 sm:grid-cols-2">
+              <nav aria-label="Footer navigation">
+                <p className="text-xs font-semibold tracking-widest text-white/60 uppercase">
+                  Explore
+                </p>
+                <ul className="mt-4 space-y-3 text-bodysm">
+                  <li>
+                    <Link href="/services" className="text-white/75 hover:text-white transition-colors">
+                      Services
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/case-studies" className="text-white/75 hover:text-white transition-colors">
+                      Case Studies
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/insights" className="text-white/75 hover:text-white transition-colors">
+                      Insights
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/services/digital-solutions"
+                      className="text-white/75 hover:text-white transition-colors"
+                    >
+                      UX Design
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
+
+              <nav aria-label="Company">
+                <p className="text-xs font-semibold tracking-widest text-white/60 uppercase">
+                  Company
+                </p>
+                <ul className="mt-4 space-y-3 text-bodysm">
+                  <li>
+                    <Link href="/privacy-policy" className="text-white/75 hover:text-white transition-colors">
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/cookies" className="text-white/75 hover:text-white transition-colors">
+                      Cookies
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => setOpenPrefs(true)}
+                      className="text-white/75 hover:text-white transition-colors"
+                      aria-label="Open cookie preferences"
+                    >
+                      Cookie preferences
+                    </button>
+                  </li>
+                  <li>
+                    <a
+                      href="mailto:info@collinalitics.co.uk"
+                      className="text-white/75 hover:text-white transition-colors"
+                    >
+                      info@collinalitics.co.uk
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
 
           {/* Divider */}
           <div className="h-px w-full bg-white/10" aria-hidden="true" />
 
-          {/* Bottom row */}
+          {/* Bottom row (UK standard: legal + company info) */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="space-y-1">
               <p className="text-bodysm text-white/85 font-medium">
-                © {new Date().getFullYear()} Collinalitics Ltd
+                © {new Date().getFullYear()} Collinalitics Ltd. All rights reserved.
               </p>
               <p className="text-caption text-white/65">
-                Registered in the UK — Company Number: SC874504
+                Registered in Scotland • Company Number: SC874504
               </p>
             </div>
 
-            <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-bodysm" aria-label="Legal">
-              <Link href="/privacy-policy" className="text-white/70 hover:text-white transition-colors">
-                Privacy Policy
-              </Link>
-
-              <Link href="/cookies" className="text-white/70 hover:text-white transition-colors">
-                Cookies
-              </Link>
-
-              <button
-                type="button"
-                onClick={() => setOpenPrefs(true)}
-                className="text-white/70 hover:text-white transition-colors"
-                aria-label="Open cookie preferences"
-              >
-                Cookie preferences
-              </button>
-
-              <a
-                href="mailto:collinsayidan@collinalitics.co.uk"
-                className="text-white/70 hover:text-white transition-colors"
-              >
-                info@collinalitics.co.uk
-              </a>
-            </nav>
+            {/* Small social row on the far right */}
+            <div className="flex flex-wrap items-center gap-2">
+              {social.map((s) => (
+                <a
+                  key={`mini-${s.label}`}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={[
+                    "inline-flex items-center justify-center",
+                    "h-10 w-10 rounded-xl",
+                    "border border-white/15 bg-white/5",
+                    "text-white/80 hover:text-white hover:bg-white/10 transition",
+                    "focus:outline-none focus:ring-2 focus:ring-white/30",
+                  ].join(" ")}
+                  aria-label={`Open ${s.label} (new tab)`}
+                  title={s.label}
+                >
+                  {s.icon}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -291,6 +372,71 @@ function MailIcon({ className }) {
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16v12H4z" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M4 7l8 6 8-6" />
+    </svg>
+  );
+}
+
+function LinkedInIcon({ className }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5ZM.5 23.5h4V7.98h-4V23.5ZM8.5 7.98h3.83v2.12h.05c.53-1 1.83-2.12 3.77-2.12 4.03 0 4.78 2.65 4.78 6.09v9.43h-4v-8.36c0-2-.04-4.57-2.79-4.57-2.79 0-3.22 2.18-3.22 4.43v8.5h-4V7.98Z" />
+    </svg>
+  );
+}
+
+function GitHubIcon({ className }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.12 3.29 9.46 7.86 10.99.58.11.79-.26.79-.57v-2.06c-3.2.71-3.87-1.58-3.87-1.58-.53-1.36-1.29-1.73-1.29-1.73-1.05-.74.08-.73.08-.73 1.16.08 1.77 1.22 1.77 1.22 1.03 1.8 2.7 1.28 3.36.98.1-.77.4-1.28.73-1.57-2.56-.3-5.26-1.31-5.26-5.84 0-1.29.45-2.35 1.18-3.18-.12-.3-.51-1.52.11-3.17 0 0 .97-.32 3.18 1.22.92-.26 1.9-.39 2.88-.39.98 0 1.97.13 2.88.39 2.2-1.54 3.18-1.22 3.18-1.22.62 1.65.23 2.87.11 3.17.73.83 1.18 1.89 1.18 3.18 0 4.54-2.7 5.54-5.27 5.84.41.37.78 1.1.78 2.22v3.29c0 .31.21.68.8.57 4.56-1.53 7.85-5.87 7.85-10.99C23.25 5.62 18.27.5 12 .5Z" />
+    </svg>
+  );
+}
+
+function InstagramIcon({ className }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9A3.5 3.5 0 0 0 20 16.5v-9A3.5 3.5 0 0 0 16.5 4h-9ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm6.2-2.3a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z" />
+    </svg>
+  );
+}
+
+function MediumIcon({ className }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M2.5 7.2a.7.7 0 0 1 .25-.56l1.9-2.3A.7.7 0 0 1 5.2 4h13.6a.7.7 0 0 1 .54.25l1.9 2.3a.7.7 0 0 1 .25.56v.3a.7.7 0 0 1-.25.55l-.7.6v8.1l.7.6a.7.7 0 0 1 .25.55v.3a.7.7 0 0 1-.7.7H16.6a.7.7 0 0 1-.7-.7v-.3a.7.7 0 0 1 .25-.55l.7-.6V9.6l-4.3 10.3h-.6L7.7 9.6v7.8l1.05 1a.7.7 0 0 1 .25.55v.3a.7.7 0 0 1-.7.7H3.2a.7.7 0 0 1-.7-.7v-.3a.7.7 0 0 1 .25-.55l1.05-1V8.65l-.7-.6a.7.7 0 0 1-.25-.55v-.3Z" />
+    </svg>
+  );
+}
+
+function YouTubeIcon({ className }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.8 4.6 12 4.6 12 4.6s-5.8 0-7.5.5A3 3 0 0 0 2.4 7.2 31.6 31.6 0 0 0 2 12a31.6 31.6 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.7.5 7.5.5 7.5.5s5.8 0 7.5-.5a3 3 0 0 0 2.1-2.1A31.6 31.6 0 0 0 22 12a31.6 31.6 0 0 0-.4-4.8ZM10.2 15.3V8.7L15.9 12l-5.7 3.3Z" />
     </svg>
   );
 }

@@ -11,6 +11,7 @@ import ClientLogos from "../components/sections/ClientLogos";
 import StatsRow from "../components/sections/StatsRow";
 import BeforeAfter from "../components/sections/BeforeAfter";
 import CaseStudiesPreview from "../components/CaseStudiesPreview";
+import TeamSection from "@/components/TeamSection";
 
 
 export default function Page() {
@@ -26,7 +27,7 @@ export default function Page() {
         <CaseStudiesPreview />
         <BeforeAfter />
         <WhyUs />
-        <StatsRow />
+        <TeamSection />
         <Contact />
       </main>
       <Footer />
