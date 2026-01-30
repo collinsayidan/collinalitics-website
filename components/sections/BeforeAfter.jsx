@@ -13,13 +13,8 @@ export default function BeforeAfterReveal() {
 
   // Start mostly "Before"
   const [percent, setPercent] = useState(80);
-  const percentRef = useRef(percent);
 
-  useEffect(() => {
-    percentRef.current = percent;
-  }, [percent]);
-
-  // Intro animation (subtle)
+  // Intro animation (subtle) — disabled for reduced motion
   useEffect(() => {
     if (!inView || prefersReduced) return;
     const controls = animate(80, 45, {
@@ -36,6 +31,7 @@ export default function BeforeAfterReveal() {
     (clientX) => {
       const rect = trackRef.current?.getBoundingClientRect();
       if (!rect) return;
+
       const x = clamp(clientX - rect.left, 0, rect.width);
       setPercent((x / rect.width) * 100);
     },
@@ -43,35 +39,43 @@ export default function BeforeAfterReveal() {
   );
 
   // Pointer dragging (track owns capture)
-  const onPointerDown = (e) => {
-    if (prefersReduced) return;
-    e.preventDefault();
-    trackRef.current?.setPointerCapture?.(e.pointerId);
-    setFromX(e.clientX);
-  };
+  const onPointerDown = useCallback(
+    (e) => {
+      e.preventDefault();
+      trackRef.current?.setPointerCapture?.(e.pointerId);
+      setFromX(e.clientX);
+    },
+    [setFromX]
+  );
 
-  const onPointerMove = (e) => {
-    if (prefersReduced) return;
-    // For mouse, only drag while pressed; for touch allow move.
-    if (e.pointerType !== "touch" && e.buttons !== 1) return;
-    setFromX(e.clientX);
-  };
+  const onPointerMove = useCallback(
+    (e) => {
+      // For mouse, only drag while pressed; touch can move freely.
+      if (e.pointerType !== "touch" && e.buttons !== 1) return;
+      setFromX(e.clientX);
+    },
+    [setFromX]
+  );
 
-  const onPointerUp = (e) => {
+  const onPointerUp = useCallback((e) => {
     trackRef.current?.releasePointerCapture?.(e.pointerId);
-  };
+  }, []);
 
   // Keyboard support (slider)
   const step = 3;
-  const onKeyDown = (e) => {
-    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
-    e.preventDefault();
-    setPercent((p) => {
-      if (e.key === "Home") return 0;
-      if (e.key === "End") return 100;
-      return clamp(p + (e.key === "ArrowRight" ? step : -step), 0, 100);
-    });
-  };
+  const onKeyDown = useCallback(
+    (e) => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
+      e.preventDefault();
+
+      setPercent((p) => {
+        if (e.key === "Home") return 0;
+        if (e.key === "End") return 100;
+        return clamp(p + (e.key === "ArrowRight" ? step : -step), 0, 100);
+      });
+    },
+    [clamp]
+  );
 
   const baseTransition = { duration: 0.6, ease: [0.2, 0.65, 0.25, 1] };
   const handleLeft = `${percent}%`;
@@ -91,10 +95,13 @@ export default function BeforeAfterReveal() {
       className="relative overflow-hidden text-white py-24 sm:py-28"
       aria-labelledby="before-after-heading"
     >
-      {/* Background */}
+      {/* ✅ MAIN BG COLOR CONTROL IS HERE */}
       <div className="absolute inset-0 bg-collin-navy-gradient" aria-hidden="true" />
+
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.30] [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:72px_72px]"
+        className="pointer-events-none absolute inset-0 opacity-[0.30]
+        [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)]
+        [background-size:72px_72px]"
         aria-hidden="true"
       />
       <div
@@ -122,10 +129,7 @@ export default function BeforeAfterReveal() {
             </p>
           </div>
 
-          <h2
-            id="before-after-heading"
-            className="mt-6 text-h2 text-white"
-          >
+          <h2 id="before-after-heading" className="mt-6 text-h2 text-white">
             Before &amp; After:{" "}
             <span className="bg-gradient-to-r from-collin-teal to-collin-teal-light bg-clip-text text-transparent">
               decision-ready
@@ -134,7 +138,6 @@ export default function BeforeAfterReveal() {
           </h2>
 
           <p className="text-bodylg text-white/85 mt-4 leading-relaxed">
-            See how manual, inconsistent reporting becomes a clean, reliable dashboard.
             Drag anywhere to compare — or use your arrow keys.
           </p>
         </motion.header>
@@ -156,7 +159,7 @@ export default function BeforeAfterReveal() {
               <div>
                 <p className="text-sm font-semibold text-white">Drag to compare</p>
                 <p className="text-xs text-white/70">
-                  Tip: click/drag anywhere • ← → for fine control • Home/End to jump
+                  Click/drag anywhere • ← → for fine control • Home/End to jump
                 </p>
               </div>
             </div>
@@ -200,7 +203,6 @@ export default function BeforeAfterReveal() {
               fill
               sizes="100vw"
               className="object-cover"
-              priority={false}
             />
 
             {/* BEFORE (clipped overlay) */}
@@ -215,7 +217,6 @@ export default function BeforeAfterReveal() {
                 fill
                 sizes="100vw"
                 className="object-cover"
-                priority={false}
               />
             </div>
 
@@ -254,7 +255,7 @@ export default function BeforeAfterReveal() {
               </span>
             </div>
 
-            {/* Handle: proper slider semantics */}
+            {/* Handle (also draggable + keyboard slider semantics) */}
             <motion.button
               type="button"
               className={[
@@ -269,6 +270,11 @@ export default function BeforeAfterReveal() {
               ].join(" ")}
               style={{ left: handleLeft }}
               onKeyDown={onKeyDown}
+              // ✅ allow dragging from handle too:
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onPointerCancel={onPointerUp}
               role="slider"
               aria-label="Reveal slider"
               aria-orientation="horizontal"
@@ -277,11 +283,6 @@ export default function BeforeAfterReveal() {
               aria-valuenow={Math.round(percent)}
               aria-valuetext={ariaValueText}
               title="Drag or use arrow keys"
-              animate={
-                prefersReduced
-                  ? undefined
-                  : { boxShadow: "0 18px 40px -18px rgba(0,0,0,0.75)" }
-              }
               whileHover={prefersReduced ? undefined : { y: -1 }}
               transition={{ duration: 0.25 }}
             >
@@ -304,31 +305,22 @@ export default function BeforeAfterReveal() {
             </motion.button>
           </motion.div>
 
-          {/* Bottom content: Before/After meaning */}
+          {/* Bottom content */}
           <div className="px-5 sm:px-7 pb-6 sm:pb-7 pt-6 sm:pt-7">
             <div className="grid gap-4 md:grid-cols-2">
               <InfoCard
                 title="Before"
                 subtitle="Manual & inconsistent"
-                points={[
-                  "Disconnected spreadsheets",
-                  "Definitions vary across teams",
-                  "Slow reporting cycles",
-                ]}
+                points={["Disconnected spreadsheets", "Definitions vary across teams", "Slow reporting cycles"]}
               />
               <InfoCard
                 title="After"
                 subtitle="Clean & decision-ready"
-                points={[
-                  "Single source of truth",
-                  "Governed metrics & ownership",
-                  "Fast, reliable delivery",
-                ]}
+                points={["Single source of truth", "Governed metrics & ownership", "Fast, reliable delivery"]}
                 accent
               />
             </div>
 
-            {/* CTA */}
             <motion.div
               className="text-center mt-10"
               initial={{ opacity: 0, y: prefersReduced ? 0 : 10 }}
@@ -394,7 +386,15 @@ function InfoCard({ title, subtitle, points, accent }) {
 
 function IconCheck() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="h-4 w-4">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="2.5"
+      stroke="currentColor"
+      className="h-4 w-4"
+      aria-hidden="true"
+    >
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
     </svg>
   );
@@ -402,7 +402,15 @@ function IconCheck() {
 
 function IconCompare() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.2" stroke="currentColor" className="h-5 w-5 text-white/90">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="2.2"
+      stroke="currentColor"
+      className="h-5 w-5 text-white/90"
+      aria-hidden="true"
+    >
       <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4V6Z" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M14 18h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-4v14Z" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16" />

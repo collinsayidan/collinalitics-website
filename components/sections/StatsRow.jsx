@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 export default function StatsRow() {
@@ -10,35 +12,38 @@ export default function StatsRow() {
 
   return (
     <section
-      className="relative overflow-hidden bg-gradient-to-b from-white to-gray-50 py-20 sm:py-24"
+      className="relative overflow-hidden py-20 sm:py-24 text-white"
       aria-label="Key statistics"
     >
-      {/* Subtle grid */}
+      {/* ✅ MAIN BG COLOR CONTROL IS HERE */}
+      <div className="absolute inset-0 bg-collin-navy-gradient" aria-hidden="true" />
+
+      {/* Soft grid */}
       <div
-        className="absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)] [background-size:72px_72px] pointer-events-none"
+        className="pointer-events-none absolute inset-0 opacity-[0.22]
+        [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)]
+        [background-size:72px_72px]"
         aria-hidden="true"
       />
 
       {/* Ambient accents */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-20 right-[-6rem] h-64 w-64 rounded-full bg-collin-teal-light/18 blur-3xl" />
-        <div className="absolute -bottom-24 left-[-6rem] h-64 w-64 rounded-full bg-collin-teal/10 blur-3xl" />
+        <div className="absolute -top-20 right-[-6rem] h-64 w-64 rounded-full bg-collin-teal/18 blur-[120px]" />
+        <div className="absolute -bottom-24 left-[-6rem] h-64 w-64 rounded-full bg-collin-teal-light/14 blur-[120px]" />
       </div>
 
       <div className="container-wrapper relative z-10">
         <header className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/70 px-4 py-2 backdrop-blur">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 backdrop-blur">
             <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" />
-            <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">
+            <p className="text-xs font-semibold tracking-widest text-white/80 uppercase">
               Quick proof
             </p>
           </div>
 
-          <h2 className="mt-6 text-h3 text-collin-navy">
-            Measurable results, delivered clearly
-          </h2>
+          <h2 className="mt-6 text-h3 text-white">Measurable results, delivered clearly</h2>
 
-          <p className="mt-4 text-body text-collin-slate">
+          <p className="mt-4 text-body text-white/80">
             A snapshot of experience and outcomes we focus on across engagements.
           </p>
         </header>
@@ -50,13 +55,13 @@ export default function StatsRow() {
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-3 text-center">
-          <p className="text-xs text-gray-500 max-w-2xl leading-relaxed">
+          <p className="text-xs text-white/65 max-w-2xl leading-relaxed">
             Figures are representative of typical engagements and vary by scope, data maturity, and delivery model.
           </p>
 
           <a
             href="#case-studies"
-            className="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-collin-navy hover:bg-gray-50 transition"
+            className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 transition backdrop-blur"
           >
             View case studies
             <span className="ml-2" aria-hidden="true">
@@ -73,36 +78,37 @@ function StatCard({ value, label, icon }) {
   return (
     <div
       className={[
-        "group rounded-3xl border border-gray-200 bg-white/95 p-6 sm:p-7",
-        "shadow-[0_18px_50px_-35px_rgba(0,0,0,0.35)]",
-        "transition hover:-translate-y-1 hover:shadow-[0_26px_70px_-40px_rgba(0,0,0,0.45)]",
-        "hover:border-collin-teal/35",
-        "relative overflow-hidden",
+        "group relative overflow-hidden rounded-3xl",
+        "border border-white/12 bg-white/[0.06] backdrop-blur-xl",
+        "ring-1 ring-white/10",
+        "p-6 sm:p-7",
+        "shadow-[0_25px_70px_rgba(0,0,0,0.35)]",
+        "transition hover:-translate-y-1 hover:border-collin-teal/35",
       ].join(" ")}
     >
-      {/* Soft corner highlight */}
+      {/* Soft corner glow */}
       <div
-        className="pointer-events-none absolute -top-24 -right-24 h-48 w-48 rounded-full bg-collin-teal/10 blur-3xl opacity-0 group-hover:opacity-100 transition"
+        className="pointer-events-none absolute -top-24 -right-24 h-48 w-48 rounded-full bg-collin-teal/16 blur-3xl opacity-0 group-hover:opacity-100 transition"
         aria-hidden="true"
       />
 
       <div className="flex items-start justify-between gap-4">
-        <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-collin-teal/10 text-collin-teal">
+        <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-collin-teal/18 text-collin-lightTeal border border-white/10">
           {icon}
         </span>
 
         {/* Small “signal” line */}
         <span
-          className="mt-1 h-1.5 w-14 rounded-full bg-gradient-to-r from-collin-teal/60 to-collin-teal-light/60"
+          className="mt-1 h-1.5 w-14 rounded-full bg-gradient-to-r from-collin-teal/70 to-collin-teal-light/70"
           aria-hidden="true"
         />
       </div>
 
-      <p className="mt-6 text-3xl sm:text-4xl font-bold text-collin-navy tracking-tight">
+      <p className="mt-6 text-3xl sm:text-4xl font-bold text-white tracking-tight">
         {value}
       </p>
 
-      <p className="mt-3 text-sm leading-relaxed text-collin-slate">
+      <p className="mt-3 text-sm leading-relaxed text-white/75">
         {label}
       </p>
     </div>

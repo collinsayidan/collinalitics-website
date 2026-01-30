@@ -149,7 +149,7 @@ export default function Footer() {
 
               <p className="mt-3 text-bodysm text-white/75 leading-relaxed">
                 UK-based consultancy delivering analytics engineering, BI dashboards,
-                systems analysis, AI solutions — and UX design for clear, usable digital products.
+                systems analysis, AI solutions and UX design for clear, usable digital products.
               </p>
 
               <div className="mt-7 flex flex-wrap gap-3">

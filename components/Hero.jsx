@@ -1,16 +1,21 @@
 "use client";
+
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
+
+const CALENDLY_URL = "https://calendly.com/collinsayidan-collinalitics/30min";
 
 export default function Hero() {
   const sectionRef = useRef(null);
   const cardRef = useRef(null);
-  const rafBgRef = useRef(null);
-  const rafTiltRef = useRef(null);
+
+  const rafBgRef = useRef(0);
+  const rafTiltRef = useRef(0);
+  const readyTimerRef = useRef(0);
 
   const [reduceMotion, setReduceMotion] = useState(false);
   const [finePointer, setFinePointer] = useState(false);
 
-  // Motion preferences + pointer type
+  // Detect reduced-motion + pointer type
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -32,42 +37,60 @@ export default function Hero() {
     };
   }, []);
 
-  const calendlyUrl = useMemo(() => "https://calendly.com/collinsayidan-collinalitics/30min", []);
-
-  const ensureCalendly = useCallback(async () => {
+  // Calendly loader (robust + fallback)
+  const openCalendly = useCallback(() => {
     if (typeof window === "undefined") return;
 
     const openWidget = () => {
-      window.Calendly?.initPopupWidget({ url: calendlyUrl });
+      if (window.Calendly?.initPopupWidget) {
+        window.Calendly.initPopupWidget({ url: CALENDLY_URL });
+        return true;
+      }
+      return false;
     };
 
-    if (window.Calendly) {
-      openWidget();
-      return;
-    }
-
-    // Load Calendly assets once (shared with Navbar)
-    if (!document.getElementById("calendly-widget-script")) {
+    // Ensure CSS
+    if (!document.getElementById("calendly-widget-css")) {
       const link = document.createElement("link");
+      link.id = "calendly-widget-css";
       link.rel = "stylesheet";
       link.href = "https://assets.calendly.com/assets/external/widget.css";
-      link.id = "calendly-widget-css";
       document.head.appendChild(link);
+    }
 
-      const script = document.createElement("script");
+    // If already available, open immediately
+    if (openWidget()) return;
+
+    // Ensure script
+    let script = document.getElementById("calendly-widget-script");
+    if (!script) {
+      script = document.createElement("script");
       script.id = "calendly-widget-script";
       script.src = "https://assets.calendly.com/assets/external/widget.js";
       script.async = true;
-      script.onload = openWidget;
+
+      script.onload = () => {
+        const ok = openWidget();
+        if (!ok) window.open(CALENDLY_URL, "_blank", "noopener,noreferrer");
+      };
+
+      script.onerror = () => {
+        window.open(CALENDLY_URL, "_blank", "noopener,noreferrer");
+      };
+
       document.body.appendChild(script);
       return;
     }
 
-    // Script exists but may not be ready yet
-    setTimeout(openWidget, 250);
-  }, [calendlyUrl]);
+    // Script exists but object not ready -> short retry then fallback
+    window.clearTimeout(readyTimerRef.current);
+    readyTimerRef.current = window.setTimeout(() => {
+      const ok = openWidget();
+      if (!ok) window.open(CALENDLY_URL, "_blank", "noopener,noreferrer");
+    }, 250);
+  }, []);
 
-  // Background parallax (desktop + fine pointer only)
+  // Background parallax (only on fine pointer + no reduced motion)
   const onPointerMoveBg = useCallback(
     (e) => {
       if (reduceMotion || !finePointer) return;
@@ -89,11 +112,11 @@ export default function Hero() {
   const onPointerLeaveBg = useCallback(() => {
     const section = sectionRef.current;
     if (!section) return;
-    section.style.setProperty("--bg-x", `50%`);
-    section.style.setProperty("--bg-y", `50%`);
+    section.style.setProperty("--bg-x", "50%");
+    section.style.setProperty("--bg-y", "50%");
   }, []);
 
-  // 3D tilt (desktop + fine pointer only)
+  // Card tilt (desktop only)
   const onPointerMoveTilt = useCallback(
     (e) => {
       if (reduceMotion || !finePointer) return;
@@ -124,11 +147,12 @@ export default function Hero() {
     card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg)";
   }, []);
 
-  // Cleanup RAFs
+  // Cleanup
   useEffect(() => {
     return () => {
       if (rafBgRef.current) cancelAnimationFrame(rafBgRef.current);
       if (rafTiltRef.current) cancelAnimationFrame(rafTiltRef.current);
+      if (readyTimerRef.current) window.clearTimeout(readyTimerRef.current);
     };
   }, []);
 
@@ -140,55 +164,62 @@ export default function Hero() {
       aria-labelledby="hero-title"
       onPointerMove={onPointerMoveBg}
       onPointerLeave={onPointerLeaveBg}
-      className="hero-bg relative overflow-hidden text-white min-h-[92vh] flex items-center"
+      className="relative overflow-hidden text-white min-h-[92vh] flex items-center"
       style={{ backgroundPosition: "var(--bg-x, 50%) var(--bg-y, 50%)" }}
     >
-      {/* Ambient gradient blobs */}
+      {/* ===== COLOR CONTROL (Hero BG) =====
+          Change these for “more blue / more navy”:
+          - from-collin-navy/.. via-[#0B1E3B]/.. to-[#061225]/..
+      */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[radial-gradient(1200px_circle_at_var(--bg-x,50%)_var(--bg-y,50%),rgba(56,189,248,0.18),transparent_45%),radial-gradient(900px_circle_at_20%_20%,rgba(45,212,191,0.14),transparent_55%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-gradient-to-b from-[#061225] via-[#071B35] to-[#051126]"
+      />
+
+      {/* Subtle grid */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[0.16]
+        [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)]
+        [background-size:88px_88px]"
+      />
+
+      {/* Teal glows (controlled, not noisy) */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-24 right-[-6rem] h-80 w-80 rounded-full bg-collin-lightTeal/20 blur-3xl" />
-        <div className="absolute -bottom-28 left-[-6rem] h-96 w-96 rounded-full bg-collin-teal/10 blur-3xl" />
+        <div className="absolute -top-32 right-[-8rem] h-[28rem] w-[28rem] rounded-full bg-collin-lightTeal/16 blur-[120px]" />
+        <div className="absolute -bottom-36 left-[-8rem] h-[32rem] w-[32rem] rounded-full bg-collin-teal/10 blur-[140px]" />
       </div>
-
-      {/* Premium overlay */}
-      <div
-        className="absolute inset-0 bg-gradient-to-br from-black/85 via-black/45 to-collin-navy/25 pointer-events-none"
-        aria-hidden="true"
-      />
-
-      {/* Subtle radial highlight */}
-      <div
-        className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_20%_20%,rgba(0,255,200,0.18),transparent_55%),radial-gradient(circle_at_80%_70%,rgba(0,150,255,0.14),transparent_60%)]"
-        aria-hidden="true"
-      />
 
       <div className="container-wrapper relative z-10">
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-12 items-center">
           {/* Left */}
           <div className="lg:col-span-7">
-            {/* Eyebrow */}
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 backdrop-blur-md">
               <span className="h-2 w-2 rounded-full bg-collin-lightTeal" aria-hidden="true" />
-              <p className="text-xs font-semibold tracking-widest text-gray-100 uppercase">
+              <p className="text-xs font-semibold tracking-widest text-white/85 uppercase">
                 Analytics Engineering • BI • Systems
               </p>
             </div>
 
             <h1
               id="hero-title"
-              className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.05]"
+              className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.06]"
             >
               Turn complex data into{" "}
               <span className="text-collin-lightTeal">clear decisions</span>
-              <span className="block mt-2 text-gray-100">your team can act on.</span>
+              <span className="block mt-2 text-white/95">your team can act on.</span>
             </h1>
 
-            <p className="mt-6 text-lg sm:text-xl text-gray-100/90 max-w-2xl leading-relaxed">
+            <p className="mt-6 text-lg sm:text-xl text-white/80 max-w-2xl leading-relaxed">
               We help UK organisations replace manual reporting with reliable metrics,
               decision-ready dashboards, and scalable data foundations — built for long-term clarity.
             </p>
 
-            {/* Micro-proof */}
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-100/80">
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/75">
               <span className="inline-flex items-center gap-2">
                 <CheckMini />
                 Faster reporting cycles
@@ -203,13 +234,12 @@ export default function Hero() {
               </span>
             </div>
 
-            {/* CTAs */}
             <div className="mt-10 flex flex-col sm:flex-row gap-3">
               <button
                 type="button"
-                onClick={ensureCalendly}
+                onClick={openCalendly}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-collin-teal px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-black/20 hover:opacity-95 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-lightTeal/30"
                 aria-label="Book a free strategy call (Calendly popup)"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-collin-teal px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-black/20 hover:opacity-95 transition"
               >
                 <CalendarIcon />
                 Free Strategy Call
@@ -218,7 +248,7 @@ export default function Hero() {
 
               <a
                 href="#services"
-                className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
+                className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25"
                 aria-label="View services section"
               >
                 View Services
@@ -226,15 +256,14 @@ export default function Hero() {
 
               <a
                 href="#use-case"
-                className="text-sm font-semibold text-gray-100/90 hover:text-white transition self-center sm:self-auto sm:ml-2"
+                className="text-sm font-semibold text-white/85 hover:text-white transition self-center sm:self-auto sm:ml-2"
                 aria-label="See demo section"
               >
                 See demo <span aria-hidden="true">→</span>
               </a>
             </div>
 
-            {/* Trust strip */}
-            <div className="mt-10 flex flex-wrap items-center gap-3 text-xs text-white/75">
+            <div className="mt-10 flex flex-wrap items-center gap-3 text-xs text-white/70">
               <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 backdrop-blur-md">
                 UK-based delivery
               </span>
@@ -253,11 +282,15 @@ export default function Hero() {
               ref={cardRef}
               onPointerMove={onPointerMoveTilt}
               onPointerLeave={resetTilt}
-              className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl shadow-2xl ring-1 ring-white/10 p-7 sm:p-8 transition-transform duration-200 ease-out will-change-transform"
+              className={[
+                "rounded-2xl border border-white/18 bg-white/[0.10] backdrop-blur-xl",
+                "shadow-[0_30px_90px_rgba(0,0,0,0.45)] ring-1 ring-white/10",
+                "p-7 sm:p-8 transition-transform duration-200 ease-out will-change-transform",
+              ].join(" ")}
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs font-semibold tracking-widest text-gray-100/80 uppercase">
+                  <p className="text-xs font-semibold tracking-widest text-white/70 uppercase">
                     What we deliver
                   </p>
                   <h2 className="mt-2 text-xl font-semibold text-white">
@@ -265,12 +298,12 @@ export default function Hero() {
                   </h2>
                 </div>
 
-                <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-gray-100 border border-white/15">
+                <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/80 border border-white/15">
                   UK-based
                 </span>
               </div>
 
-              <ul className="mt-6 space-y-4 text-sm text-gray-100/90 leading-relaxed">
+              <ul className="mt-6 space-y-4 text-sm text-white/80 leading-relaxed">
                 <li className="flex items-start gap-3">
                   <BulletCheck />
                   Decision-ready dashboards trusted by leadership teams
@@ -290,17 +323,19 @@ export default function Hero() {
               </ul>
 
               <div className="mt-7 pt-5 border-t border-white/15 flex items-center justify-between gap-4">
-                <p className="text-xs text-gray-100/75 leading-relaxed">
+                <p className="text-xs text-white/65 leading-relaxed">
                   Supporting SMEs, charities, and public-sector teams across the UK.
                 </p>
-                <a href="#about" className="text-xs font-semibold text-white hover:opacity-90 transition">
+                <a
+                  href="#about"
+                  className="text-xs font-semibold text-white hover:opacity-90 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 rounded-md"
+                >
                   Why Collinalitics →
                 </a>
               </div>
             </div>
 
-            {/* Small helper note (optional) */}
-            <p className="mt-4 text-xs text-white/70">
+            <p className="mt-4 text-xs text-white/65">
               Prefer email?{" "}
               <a href="#contact" className="underline underline-offset-4 hover:opacity-90">
                 Send a message
@@ -317,7 +352,15 @@ export default function Hero() {
 /* Icons */
 function CalendarIcon() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor" className="h-4 w-4">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="1.8"
+      stroke="currentColor"
+      className="h-4 w-4"
+      aria-hidden="true"
+    >
       <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10m-12 8h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 14l2 2 4-4" />
     </svg>
@@ -326,7 +369,7 @@ function CalendarIcon() {
 
 function ArrowIcon() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4" aria-hidden="true">
       <path
         fillRule="evenodd"
         d="M3 10a.75.75 0 0 1 .75-.75h10.69l-3.22-3.22a.75.75 0 1 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.22-3.22H3.75A.75.75 0 0 1 3 10Z"
@@ -338,7 +381,7 @@ function ArrowIcon() {
 
 function CheckMini() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="h-4 w-4 text-collin-lightTeal">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="h-4 w-4 text-collin-lightTeal" aria-hidden="true">
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
     </svg>
   );
@@ -347,7 +390,7 @@ function CheckMini() {
 function BulletCheck() {
   return (
     <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-lg bg-white/10 text-collin-lightTeal border border-white/15">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="h-4 w-4">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="h-4 w-4" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
       </svg>
     </span>

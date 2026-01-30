@@ -1,13 +1,14 @@
 import "./globals.css";
 import { Roboto, Roboto_Condensed } from "next/font/google";
-
 import SmoothScrollProvider from "../components/SmoothScrollProvider";
 import AssistantButton from "../components/AssistantButton";
 import AnalyticsLoader from "../components/AnalyticsLoader";
-
 import CookieConsentProvider from "../components/cookies/CookieConsentProvider";
 import CookieBanner from "../components/cookies/CookieBanner";
 import CookiePreferencesModal from "../components/cookies/CookiePreferencesModal";
+import AssistantTeaser from "@/components/AssistantTeaser";
+import ScrollHomeButton from "@/components/ScrollHomeButton";
+
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -78,6 +79,8 @@ export default function RootLayout({ children }) {
           <SmoothScrollProvider>
             <main id="main">{children}</main>
             <AssistantButton />
+            <AssistantTeaser />
+            <ScrollHomeButton />
           </SmoothScrollProvider>
 
           {/* Optional analytics (should respect consent inside this component) */}

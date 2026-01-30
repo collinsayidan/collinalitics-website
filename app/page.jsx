@@ -12,6 +12,7 @@ import StatsRow from "../components/sections/StatsRow";
 import BeforeAfter from "../components/sections/BeforeAfter";
 import CaseStudiesPreview from "../components/CaseStudiesPreview";
 import TeamSection from "@/components/TeamSection";
+import AssistantButton from '@/components/AssistantButton.jsx';
 
 
 export default function Page() {
@@ -28,6 +29,7 @@ export default function Page() {
         <BeforeAfter />
         <WhyUs />
         <TeamSection />
+        <StatsRow />
         <Contact />
       </main>
       <Footer />
