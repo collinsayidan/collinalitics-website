@@ -77,7 +77,7 @@ export default function About() {
 
             <p className="mt-5 max-w-2xl text-bodylg leading-relaxed text-collin-slate">
               Collinalitics is a UK-based analytics engineering and consulting firm helping teams
-              replace fragmented reporting with automated, reliable insight — faster, with confidence,
+              replace fragmented reporting with automated, reliable insight faster, with confidence,
               and designed to scale.
             </p>
 

@@ -1,11 +1,8 @@
-"use client";
-
-import React, { useMemo } from "react";
 import { notFound } from "next/navigation";
 
 import BlogLayout from "@/components/insights/BlogLayout";
 import BlogHero from "@/components/insights/BlogHero";
-import ReadingProgress from "@/components/insights/ReadingProgress"; // ✅ ensure filename/case matches
+import ReadingProgress from "@/components/insights/ReadingProgress";
 import BlogCard from "@/components/insights/BlogCard";
 
 import { authors } from "@/components/data/authors";
@@ -168,55 +165,35 @@ const POSTS = Object.entries(ARTICLES).map(([slug, a]) => ({
 
 /* ------------------ Page ------------------ */
 
-export default function BlogArticle({ params }) {
-  const { slug } = params;
+export default async function Page({ params }) {
+  // ✅ Next may provide params as a Promise in some versions/routes
+  const resolvedParams = typeof params?.then === "function" ? await params : params;
+  const slug = resolvedParams?.slug;
 
   const article = ARTICLES[slug];
   if (!article) return notFound();
 
   const metaLine = `${article.date} • ${getReadingTime(article.content)}`;
 
-  const headings = useMemo(() => buildHeadings(article.content), [article.content]);
+  const headings = buildHeadings(article.content);
 
-  const related = useMemo(() => {
-    const sameCategory = POSTS.filter(
-      (p) => p.slug !== slug && p.category === article.category
-    ).slice(0, 2);
-
-    // Fallback if only 0/1 related in same category
-    if (sameCategory.length >= 2) return sameCategory;
-
-    const fill = POSTS.filter((p) => p.slug !== slug && !sameCategory.some((x) => x.slug === p.slug))
-      .slice(0, 2 - sameCategory.length);
-
-    return [...sameCategory, ...fill];
-  }, [slug, article.category]);
+  const related = getRelatedPosts(slug, article.category);
 
   return (
     <>
       <ReadingProgress />
 
-      <BlogHero
-        title={article.title}
-        date={metaLine}
-        category={article.category}
-      />
+      <BlogHero title={article.title} date={metaLine} category={article.category} />
 
-      <BlogLayout
-        content={article.content}
-        headings={headings}
-        author={authors[article.author]}
-      />
+      <BlogLayout content={article.content} headings={headings} author={authors[article.author]} />
 
-      {/* Related Articles (designed section) */}
+      {/* Related */}
       <section className="relative mt-24 sm:mt-28 overflow-hidden">
-        {/* Subtle background polish */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white to-gray-50" aria-hidden="true" />
         <div
-          className="absolute inset-0 bg-gradient-to-b from-white to-gray-50"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)] [background-size:72px_72px] pointer-events-none"
+          className="absolute inset-0 opacity-[0.35]
+          [background-image:linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)]
+          [background-size:72px_72px] pointer-events-none"
           aria-hidden="true"
         />
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -235,12 +212,11 @@ export default function BlogArticle({ params }) {
                   </p>
                 </div>
 
-                <h3 className="mt-5 text-h3 text-collin-navy">
-                  Related articles
-                </h3>
+                <h3 className="mt-5 text-h3 text-collin-navy">Related articles</h3>
 
                 <p className="mt-2 text-body text-collin-slate">
-                  More on <span className="font-semibold text-collin-navy">{article.category}</span> (plus a couple of high-value reads).
+                  More on{" "}
+                  <span className="font-semibold text-collin-navy">{article.category}</span>.
                 </p>
               </div>
 
@@ -248,10 +224,7 @@ export default function BlogArticle({ params }) {
                 href="/insights"
                 className="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-collin-navy hover:bg-gray-50 transition w-full sm:w-auto"
               >
-                View all insights
-                <span className="ml-2" aria-hidden="true">
-                  <ArrowIcon />
-                </span>
+                View all insights <span className="ml-2" aria-hidden="true">→</span>
               </a>
             </div>
 
@@ -267,7 +240,6 @@ export default function BlogArticle({ params }) {
               ))}
             </div>
 
-            {/* Bottom CTA */}
             <div className="mt-12 rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-xl">
               <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                 <div className="max-w-2xl">
@@ -278,13 +250,13 @@ export default function BlogArticle({ params }) {
                     Turn this insight into a practical reporting improvement.
                   </h4>
                   <p className="mt-3 text-body text-collin-slate leading-relaxed">
-                    If you’re dealing with manual reporting, unclear KPIs, or low confidence in numbers, we can recommend
-                    the fastest first step to improve clarity.
+                    If you’re dealing with manual reporting, unclear KPIs, or low confidence in numbers,
+                    we can recommend the fastest first step to improve clarity.
                   </p>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                  <a href="#contact" className="cta-primary cta-full">
+                  <a href="/#contact" className="cta-primary cta-full">
                     Book a discovery call
                   </a>
                   <a href="/services" className="cta-secondary cta-full">
@@ -311,20 +283,17 @@ export default function BlogArticle({ params }) {
 
 function makeExcerpt(markdown, maxLen = 140) {
   const plain = (markdown || "")
-    .replace(/^#{1,6}\s+/gm, "") // remove headings
-    .replace(/[`*_>#-]/g, "") // remove some markdown symbols
-    .replace(/\[(.*?)\]\((.*?)\)/g, "$1") // links -> text
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/[`*_>#-]/g, "")
+    .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
     .replace(/\s+/g, " ")
     .trim();
 
-  if (plain.length <= maxLen) return plain;
-  return plain.slice(0, maxLen).trimEnd() + "…";
+  return plain.length <= maxLen ? plain : plain.slice(0, maxLen).trimEnd() + "…";
 }
 
 function buildHeadings(markdown) {
   const matches = Array.from((markdown || "").matchAll(/^##\s+(.*)$/gm));
-
-  // ensure unique ids even if headings repeat
   const seen = new Map();
 
   return matches.map((m) => {
@@ -339,28 +308,22 @@ function buildHeadings(markdown) {
   });
 }
 
-/* ------------------ small UI bits ------------------ */
+function getRelatedPosts(currentSlug, category) {
+  const sameCategory = POSTS.filter((p) => p.slug !== currentSlug && p.category === category).slice(0, 2);
+  if (sameCategory.length >= 2) return sameCategory;
+
+  const fill = POSTS.filter((p) => p.slug !== currentSlug && !sameCategory.some((x) => x.slug === p.slug))
+    .slice(0, 2 - sameCategory.length);
+
+  return [...sameCategory, ...fill];
+}
+
+/* ------------------ small UI ------------------ */
 
 function Chip({ children }) {
   return (
     <span className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-collin-navy">
       {children}
     </span>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-4 w-4"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="2"
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 5l7 7-7 7" />
-    </svg>
   );
 }

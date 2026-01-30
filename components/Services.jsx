@@ -78,7 +78,7 @@ export default function Services() {
 
           <p className="mt-5 text-bodylg text-collin-slate leading-relaxed max-w-3xl">
             We modernise reporting, strengthen data foundations, and design dashboards
-            that stakeholders actually use — without unnecessary complexity.
+            that stakeholders actually use without unnecessary complexity.
           </p>
 
           {/* Proof / audience chips */}
@@ -155,7 +155,7 @@ export default function Services() {
               Not sure what you need yet?
             </h3>
             <p className="mt-2 text-sm text-collin-slate leading-relaxed">
-              We’ll help you pinpoint the quickest path to impact — whether that’s KPI clarity,
+              We’ll help you pinpoint the quickest path to impact whether that’s KPI clarity,
               reporting automation, or strengthening your data foundations.
             </p>
           </div>

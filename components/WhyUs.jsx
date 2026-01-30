@@ -99,7 +99,7 @@ export default function WhyUs() {
           </motion.h2>
 
           <motion.p variants={fadeUp} className="mt-4 text-bodylg leading-relaxed text-white/85">
-            We combine modern analytics engineering with systems thinking — so your reporting becomes trusted,
+            We combine modern analytics engineering with systems thinkingso your reporting becomes trusted,
             repeatable, and genuinely useful.
           </motion.p>
         </motion.header>
@@ -175,7 +175,7 @@ export default function WhyUs() {
               <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">Best fit</p>
               <p className="mt-2 text-sm leading-relaxed text-gray-700">
                 SMEs, charities, and public-sector teams who want reporting that is trustworthy, governed,
-                and easy to run — without complexity for its own sake.
+                and easy to run without complexity for its own sake.
               </p>
             </div>
           </motion.article>
@@ -197,7 +197,7 @@ export default function WhyUs() {
               <div>
                 <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">Outcomes</p>
                 <h3 className="mt-2 text-h4 font-semibold text-collin-navy">
-                  Reporting becomes a driver for decisions — not a chore.
+                  Reporting becomes a driver for decisions not a chore.
                 </h3>
               </div>
 
@@ -226,7 +226,7 @@ export default function WhyUs() {
                 <div>
                   <p className="text-sm italic leading-relaxed text-gray-700">
                     “We moved from scattered spreadsheets to a single source of truth.
-                    Leadership finally has clarity — and reporting time dropped from days to minutes.”
+                    Leadership finally has clarity and reporting time dropped from days to minutes.”
                   </p>
                   <p className="mt-3 text-xs font-semibold tracking-widest text-gray-500 uppercase">
                     Senior Operations Manager • UK Public Sector
@@ -249,7 +249,7 @@ export default function WhyUs() {
             <p className="text-xs font-semibold tracking-widest text-white/75 uppercase">How we work</p>
             <h3 className="mt-3 text-h3 font-semibold text-white">A simple approach that scales.</h3>
             <p className="mt-3 text-sm leading-relaxed text-white/80 max-w-2xl mx-auto">
-              Clear phases, clear outputs, and documentation built in — so the work lasts beyond delivery.
+              Clear phases, clear outputs, and documentation built in so the work lasts beyond delivery.
             </p>
           </motion.div>
 
@@ -301,7 +301,7 @@ export default function WhyUs() {
             </a>
 
             <p className="mt-3 text-xs text-white/70">
-              No pressure — we’ll confirm fit, scope, and next steps.
+              No pressure we’ll confirm fit, scope, and next steps.
             </p>
           </motion.div>
         </motion.div>

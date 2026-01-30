@@ -7,7 +7,7 @@ const caseStudies = {
     title: "Public Sector Reporting Transformation",
     sector: "Public Sector",
     outcome: "Reduced reporting time from days to minutes",
-    image: "/images/case-studies/layout.png",
+    image: "/case-studies/Publicsector.jpg",
     body: `
 Collinalitics partnered with a government agency to overhaul their legacy reporting workflows.
 By implementing automated Power BI dashboards and streamlining data pipelines, we reduced

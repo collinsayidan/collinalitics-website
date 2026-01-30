@@ -108,7 +108,7 @@ export default function UseCase() {
             <div className="mt-2 rounded-2xl overflow-hidden border border-gray-200 bg-gray-50">
               <div className="relative aspect-[16/10] w-full">
                 <Image
-                  src="/images/project_05.jpg"
+                  src="/usecase/usecase_01.png"
                   alt="Dashboard preview"
                   fill
                   className="object-cover"

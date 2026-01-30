@@ -180,9 +180,9 @@ export default function Contact() {
               <ActionCard
                 title="Email us"
                 desc="Best for detailed requests, docs, and context."
-                href="mailto:collinsayidan@collinalitics.co.uk"
+                href="mailto:info@collinalitics.co.uk"
                 icon={<MailIcon className="h-5 w-5" />}
-                cta="collinsayidan@collinalitics.co.uk"
+                cta="info@collinalitics.co.uk"
               />
               <ActionCard
                 title="Book a free discovery call"
@@ -350,7 +350,7 @@ export default function Contact() {
                     </p>
                   ) : (
                     <p id="message-help" className="mt-2 text-xs text-white/55">
-                      Include goals + timelines if you can — we’ll tailor the response.
+                      Include goals + timelines if you can we’ll tailor the response.
                     </p>
                   )}
                 </div>

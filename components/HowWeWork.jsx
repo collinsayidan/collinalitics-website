@@ -126,11 +126,11 @@ export default function HowWeWork() {
           </motion.div>
 
           <motion.h2 id="how-heading" variants={fadeUp} className="mt-6 text-h2 text-white">
-            A clear, collaborative process — designed for confidence.
+            A clear, collaborative process designed for confidence.
           </motion.h2>
 
           <motion.p variants={fadeUp} className="mt-4 text-bodylg text-white/85 leading-relaxed">
-            Transparent, structured, and aligned with best practice — so your reporting becomes easier,
+            Transparent, structured, and aligned with best practice so your reporting becomes easier,
             more reliable, and more useful across the organisation.
           </motion.p>
 
@@ -272,7 +272,7 @@ export default function HowWeWork() {
               Ready to improve reporting clarity?
             </h3>
             <p className="mt-2 text-sm text-white/80 leading-relaxed">
-              We’ll recommend a practical first step based on your current maturity — focused on the highest-impact improvements.
+              We’ll recommend a practical first step based on your current maturity focused on the highest-impact improvements.
             </p>
           </div>
 

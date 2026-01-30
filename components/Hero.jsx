@@ -216,7 +216,7 @@ export default function Hero() {
 
             <p className="mt-6 text-lg sm:text-xl text-white/80 max-w-2xl leading-relaxed">
               We help UK organisations replace manual reporting with reliable metrics,
-              decision-ready dashboards, and scalable data foundations — built for long-term clarity.
+              decision-ready dashboards, and scalable data foundations built for long-term clarity.
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/75">

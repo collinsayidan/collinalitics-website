@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 export default function BIDashboards() {
   const capabilities = [
@@ -35,25 +36,68 @@ export default function BIDashboards() {
     "Documentation + handover (usage + metric definitions)",
   ];
 
-  const tools = ["Power BI", "Tableau", "Looker Studio", "Excel (where needed)", "SQL-backed reporting layer"];
+  const tools = [
+    "Power BI",
+    "Tableau",
+    "Looker Studio",
+    "Excel (where needed)",
+    "SQL-backed reporting layer",
+  ];
 
   return (
-    <section className="relative overflow-hidden bg-white py-24 sm:py-28 md:py-32">
+    <section className="relative overflow-hidden bg-white py-20 sm:py-24 md:py-28">
       {/* Subtle background accents */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="absolute -top-24 right-[-6rem] h-72 w-72 rounded-full bg-collin-teal-light/14 blur-3xl" />
         <div className="absolute -bottom-28 left-[-6rem] h-72 w-72 rounded-full bg-collin-teal/10 blur-3xl" />
-        <div className="absolute inset-0 opacity-[0.035] bg-[url('/patterns/grid.svg')]" />
+        <div className="absolute inset-0 opacity-[0.03] [background-image:linear-gradient(to_right,rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.06)_1px,transparent_1px)] [background-size:84px_84px]" />
       </div>
 
       <div className="container-wrapper relative z-10">
-        {/* Header */}
-        <header className="max-w-3xl">
-          <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">
-            Service
-          </p>
+        {/* Top nav row (Home / Services) */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <nav
+            aria-label="Breadcrumb"
+            className="text-sm text-collin-slate flex flex-wrap items-center gap-2"
+          >
+            <Link href="/" className="hover:text-collin-navy transition font-medium">
+              Home
+            </Link>
+            <span className="text-collin-slate/60">/</span>
+            <Link href="/services" className="hover:text-collin-navy transition font-medium">
+              Services
+            </Link>
+            <span className="text-collin-slate/60">/</span>
+            <span className="text-collin-navy font-semibold">BI Dashboards</span>
+          </nav>
 
-          <h1 className="mt-3 text-h2 text-collin-navy font-semibold">
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center rounded-full border border-gray-200 bg-white/80 px-4 py-2 text-xs font-semibold text-collin-navy hover:bg-gray-50 transition"
+            >
+              Back to Home
+            </Link>
+
+            <Link
+              href="/services"
+              className="inline-flex items-center justify-center rounded-full border border-gray-200 bg-white/80 px-4 py-2 text-xs font-semibold text-collin-navy hover:bg-gray-50 transition"
+            >
+              All Services
+            </Link>
+          </div>
+        </div>
+
+        {/* Header */}
+        <header className="max-w-3xl mt-10">
+          <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/70 px-4 py-2 backdrop-blur">
+            <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" />
+            <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">
+              Service
+            </p>
+          </div>
+
+          <h1 className="mt-6 text-h2 text-collin-navy font-semibold tracking-tight">
             BI Dashboards
           </h1>
 
@@ -62,13 +106,21 @@ export default function BIDashboards() {
             without noise, clutter, or unnecessary complexity. The focus is usability, trust, and outcomes.
           </p>
 
-          <div className="mt-6 h-1 w-16 rounded-full bg-collin-teal/40" aria-hidden="true" />
+          {/* Micro-proof row */}
+          <div className="mt-8 flex flex-wrap items-center gap-2 text-xs text-gray-600">
+            <ProofPill>Decision-ready design</ProofPill>
+            <ProofPill>Governed KPI definitions</ProofPill>
+            <ProofPill>Drill-down without clutter</ProofPill>
+            <ProofPill>Automation-friendly</ProofPill>
+          </div>
+
+          <div className="mt-8 h-px w-full bg-gray-200" aria-hidden="true" />
         </header>
 
-        <div className="mt-14 grid gap-10 lg:grid-cols-12 lg:gap-12 items-start">
+        <div className="mt-12 grid gap-10 lg:grid-cols-12 lg:gap-12 items-start">
           {/* Left: What we build */}
-          <div className="lg:col-span-7">
-            <div className="rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-soft">
+          <div className="lg:col-span-7 space-y-8">
+            <div className="rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-[0_18px_60px_rgba(2,12,27,0.08)]">
               <h2 className="text-sm font-semibold tracking-widest text-collin-slate uppercase">
                 What we build
               </h2>
@@ -77,13 +129,13 @@ export default function BIDashboards() {
                 {capabilities.map((c) => (
                   <div key={c.title} className="flex items-start gap-4">
                     <span
-                      className="mt-0.5 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-collin-teal/10 text-collin-teal"
+                      className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-collin-teal/10 text-collin-teal border border-collin-teal/10"
                       aria-hidden="true"
                     >
                       <CheckIcon className="h-5 w-5" />
                     </span>
 
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-base font-semibold text-collin-navy">{c.title}</p>
                       <p className="mt-1 text-sm text-gray-700 leading-relaxed">{c.desc}</p>
                     </div>
@@ -93,10 +145,16 @@ export default function BIDashboards() {
             </div>
 
             {/* UX Principles */}
-            <div className="mt-8 rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-soft">
-              <h2 className="text-sm font-semibold tracking-widest text-collin-slate uppercase">
-                Dashboard UX principles (how we avoid clutter)
-              </h2>
+            <div className="rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-[0_18px_60px_rgba(2,12,27,0.08)]">
+              <div className="flex items-center justify-between gap-4">
+                <h2 className="text-sm font-semibold tracking-widest text-collin-slate uppercase">
+                  Dashboard UX principles (how we avoid clutter)
+                </h2>
+
+                <span className="hidden sm:inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-semibold text-collin-navy">
+                  Premium usability
+                </span>
+              </div>
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <Principle
@@ -117,11 +175,45 @@ export default function BIDashboards() {
                 />
               </div>
             </div>
+
+            {/* Conversion band */}
+            <div className="relative overflow-hidden rounded-3xl border border-gray-200 bg-white p-7 sm:p-9 shadow-[0_18px_60px_rgba(2,12,27,0.08)]">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-collin-teal/10 blur-3xl"
+              />
+              <div className="relative">
+                <h3 className="text-h4 text-collin-navy">Want a dashboard people actually use?</h3>
+                <p className="mt-2 text-body text-collin-slate leading-relaxed max-w-2xl">
+                  Share what you track today — we’ll recommend a cleaner KPI structure, a better layout,
+                  and a practical path to trusted reporting.
+                </p>
+
+                <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center justify-center rounded-xl bg-collin-teal px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-collin-teal/20 hover:opacity-95 transition"
+                  >
+                    Discuss your dashboard needs
+                    <span className="ml-2" aria-hidden="true">
+                      <ArrowRightIcon className="h-4 w-4" />
+                    </span>
+                  </a>
+
+                  <Link
+                    href="/services"
+                    className="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-collin-navy hover:bg-gray-50 transition"
+                  >
+                    View all services
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Right: Outcomes + Deliverables */}
-          <aside className="lg:col-span-5 space-y-8">
-            <div className="rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-soft">
+          <aside className="lg:col-span-5 space-y-8 lg:sticky lg:top-24">
+            <div className="rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-[0_18px_60px_rgba(2,12,27,0.08)]">
               <h2 className="text-sm font-semibold tracking-widest text-collin-slate uppercase">
                 Outcomes you can expect
               </h2>
@@ -129,14 +221,14 @@ export default function BIDashboards() {
               <ul className="mt-6 space-y-3">
                 {outcomes.map((o) => (
                   <li key={o} className="flex items-start gap-3">
-                    <span className="mt-1.5 h-2 w-2 rounded-full bg-collin-teal" aria-hidden="true" />
+                    <span className="mt-1.5 h-2.5 w-2.5 rounded-full bg-collin-teal flex-shrink-0" />
                     <span className="text-sm text-gray-700 leading-relaxed">{o}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-soft">
+            <div className="rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-[0_18px_60px_rgba(2,12,27,0.08)]">
               <h2 className="text-sm font-semibold tracking-widest text-collin-slate uppercase">
                 Typical deliverables
               </h2>
@@ -145,7 +237,7 @@ export default function BIDashboards() {
                 {deliverables.map((d) => (
                   <li key={d} className="flex items-start gap-3">
                     <span
-                      className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-lg bg-collin-teal/10 text-collin-teal"
+                      className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-xl bg-collin-teal/10 text-collin-teal border border-collin-teal/10 flex-shrink-0"
                       aria-hidden="true"
                     >
                       <CheckIcon className="h-4 w-4" />
@@ -156,7 +248,7 @@ export default function BIDashboards() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-soft">
+            <div className="rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-[0_18px_60px_rgba(2,12,27,0.08)]">
               <h2 className="text-sm font-semibold tracking-widest text-collin-slate uppercase">
                 Tools we work with
               </h2>
@@ -183,12 +275,12 @@ export default function BIDashboards() {
                   </span>
                 </a>
 
-                <a
+                <Link
                   href="/services"
                   className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-collin-navy hover:bg-gray-50 transition"
                 >
                   View all services
-                </a>
+                </Link>
               </div>
             </div>
           </aside>
@@ -206,6 +298,14 @@ function Principle({ title, desc }) {
       <p className="text-sm font-semibold text-collin-navy">{title}</p>
       <p className="mt-2 text-sm text-gray-700 leading-relaxed">{desc}</p>
     </div>
+  );
+}
+
+function ProofPill({ children }) {
+  return (
+    <span className="inline-flex items-center rounded-full border border-gray-200 bg-white/70 px-3 py-1 text-xs font-semibold text-collin-navy">
+      {children}
+    </span>
   );
 }
 

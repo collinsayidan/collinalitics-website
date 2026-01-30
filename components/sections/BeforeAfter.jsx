@@ -138,7 +138,7 @@ export default function BeforeAfterReveal() {
           </h2>
 
           <p className="text-bodylg text-white/85 mt-4 leading-relaxed">
-            Drag anywhere to compare — or use your arrow keys.
+            Drag anywhere to compare or use your arrow keys.
           </p>
         </motion.header>
 
