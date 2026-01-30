@@ -7,7 +7,7 @@ const caseStudies = {
     title: "Public Sector Reporting Transformation",
     sector: "Public Sector",
     outcome: "Reduced reporting time from days to minutes",
-    image: "/images/case-studies/project_01.jpg",
+    image: "/images/case-studies/layout.png",
     body: `
 Collinalitics partnered with a government agency to overhaul their legacy reporting workflows.
 By implementing automated Power BI dashboards and streamlining data pipelines, we reduced
@@ -68,8 +68,11 @@ giving executives instant clarity and enabling proactive performance management.
   },
 };
 
-export default function CaseStudyDetail({ params }) {
-  const study = caseStudies[params.slug];
+// ✅ FIX: make it async and unwrap params
+export default async function CaseStudyDetail({ params }) {
+  const { slug } = await params;
+
+  const study = caseStudies[slug];
   if (!study) return notFound();
 
   return (
@@ -146,13 +149,9 @@ export default function CaseStudyDetail({ params }) {
                 </span>
               </div>
 
-              <h1 className="mt-4 text-h2 text-collin-navy leading-tight">
-                {study.title}
-              </h1>
+              <h1 className="mt-4 text-h2 text-collin-navy leading-tight">{study.title}</h1>
 
-              <p className="mt-3 text-bodylg text-collin-slate font-medium">
-                {study.outcome}
-              </p>
+              <p className="mt-3 text-bodylg text-collin-slate font-medium">{study.outcome}</p>
 
               <div className="mt-7 rounded-2xl border border-gray-200 bg-white p-6">
                 <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
@@ -238,24 +237,9 @@ export default function CaseStudyDetail({ params }) {
 
           {/* Side blocks */}
           <div className="lg:col-span-5 space-y-8">
-            <InfoBlock
-              title="Challenge"
-              items={study.challenge}
-              icon={<IconAlert />}
-              tone="neutral"
-            />
-            <InfoBlock
-              title="Approach"
-              items={study.approach}
-              icon={<IconTools />}
-              tone="neutral"
-            />
-            <InfoBlock
-              title="Impact"
-              items={study.impact}
-              icon={<IconSpark />}
-              tone="accent"
-            />
+            <InfoBlock title="Challenge" items={study.challenge} icon={<IconAlert />} tone="neutral" />
+            <InfoBlock title="Approach" items={study.approach} icon={<IconTools />} tone="neutral" />
+            <InfoBlock title="Impact" items={study.impact} icon={<IconSpark />} tone="accent" />
           </div>
         </div>
 

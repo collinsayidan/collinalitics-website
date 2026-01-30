@@ -2,14 +2,14 @@
 
 A professional one-page website for Collinalitics Ltd, built with **Next.js (App Router)** and **Tailwind CSS**. Ready for **Netlify** deployment with `@netlify/plugin-nextjs`.
 
-## ✨ Features
+## Features
 - App Router (`/app`) with SEO `metadata`
 - Tailwind CSS and reusable utility classes
 - Smooth in-page navigation, fixed navbar, correct anchor offsets
 - Sections: Hero, About, Services, How We Work, Demo Use Case, Why Us, Contact, Footer
 - Open Graph meta and favicon in `/public`
 
-## 🚀 Getting Started
+## Getting Started
 ```bash
 npm install
 npm run dev
@@ -22,7 +22,7 @@ npm run build
 npm start
 ```
 
-## 🌐 Deploy to Netlify
+## Deploy to Netlify
 1. Push this repo to GitHub (or import directly in Netlify)
 2. Netlify build settings:
    - Build command: `npm run build`
@@ -35,7 +35,7 @@ npm start
 - Update colours in `tailwind.config.js`
 - Replace `/public/og-image.png` with a branded 1200×630 banner
 
-## 📁 Structure
+##  Structure
 ```
 collinalitics-next/
   app/
