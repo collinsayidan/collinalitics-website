@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "@/components/ThemeToggle"; // ✅ add
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -25,15 +26,11 @@ export default function Navbar() {
     []
   );
 
-  // Convert section hrefs depending on route:
-  // - On home: "#about"
-  // - Elsewhere: "/#about"
   const resolveHref = (l) => {
     if (l.type === "route") return l.href;
     return isHome ? l.href : `/${l.href}`;
   };
 
-  // Lock body scroll on mobile menu open
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -43,7 +40,6 @@ export default function Navbar() {
     };
   }, [open]);
 
-  // Close on Escape
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === "Escape") setOpen(false);
@@ -52,20 +48,17 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  // Close menu on route change
   useEffect(() => {
     setOpen(false);
     setActive(isHome ? "#top" : pathname);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  // Active section highlight (ONLY on homepage where sections exist)
   useEffect(() => {
     if (!isHome) return;
 
     const ids = ["top", "about", "services", "how", "use-case", "why", "contact"];
     const elements = ids.map((id) => document.getElementById(id)).filter(Boolean);
-
     if (!elements.length || typeof IntersectionObserver === "undefined") return;
 
     const io = new IntersectionObserver(
@@ -83,7 +76,6 @@ export default function Navbar() {
     return () => io.disconnect();
   }, [isHome]);
 
-  // Calendly popup (lazy-load)
   const openCalendly = () => {
     if (typeof window === "undefined") return;
 
@@ -111,11 +103,7 @@ export default function Navbar() {
   };
 
   const isLinkActive = (l) => {
-    if (l.type === "route") {
-      // highlight Insights for /insights and /insights/anything
-      return pathname === l.href || pathname.startsWith(`${l.href}/`);
-    }
-    // section highlighting only meaningful on home
+    if (l.type === "route") return pathname === l.href || pathname.startsWith(`${l.href}/`);
     return isHome && active === l.href;
   };
 
@@ -127,15 +115,21 @@ export default function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       {/* Backdrop bar */}
-      <div className="bg-white/70 backdrop-blur-xl border-b border-gray-200">
+      <div
+        className={[
+          "border-b backdrop-blur-xl",
+          "bg-white/70 border-gray-200",
+          "dark:bg-collin-navy/70 dark:border-white/10",
+        ].join(" ")}
+      >
         <div className="container-wrapper">
-          <div className="flex h-16 items-center justify-between">
+          <div className="flex h-16 items-center justify-between gap-3">
             {/* Logo */}
             <Link href={isHome ? "#top" : "/#top"} className="flex items-center gap-2" aria-label="Collinalitics home">
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-collin-teal text-white font-bold">
                 C
               </span>
-              <span className="text-sm sm:text-base font-semibold text-collin-navy">
+              <span className="text-sm sm:text-base font-semibold text-collin-navy dark:text-white">
                 Collinalitics Ltd
               </span>
             </Link>
@@ -153,7 +147,9 @@ export default function Navbar() {
                     onClick={() => onNavClick(l)}
                     className={[
                       "text-sm font-medium transition",
-                      activeNow ? "text-collin-teal" : "text-collin-slate hover:text-collin-teal",
+                      activeNow
+                        ? "text-collin-teal"
+                        : "text-collin-slate hover:text-collin-teal dark:text-white/80 dark:hover:text-collin-teal-light",
                     ].join(" ")}
                   >
                     {l.label}
@@ -170,18 +166,26 @@ export default function Navbar() {
                 <CalendarIcon className="h-4 w-4" />
                 Book a free discovery call
               </button>
+
+              {/* ✅ Theme toggle (desktop) */}
+              <ThemeToggle />
             </nav>
 
-            {/* Mobile Menu Toggle */}
-            <button
-              className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-collin-slate hover:bg-gray-100 transition"
-              aria-label={open ? "Close navigation" : "Open navigation"}
-              aria-expanded={open}
-              onClick={() => setOpen((v) => !v)}
-              type="button"
-            >
-              {open ? <CloseIcon /> : <MenuIcon />}
-            </button>
+            {/* Right side (mobile): toggle + burger */}
+            <div className="md:hidden flex items-center gap-2">
+              {/* ✅ Theme toggle (mobile compact) */}
+              <ThemeToggle compact />
+
+              <button
+                className="inline-flex items-center justify-center rounded-md p-2 text-collin-slate hover:bg-gray-100 transition dark:text-white/80 dark:hover:bg-white/10"
+                aria-label={open ? "Close navigation" : "Open navigation"}
+                aria-expanded={open}
+                onClick={() => setOpen((v) => !v)}
+                type="button"
+              >
+                {open ? <CloseIcon /> : <MenuIcon />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -199,7 +203,7 @@ export default function Navbar() {
 
           <div className="relative">
             <div className="container-wrapper">
-              <div className="mt-3 card bg-white/95 p-4">
+              <div className="mt-3 rounded-2xl border border-gray-200 bg-white/95 p-4 shadow-lg dark:border-white/10 dark:bg-collin-navy/90">
                 <div className="grid gap-1">
                   {links.map((l) => {
                     const href = resolveHref(l);
@@ -214,7 +218,7 @@ export default function Navbar() {
                           "rounded-lg px-3 py-2 text-sm font-medium transition",
                           activeNow
                             ? "bg-collin-teal/10 text-collin-teal"
-                            : "text-collin-slate hover:bg-gray-100",
+                            : "text-collin-slate hover:bg-gray-100 dark:text-white/80 dark:hover:bg-white/10",
                         ].join(" ")}
                       >
                         {l.label}
@@ -222,7 +226,7 @@ export default function Navbar() {
                     );
                   })}
 
-                  <div className="mt-2 pt-3 border-t border-gray-200">
+                  <div className="mt-2 pt-3 border-t border-gray-200 dark:border-white/10">
                     <button
                       onClick={() => {
                         openCalendly();

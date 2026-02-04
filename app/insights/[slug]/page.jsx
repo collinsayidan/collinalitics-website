@@ -174,9 +174,7 @@ export default async function Page({ params }) {
   if (!article) return notFound();
 
   const metaLine = `${article.date} • ${getReadingTime(article.content)}`;
-
   const headings = buildHeadings(article.content);
-
   const related = getRelatedPosts(slug, article.category);
 
   return (
@@ -185,44 +183,54 @@ export default async function Page({ params }) {
 
       <BlogHero title={article.title} date={metaLine} category={article.category} />
 
-      <BlogLayout content={article.content} headings={headings} author={authors[article.author]} />
+      <BlogLayout
+        content={article.content}
+        headings={headings}
+        author={authors[article.author]}
+      />
 
-      {/* Related */}
+      {/* Related (dark navy/teal/slate – no glass) */}
       <section className="relative mt-24 sm:mt-28 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-white to-gray-50" aria-hidden="true" />
+        {/* Dark brand background */}
+        <div className="absolute inset-0 bg-collin-navy-gradient" aria-hidden="true" />
+
+        {/* Grid */}
         <div
-          className="absolute inset-0 opacity-[0.35]
-          [background-image:linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)]
-          [background-size:72px_72px] pointer-events-none"
+          className="pointer-events-none absolute inset-0 opacity-[0.22]
+          [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)]
+          [background-size:72px_72px]"
           aria-hidden="true"
         />
+
+        {/* Glows */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-24 right-[-6rem] h-72 w-72 rounded-full bg-collin-teal-light/16 blur-3xl" />
-          <div className="absolute -bottom-28 left-[-6rem] h-72 w-72 rounded-full bg-collin-teal/10 blur-3xl" />
+          <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-collin-teal/16 blur-[120px]" />
+          <div className="absolute -bottom-28 -right-28 h-72 w-72 rounded-full bg-collin-teal-light/12 blur-[120px]" />
         </div>
 
         <div className="container-wrapper relative z-10 py-16 sm:py-20">
           <div className="mx-auto max-w-4xl">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/70 px-4 py-2 backdrop-blur">
+                {/* Solid pill (no blur) */}
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2">
                   <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" />
-                  <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">
+                  <p className="text-xs font-semibold tracking-widest text-white/80 uppercase">
                     Keep reading
                   </p>
                 </div>
 
-                <h3 className="mt-5 text-h3 text-collin-navy">Related articles</h3>
+                <h3 className="mt-5 text-h3 text-white">Related articles</h3>
 
-                <p className="mt-2 text-body text-collin-slate">
+                <p className="mt-2 text-body text-white/70">
                   More on{" "}
-                  <span className="font-semibold text-collin-navy">{article.category}</span>.
+                  <span className="font-semibold text-white">{article.category}</span>.
                 </p>
               </div>
 
               <a
                 href="/insights"
-                className="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-collin-navy hover:bg-gray-50 transition w-full sm:w-auto"
+                className="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/5 px-5 py-3 text-sm font-semibold text-white/85 hover:bg-white/10 transition w-full sm:w-auto"
               >
                 View all insights <span className="ml-2" aria-hidden="true">→</span>
               </a>
@@ -240,16 +248,17 @@ export default async function Page({ params }) {
               ))}
             </div>
 
-            <div className="mt-12 rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-xl">
+            {/* CTA box (dark, brand-consistent) */}
+            <div className="mt-12 rounded-3xl border border-white/10 bg-black/20 p-7 sm:p-9 shadow-2xl">
               <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                 <div className="max-w-2xl">
-                  <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">
+                  <p className="text-xs font-semibold tracking-widest text-white/70 uppercase">
                     Want help applying this?
                   </p>
-                  <h4 className="mt-2 text-h4 text-collin-navy">
+                  <h4 className="mt-2 text-h4 text-white">
                     Turn this insight into a practical reporting improvement.
                   </h4>
-                  <p className="mt-3 text-body text-collin-slate leading-relaxed">
+                  <p className="mt-3 text-body text-white/70 leading-relaxed">
                     If you’re dealing with manual reporting, unclear KPIs, or low confidence in numbers,
                     we can recommend the fastest first step to improve clarity.
                   </p>
@@ -322,7 +331,7 @@ function getRelatedPosts(currentSlug, category) {
 
 function Chip({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-collin-navy">
+    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/80">
       {children}
     </span>
   );

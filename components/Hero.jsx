@@ -1,6 +1,17 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button"; // <-- If alias fails, use "../components/ui/button"
+import {
+  ArrowRight,
+  Zap,
+  Shield,
+  Gauge,
+  Calendar,
+  Check,
+  ArrowUpRight,
+} from "lucide-react";
 
 const CALENDLY_URL = "https://calendly.com/collinsayidan-collinalitics/30min";
 
@@ -15,7 +26,7 @@ export default function Hero() {
   const [reduceMotion, setReduceMotion] = useState(false);
   const [finePointer, setFinePointer] = useState(false);
 
-  // Detect reduced-motion + pointer type
+  // Detect reduced motion + fine pointer
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -82,7 +93,7 @@ export default function Hero() {
       return;
     }
 
-    // Script exists but object not ready -> short retry then fallback
+    // Script exists but Calendly not ready: retry then fallback
     window.clearTimeout(readyTimerRef.current);
     readyTimerRef.current = window.setTimeout(() => {
       const ok = openWidget();
@@ -90,7 +101,7 @@ export default function Hero() {
     }, 250);
   }, []);
 
-  // Background parallax (only on fine pointer + no reduced motion)
+  // Background parallax
   const onPointerMoveBg = useCallback(
     (e) => {
       if (reduceMotion || !finePointer) return;
@@ -147,13 +158,17 @@ export default function Hero() {
     card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg)";
   }, []);
 
-  // Cleanup
   useEffect(() => {
     return () => {
       if (rafBgRef.current) cancelAnimationFrame(rafBgRef.current);
       if (rafTiltRef.current) cancelAnimationFrame(rafTiltRef.current);
       if (readyTimerRef.current) window.clearTimeout(readyTimerRef.current);
     };
+  }, []);
+
+  const scrollToServices = useCallback(() => {
+    const el = document.getElementById("services");
+    el?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
   return (
@@ -164,235 +179,192 @@ export default function Hero() {
       aria-labelledby="hero-title"
       onPointerMove={onPointerMoveBg}
       onPointerLeave={onPointerLeaveBg}
-      className="relative overflow-hidden text-white min-h-[92vh] flex items-center"
+      className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
       style={{ backgroundPosition: "var(--bg-x, 50%) var(--bg-y, 50%)" }}
     >
-      {/* ===== COLOR CONTROL (Hero BG) =====
-          Change these for “more blue / more navy”:
-          - from-collin-navy/.. via-[#0B1E3B]/.. to-[#061225]/..
-      */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(1200px_circle_at_var(--bg-x,50%)_var(--bg-y,50%),rgba(56,189,248,0.18),transparent_45%),radial-gradient(900px_circle_at_20%_20%,rgba(45,212,191,0.14),transparent_55%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-b from-[#061225] via-[#071B35] to-[#051126]"
-      />
+      {/* Abstract data visualization background (HeroSection style) */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-3xl" />
 
-      {/* Subtle grid */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.16]
-        [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)]
-        [background-size:88px_88px]"
-      />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-      {/* Teal glows (controlled, not noisy) */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 right-[-8rem] h-[28rem] w-[28rem] rounded-full bg-collin-lightTeal/16 blur-[120px]" />
-        <div className="absolute -bottom-36 left-[-8rem] h-[32rem] w-[32rem] rounded-full bg-collin-teal/10 blur-[140px]" />
+        {/* Parallax highlight overlay */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(900px circle at var(--bg-x,50%) var(--bg-y,50%), rgba(56,189,248,0.10), transparent 55%)",
+          }}
+        />
       </div>
 
-      <div className="container-wrapper relative z-10">
-        <div className="grid gap-14 lg:grid-cols-12 lg:gap-12 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left */}
-          <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 backdrop-blur-md">
-              <span className="h-2 w-2 rounded-full bg-collin-lightTeal" aria-hidden="true" />
-              <p className="text-xs font-semibold tracking-widest text-white/85 uppercase">
+          <motion.div
+            initial={{ opacity: 0, y: reduceMotion ? 0 : 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-8">
+              <span className="text-blue-400 text-sm font-medium tracking-wide">
                 Analytics Engineering • BI • Systems
-              </p>
+              </span>
             </div>
 
             <h1
               id="hero-title"
-              className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.06]"
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight mb-6"
             >
               Turn complex data into{" "}
-              <span className="text-collin-lightTeal">clear decisions</span>
-              <span className="block mt-2 text-white/95">your team can act on.</span>
+              <span className="bg-gradient-to-r from-blue-400 via-teal-400 to-blue-400 bg-clip-text text-transparent">
+                clear decisions
+              </span>{" "}
+              your team can act on.
             </h1>
 
-            <p className="mt-6 text-lg sm:text-xl text-white/80 max-w-2xl leading-relaxed">
+            <p className="text-lg text-slate-400 leading-relaxed mb-10 max-w-xl">
               We help UK organisations replace manual reporting with reliable metrics,
               decision-ready dashboards, and scalable data foundations built for long-term clarity.
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/75">
-              <span className="inline-flex items-center gap-2">
-                <CheckMini />
-                Faster reporting cycles
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <CheckMini />
-                Trusted single source of truth
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <CheckMini />
-                Less manual effort
-              </span>
-            </div>
-
-            <div className="mt-10 flex flex-col sm:flex-row gap-3">
-              <button
-                type="button"
-                onClick={openCalendly}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-collin-teal px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-black/20 hover:opacity-95 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-lightTeal/30"
-                aria-label="Book a free strategy call (Calendly popup)"
-              >
-                <CalendarIcon />
+            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <Button size="lg" onClick={openCalendly}>
+                <Calendar className="h-5 w-5" />
                 Free Strategy Call
-                <ArrowIcon />
-              </button>
+                <ArrowRight className="h-5 w-5" />
+              </Button>
 
-              <a
-                href="#services"
-                className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25"
-                aria-label="View services section"
-              >
+              <Button size="lg" variant="outline" type="button" onClick={scrollToServices}>
                 View Services
-              </a>
-
-              <a
-                href="#use-case"
-                className="text-sm font-semibold text-white/85 hover:text-white transition self-center sm:self-auto sm:ml-2"
-                aria-label="See demo section"
-              >
-                See demo <span aria-hidden="true">→</span>
-              </a>
+              </Button>
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center gap-3 text-xs text-white/70">
-              <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 backdrop-blur-md">
-                UK-based delivery
-              </span>
-              <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 backdrop-blur-md">
-                KPI frameworks & governance
-              </span>
-              <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 backdrop-blur-md">
-                Automation-first approach
-              </span>
+            <div className="flex flex-wrap gap-6">
+              {[
+                { icon: Gauge, label: "Faster reporting cycles" },
+                { icon: Shield, label: "Trusted single source of truth" },
+                { icon: Zap, label: "Less manual effort" },
+              ].map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, y: reduceMotion ? 0 : 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 + i * 0.1, duration: 0.5 }}
+                  className="flex items-center gap-2 text-slate-400"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center">
+                    <item.icon className="w-4 h-4 text-teal-400" />
+                  </div>
+                  <span className="text-sm font-medium">{item.label}</span>
+                </motion.div>
+              ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Right */}
-          <div className="lg:col-span-5">
-            <div
-              ref={cardRef}
-              onPointerMove={onPointerMoveTilt}
-              onPointerLeave={resetTilt}
-              className={[
-                "rounded-2xl border border-white/18 bg-white/[0.10] backdrop-blur-xl",
-                "shadow-[0_30px_90px_rgba(0,0,0,0.45)] ring-1 ring-white/10",
-                "p-7 sm:p-8 transition-transform duration-200 ease-out will-change-transform",
-              ].join(" ")}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-xs font-semibold tracking-widest text-white/70 uppercase">
-                    What we deliver
-                  </p>
-                  <h2 className="mt-2 text-xl font-semibold text-white">
-                    Outcomes your stakeholders feel
-                  </h2>
+          <motion.div
+            initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="hidden lg:block"
+          >
+            <div className="relative">
+              <div
+                ref={cardRef}
+                onPointerMove={onPointerMoveTilt}
+                onPointerLeave={resetTilt}
+                className="bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-slate-800 p-6 shadow-2xl transition-transform duration-200 ease-out will-change-transform"
+              >
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-green-500/80" />
                 </div>
 
-                <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/80 border border-white/15">
-                  UK-based
-                </span>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-3 gap-3">
+                    {[
+                      { label: "Revenue", value: "£2.4M", change: "+12%" },
+                      { label: "Efficiency", value: "94%", change: "+8%" },
+                      { label: "Reports", value: "847", change: "+23%" },
+                    ].map((stat) => (
+                      <div key={stat.label} className="bg-slate-800/50 rounded-xl p-4">
+                        <p className="text-slate-500 text-xs mb-1">{stat.label}</p>
+                        <p className="text-white font-semibold text-lg">{stat.value}</p>
+                        <p className="text-teal-400 text-xs">{stat.change}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="bg-slate-800/50 rounded-xl p-4">
+                    <div className="flex items-end gap-2 h-32">
+                      {[40, 65, 45, 80, 55, 90, 70, 85, 60, 95, 75, 88].map((h, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ height: 0 }}
+                          animate={{ height: `${h}%` }}
+                          transition={{ delay: 0.5 + i * 0.05, duration: 0.5 }}
+                          className="flex-1 bg-gradient-to-t from-blue-600 to-teal-500 rounded-sm"
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-800/50 rounded-xl p-4">
+                    <p className="text-slate-400 text-sm font-medium mb-3">What we deliver</p>
+
+                    <ul className="space-y-2 text-sm text-slate-300">
+                      {[
+                        "Decision-ready dashboards",
+                        "KPI governance & ownership",
+                        "Systems + process analysis",
+                        "Reporting automation",
+                      ].map((t) => (
+                        <li key={t} className="flex items-start gap-2">
+                          <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-lg bg-slate-800 border border-slate-700">
+                            <Check className="h-4 w-4 text-teal-400" strokeWidth={2.5} />
+                          </span>
+                          <span>{t}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <a
+                      href="#about"
+                      className="mt-4 inline-flex items-center text-sm font-medium text-teal-300 hover:text-teal-200 transition"
+                    >
+                      Why Collinalitics
+                      <ArrowUpRight className="ml-1 h-4 w-4" />
+                    </a>
+                  </div>
+                </div>
               </div>
 
-              <ul className="mt-6 space-y-4 text-sm text-white/80 leading-relaxed">
-                <li className="flex items-start gap-3">
-                  <BulletCheck />
-                  Decision-ready dashboards trusted by leadership teams
-                </li>
-                <li className="flex items-start gap-3">
-                  <BulletCheck />
-                  KPI frameworks aligned to real business objectives
-                </li>
-                <li className="flex items-start gap-3">
-                  <BulletCheck />
-                  Systems and process analysis to improve efficiency
-                </li>
-                <li className="flex items-start gap-3">
-                  <BulletCheck />
-                  Scalable reporting automation and digital tools
-                </li>
-              </ul>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1, duration: 0.5 }}
+                className="absolute -left-8 top-1/4 bg-white rounded-xl px-4 py-3 shadow-xl"
+              >
+                <p className="text-slate-900 font-semibold text-sm">UK-based delivery</p>
+              </motion.div>
 
-              <div className="mt-7 pt-5 border-t border-white/15 flex items-center justify-between gap-4">
-                <p className="text-xs text-white/65 leading-relaxed">
-                  Supporting SMEs, charities, and public-sector teams across the UK.
-                </p>
-                <a
-                  href="#about"
-                  className="text-xs font-semibold text-white hover:opacity-90 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 rounded-md"
-                >
-                  Why Collinalitics →
-                </a>
-              </div>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.1, duration: 0.5 }}
+                className="absolute -right-4 bottom-1/4 bg-teal-500 rounded-xl px-4 py-3 shadow-xl"
+              >
+                <p className="text-white font-semibold text-sm">Automation-first</p>
+              </motion.div>
             </div>
-
-            <p className="mt-4 text-xs text-white/65">
-              Prefer email?{" "}
-              <a href="#contact" className="underline underline-offset-4 hover:opacity-90">
-                Send a message
-              </a>
-              .
-            </p>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
-  );
-}
-
-/* Icons */
-function CalendarIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.8"
-      stroke="currentColor"
-      className="h-4 w-4"
-      aria-hidden="true"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10m-12 8h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 14l2 2 4-4" />
-    </svg>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4" aria-hidden="true">
-      <path
-        fillRule="evenodd"
-        d="M3 10a.75.75 0 0 1 .75-.75h10.69l-3.22-3.22a.75.75 0 1 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.22-3.22H3.75A.75.75 0 0 1 3 10Z"
-        clipRule="evenodd"
-      />
-    </svg>
-  );
-}
-
-function CheckMini() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="h-4 w-4 text-collin-lightTeal" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-    </svg>
-  );
-}
-
-function BulletCheck() {
-  return (
-    <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-lg bg-white/10 text-collin-lightTeal border border-white/15">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="h-4 w-4" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-      </svg>
-    </span>
   );
 }

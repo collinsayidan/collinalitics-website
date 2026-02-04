@@ -2,6 +2,9 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 
 /** @type {import('tailwindcss').Config} */
 export default {
+  /** ✅ REQUIRED for theme toggle */
+  darkMode: "class",
+
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
 
   theme: {
@@ -20,6 +23,11 @@ export default {
           "teal-light": "#6EDAD5",
           slate: "#4A4A4A",
           white: "#FFFFFF",
+
+          /** ✅ Dark-surface tokens (NEW) */
+          "navy-dark": "#071B35",
+          "navy-darker": "#061225",
+          "slate-light": "#9CA3AF",
         },
 
         semantic: {
@@ -36,6 +44,10 @@ export default {
       backgroundImage: {
         "collin-navy-gradient":
           "linear-gradient(135deg, #0A2540 0%, #0D315A 100%)",
+
+        /** ✅ Dark hero / section gradient */
+        "collin-navy-gradient-dark":
+          "linear-gradient(135deg, #071B35 0%, #061225 100%)",
       },
 
       /* ============================
@@ -49,14 +61,18 @@ export default {
       boxShadow: {
         soft: "0 10px 30px rgba(2,12,27,0.06)",
         lift: "0 18px 50px rgba(2,12,27,0.10)",
+
+        /** ✅ Dark equivalents */
+        softDark: "0 12px 40px rgba(0,0,0,0.45)",
+        liftDark: "0 22px 70px rgba(0,0,0,0.55)",
+
         glowTeal: "0 0 0 6px rgba(15,181,186,0.10)",
         glowTealLight: "0 0 0 6px rgba(110,218,213,0.12)",
         glowNavy: "0 0 0 6px rgba(10,37,64,0.10)",
       },
 
       /* ============================
-         Typography Scale (optional)
-         Keep if you want theme tokens.
+         Typography Scale
          ============================ */
       fontSize: {
         display: ["4rem", { lineHeight: "1.1", fontWeight: "700" }],
@@ -75,5 +91,8 @@ export default {
     },
   },
 
-  plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
+  plugins: [
+    require("@tailwindcss/typography"),
+    require("@tailwindcss/forms"),
+  ],
 };

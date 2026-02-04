@@ -27,44 +27,50 @@ export default function CaseStudiesPage() {
   const rest = studies.filter((s) => s.slug !== featured.slug);
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-gray-50 py-20 sm:py-24">
-      {/* Subtle grid */}
+    <section className="relative overflow-hidden py-20 sm:py-24 text-white">
+      {/* ✅ Dark brand background */}
+      <div className="absolute inset-0 bg-collin-navy-gradient" aria-hidden="true" />
+
+      {/* ✅ Subtle grid */}
       <div
-        className="absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)] [background-size:72px_72px] pointer-events-none"
+        className="pointer-events-none absolute inset-0 opacity-[0.22]
+        [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)]
+        [background-size:72px_72px]"
         aria-hidden="true"
       />
 
-      {/* Ambient accents */}
+      {/* ✅ Glows */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-24 right-[-6rem] h-72 w-72 rounded-full bg-collin-teal-light/18 blur-3xl" />
-        <div className="absolute -bottom-28 left-[-6rem] h-72 w-72 rounded-full bg-collin-teal/10 blur-3xl" />
+        <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-collin-teal/16 blur-[120px]" />
+        <div className="absolute -bottom-28 -right-28 h-72 w-72 rounded-full bg-collin-teal-light/12 blur-[120px]" />
       </div>
 
       <div className="container-wrapper relative z-10">
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="text-sm text-collin-slate mb-10 flex flex-wrap items-center gap-2"
+          className="text-sm text-white/70 mb-10 flex flex-wrap items-center gap-2"
         >
-          <Link href="/" className="hover:text-collin-navy transition font-medium">
+          <Link href="/" className="hover:text-white transition font-medium">
             Home
           </Link>
-          <span className="text-collin-slate/60">/</span>
-          <span className="text-collin-navy font-semibold">Case Studies</span>
+          <span className="text-white/30">/</span>
+          <span className="text-white font-semibold">Case Studies</span>
         </nav>
 
         {/* Header */}
         <header className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/70 px-4 py-2 backdrop-blur">
+          {/* ✅ Solid pill (no blur / no glass) */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2">
             <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" />
-            <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">
+            <p className="text-xs font-semibold tracking-widest text-white/80 uppercase">
               Results
             </p>
           </div>
 
-          <h1 className="mt-6 text-h2 text-collin-navy">Case studies</h1>
+          <h1 className="mt-6 text-h2 text-white">Case studies</h1>
 
-          <p className="mt-4 text-bodylg text-collin-slate leading-relaxed">
+          <p className="mt-4 text-bodylg text-white/75 leading-relaxed">
             Real examples of how Collinalitics helps organisations gain clarity, automate reporting,
             and make confident, insight-led decisions.
           </p>
@@ -79,22 +85,23 @@ export default function CaseStudiesPage() {
 
         {/* Featured */}
         {featured && (
-          <div className="mt-10 rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-xl">
+          <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-7 sm:p-9 shadow-2xl">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-2xl">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center rounded-full bg-collin-teal/10 px-3 py-1 text-xs font-semibold text-collin-teal">
+                  <span className="inline-flex items-center rounded-full border border-collin-teal/25 bg-collin-teal/10 px-3 py-1 text-xs font-semibold text-collin-teal">
                     Featured
                   </span>
-                  <span className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-semibold text-collin-navy">
+                  <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/85">
                     {featured.sector}
                   </span>
                 </div>
 
-                <h2 className="mt-4 text-h3 text-collin-navy">{featured.title}</h2>
-                <p className="mt-3 text-body text-collin-slate leading-relaxed">
+                <h2 className="mt-4 text-h3 text-white">{featured.title}</h2>
+
+                <p className="mt-3 text-body text-white/75 leading-relaxed">
                   Outcome:{" "}
-                  <span className="font-semibold text-collin-navy">{featured.outcome}</span>
+                  <span className="font-semibold text-white">{featured.outcome}</span>
                 </p>
 
                 <div className="mt-5 flex flex-wrap gap-2">
@@ -122,7 +129,7 @@ export default function CaseStudiesPage() {
               {/* Preview */}
               <Link
                 href={`/case-studies/${featured.slug}`}
-                className="group relative block w-full lg:w-[420px] overflow-hidden rounded-2xl border border-gray-200 bg-gray-100"
+                className="group relative block w-full lg:w-[420px] overflow-hidden rounded-2xl border border-white/10 bg-black/20"
                 aria-label={`Open featured case study: ${featured.title}`}
               >
                 <div
@@ -130,7 +137,7 @@ export default function CaseStudiesPage() {
                   style={{ backgroundImage: `url(${featured.image})` }}
                 />
                 <div
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/5"
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10"
                   aria-hidden="true"
                 />
               </Link>
@@ -160,7 +167,7 @@ export default function CaseStudiesPage() {
 
 function Chip({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-gray-200 bg-white/70 px-3 py-1 text-xs font-medium text-collin-navy">
+    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/85">
       {children}
     </span>
   );
@@ -168,7 +175,7 @@ function Chip({ children }) {
 
 function Tag({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-700">
+    <span className="inline-flex items-center rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs font-medium text-white/75">
       {children}
     </span>
   );

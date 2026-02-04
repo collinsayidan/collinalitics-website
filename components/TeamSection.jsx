@@ -5,11 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 /**
- * Premium Team Section
- * - Hover-only LinkedIn icon on cards (desktop)
- * - Featured leader card with “Verified” badge
- * - Click card → modal with bio, expertise, education, LinkedIn icon
- * - Keyboard a11y: ESC closes
+ * Dark Premium Team Section (no glass reflections)
+ * - Solid dark cards (no backdrop blur)
+ * - Featured leader card
+ * - Card click opens modal
+ * - ESC closes
  */
 
 const TEAM = [
@@ -24,7 +24,13 @@ const TEAM = [
     featured: true,
     bio:
       "Collins leads delivery across analytics engineering and BI helping teams replace fragmented reporting with reliable metrics, automated pipelines, and decision-ready dashboards.",
-    expertise: ["Analytics engineering", "KPI frameworks", "Power BI delivery", "Stakeholder reporting", "Data governance"],
+    expertise: [
+      "Analytics engineering",
+      "KPI frameworks",
+      "Power BI delivery",
+      "Stakeholder reporting",
+      "Data governance",
+    ],
     strengths: ["Clear scope", "Maintainable foundations", "Executive-ready insight"],
   },
   {
@@ -56,7 +62,6 @@ const TEAM = [
     name: "Yaw Asante",
     role: "Data & Systems Consultant",
     school: "Kwame Nkrumah University of Science and Technology (Ghana/UK)",
-
     image: "/images/team/yaw-asante.png",
     linkedin: "https://www.linkedin.com/in/yasante7/",
     bio:
@@ -73,7 +78,6 @@ export default function TeamSection() {
 
   const [active, setActive] = useState(null);
 
-  // ESC closes modal
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") setActive(null);
@@ -85,32 +89,35 @@ export default function TeamSection() {
   return (
     <section
       id="team"
-      className="relative overflow-hidden bg-white py-20 sm:py-24"
+      className="relative overflow-hidden py-20 sm:py-24 text-white bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
       aria-labelledby="team-heading"
     >
-      {/* Premium background texture */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 opacity-[0.25] [background-image:linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)] [background-size:72px_72px]" />
-        <div className="absolute -top-28 right-[-7rem] h-80 w-80 rounded-full bg-collin-lightTeal/25 blur-3xl" />
-        <div className="absolute -bottom-28 left-[-7rem] h-80 w-80 rounded-full bg-collin-teal/10 blur-3xl" />
+      {/* Background: glows + grid (no blur borders on cards) */}
+      <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-3xl" />
+
+        <div className="absolute inset-0 opacity-[0.18] [background-image:linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)] [background-size:72px_72px]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
       </div>
 
       <div className="container-wrapper relative">
         {/* Header */}
         <header className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/70 px-4 py-2 backdrop-blur">
+          <div className="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-950/40 px-4 py-2">
             <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" />
-            <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">
+            <p className="text-xs font-semibold tracking-widest text-white/80 uppercase">
               Team
             </p>
           </div>
 
-          <h2 id="team-heading" className="mt-5 text-h2 text-collin-navy">
+          <h2 id="team-heading" className="mt-5 text-h2 text-white">
             Specialist delivery. Executive-grade clarity.
           </h2>
 
-          <p className="mt-4 text-bodylg text-collin-slate leading-relaxed">
-            We combine analytics engineering, BI, and consulting to deliver reporting leaders trust 
+          <p className="mt-4 text-bodylg text-white/75 leading-relaxed">
+            We combine analytics engineering, BI, and consulting to deliver reporting leaders trust
             with maintainable foundations and measurable outcomes.
           </p>
 
@@ -135,13 +142,10 @@ export default function TeamSection() {
               {rest.map((m) => (
                 <div key={m.id} className="snap-start min-w-[86%]">
                   <TeamCard member={m} onOpen={() => setActive(m)} />
-                <p className="text-sm text-white/80">
-                {m.degree ? `${m.degree} • ${m.school}` : m.school}
-                </p>
                 </div>
               ))}
             </div>
-            <p className="mt-2 text-xs text-gray-500">Swipe to explore →</p>
+            <p className="mt-2 text-xs text-white/60">Swipe to explore →</p>
           </div>
 
           {/* Desktop grid */}
@@ -153,13 +157,13 @@ export default function TeamSection() {
         </div>
 
         {/* CTA */}
-        <div className="mt-14 rounded-3xl border border-gray-200 bg-white/85 p-6 sm:p-8 shadow-xl backdrop-blur">
+        <div className="mt-14 rounded-3xl border border-slate-800 bg-slate-900/70 p-6 sm:p-8 shadow-[0_18px_70px_rgba(0,0,0,0.35)]">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm font-semibold text-collin-navy">
+              <p className="text-sm font-semibold text-white">
                 Want a recommended first step?
               </p>
-              <p className="mt-1 text-sm text-collin-slate">
+              <p className="mt-1 text-sm text-white/70">
                 Share your reporting or KPI challenge — we’ll propose a practical approach.
               </p>
             </div>
@@ -185,23 +189,17 @@ export default function TeamSection() {
 
 function FeaturedLeader({ member, onOpen }) {
   return (
-    <article className="relative overflow-hidden rounded-3xl border border-gray-200 bg-white/95 shadow-[0_22px_80px_rgba(2,12,27,0.12)]">
+    <article className="relative overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/70 shadow-[0_18px_70px_rgba(0,0,0,0.35)]">
       {/* top accent rail */}
       <div
         aria-hidden="true"
         className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-collin-teal via-collin-lightTeal to-collin-teal"
       />
 
-      {/* glow */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-collin-teal/10 blur-3xl" />
-        <div className="absolute -bottom-28 -left-28 h-80 w-80 rounded-full bg-collin-lightTeal/14 blur-3xl" />
-      </div>
-
       <div className="relative p-7 sm:p-9">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
           <div className="lg:col-span-4">
-            <div className="relative aspect-square w-24 sm:w-28 lg:w-full lg:max-w-[260px] overflow-hidden rounded-3xl bg-gray-100 ring-1 ring-gray-200">
+            <div className="relative aspect-square w-24 sm:w-28 lg:w-full lg:max-w-[260px] overflow-hidden rounded-3xl bg-slate-950/30 border border-slate-800">
               <Image
                 src={member.image}
                 alt={`${member.name} headshot`}
@@ -223,29 +221,23 @@ function FeaturedLeader({ member, onOpen }) {
 
             <div className="mt-4 flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <h3 className="text-h3 text-collin-navy">{member.name}</h3>
-                <p className="mt-2 text-body text-collin-slate">{member.role}</p>
+                <h3 className="text-h3 text-white">{member.name}</h3>
+                <p className="mt-2 text-body text-white/70">{member.role}</p>
               </div>
 
-              {/* LinkedIn icon button (always visible in featured) */}
               {member.linkedin ? (
-                <IconButton
-                  href={member.linkedin}
-                  label={`Open ${member.name}'s LinkedIn`}
-                  title="LinkedIn"
-                >
+                <IconButton href={member.linkedin} label={`Open ${member.name}'s LinkedIn`} title="LinkedIn">
                   <LinkedInIcon className="h-5 w-5" />
                 </IconButton>
               ) : null}
             </div>
 
-            <p className="mt-4 text-sm text-gray-700">
-              <span className="font-semibold text-collin-navy">School:</span> {member.school}
+            <p className="mt-4 text-sm text-white/75">
+              <span className="font-semibold text-white">School:</span>{" "}
+              {member.degree ? `${member.degree} • ${member.school}` : member.school}
             </p>
 
-            <p className="mt-4 text-sm text-gray-700 leading-relaxed">
-              {member.bio}
-            </p>
+            <p className="mt-4 text-sm text-white/75 leading-relaxed">{member.bio}</p>
 
             <div className="mt-5 flex flex-wrap gap-2">
               {member.expertise?.slice(0, 5).map((t) => (
@@ -257,7 +249,7 @@ function FeaturedLeader({ member, onOpen }) {
               <button
                 type="button"
                 onClick={onOpen}
-                className="inline-flex items-center justify-center rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-black/10 hover:opacity-95 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/30"
+                className="inline-flex items-center justify-center rounded-xl bg-slate-950/60 border border-slate-800 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-950/75 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/30"
               >
                 View profile <ArrowRightIcon className="ml-2 h-4 w-4" />
               </button>
@@ -283,7 +275,7 @@ function TeamCard({ member, onOpen }) {
     <button
       type="button"
       onClick={onOpen}
-      className="group relative w-full text-left overflow-hidden rounded-3xl border border-gray-200 bg-white/95 shadow-lg transition hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/25"
+      className="group relative w-full text-left overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/70 shadow-[0_14px_55px_rgba(0,0,0,0.30)] transition hover:bg-slate-900/85 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/25"
       aria-label={`Open profile for ${member.name}`}
     >
       {/* accent rail */}
@@ -292,25 +284,20 @@ function TeamCard({ member, onOpen }) {
         className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-collin-teal/70 via-collin-lightTeal/70 to-collin-teal/70 opacity-80"
       />
 
-      {/* hover glow */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
-        <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-collin-lightTeal/18 blur-3xl" />
-      </div>
-
       <div className="relative p-6">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-4 min-w-0">
-            <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-gray-100 ring-1 ring-gray-200">
+            <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-950/40 border border-slate-800">
               <Image src={member.image} alt={`${member.name} headshot`} fill sizes="56px" className="object-cover" />
             </div>
 
             <div className="min-w-0">
-              <h3 className="text-base font-semibold text-collin-navy truncate">{member.name}</h3>
-              <p className="mt-0.5 text-sm text-collin-slate truncate">{member.role}</p>
+              <h3 className="text-base font-semibold text-white truncate">{member.name}</h3>
+              <p className="mt-0.5 text-sm text-white/70 truncate">{member.role}</p>
             </div>
           </div>
 
-          {/* LinkedIn icon reveal (premium hover) */}
+          {/* LinkedIn icon reveal (desktop) */}
           {member.linkedin ? (
             <span
               className={[
@@ -334,11 +321,12 @@ function TeamCard({ member, onOpen }) {
           ) : null}
         </div>
 
-        <p className="mt-4 text-sm text-gray-700">
-          <span className="font-semibold text-collin-navy">School:</span> {member.school}
+        <p className="mt-4 text-sm text-white/75">
+          <span className="font-semibold text-white">School:</span>{" "}
+          {member.degree ? `${member.degree} • ${member.school}` : member.school}
         </p>
 
-        <p className="mt-3 text-sm text-gray-700 leading-relaxed line-clamp-3">
+        <p className="mt-3 text-sm text-white/75 leading-relaxed line-clamp-3">
           {member.bio}
         </p>
 
@@ -349,10 +337,8 @@ function TeamCard({ member, onOpen }) {
         </div>
 
         <div className="mt-5 flex items-center justify-between">
-          <span className="text-xs font-semibold text-collin-navy">
-            View profile
-          </span>
-          <ArrowRightIcon className="h-4 w-4 text-collin-slate group-hover:text-collin-teal transition" />
+          <span className="text-xs font-semibold text-white">View profile</span>
+          <ArrowRightIcon className="h-4 w-4 text-white/60 group-hover:text-collin-teal transition" />
         </div>
       </div>
     </button>
@@ -364,7 +350,6 @@ function TeamCard({ member, onOpen }) {
 function ProfileModal({ member, onClose }) {
   const panelRef = useRef(null);
 
-  // click outside closes
   useEffect(() => {
     const onDown = (e) => {
       if (panelRef.current && !panelRef.current.contains(e.target)) onClose();
@@ -376,7 +361,7 @@ function ProfileModal({ member, onClose }) {
   return (
     <div className="fixed inset-0 z-[200]">
       <button
-        className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
+        className="absolute inset-0 bg-black/55"
         aria-label="Close profile modal"
         onClick={onClose}
       />
@@ -390,8 +375,8 @@ function ProfileModal({ member, onClose }) {
           className={[
             "relative w-full sm:max-w-2xl",
             "rounded-t-3xl sm:rounded-3xl",
-            "border border-gray-200 bg-white",
-            "shadow-[0_30px_90px_rgba(2,12,27,0.30)]",
+            "border border-slate-800 bg-slate-950",
+            "shadow-[0_30px_90px_rgba(0,0,0,0.60)]",
             "overflow-hidden",
           ].join(" ")}
         >
@@ -402,29 +387,25 @@ function ProfileModal({ member, onClose }) {
           />
 
           {/* Header */}
-          <div className="px-6 pt-7 pb-5 border-b border-gray-200 bg-white/90 backdrop-blur">
+          <div className="px-6 pt-7 pb-5 border-b border-slate-800 bg-slate-950">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-4 min-w-0">
-                <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-gray-100 ring-1 ring-gray-200">
+                <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-900 border border-slate-800">
                   <Image src={member.image} alt={`${member.name} headshot`} fill sizes="56px" className="object-cover" />
                 </div>
 
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-lg font-semibold text-collin-navy">{member.name}</h3>
+                    <h3 className="text-lg font-semibold text-white">{member.name}</h3>
                     {member.featured ? <VerifiedBadge /> : null}
                   </div>
-                  <p className="mt-1 text-sm text-collin-slate">{member.role}</p>
+                  <p className="mt-1 text-sm text-white/70">{member.role}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
                 {member.linkedin ? (
-                  <IconButton
-                    href={member.linkedin}
-                    label={`Open ${member.name}'s LinkedIn`}
-                    title="LinkedIn"
-                  >
+                  <IconButton href={member.linkedin} label={`Open ${member.name}'s LinkedIn`} title="LinkedIn">
                     <LinkedInIcon className="h-5 w-5" />
                   </IconButton>
                 ) : null}
@@ -432,7 +413,7 @@ function ProfileModal({ member, onClose }) {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="inline-flex items-center justify-center h-10 w-10 rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/25"
+                  className="inline-flex items-center justify-center h-10 w-10 rounded-xl border border-slate-800 bg-slate-900 text-white hover:bg-slate-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/25"
                   aria-label="Close modal"
                   title="Close"
                 >
@@ -446,12 +427,10 @@ function ProfileModal({ member, onClose }) {
           <div className="px-6 py-6">
             <div className="grid gap-6 sm:grid-cols-12">
               <div className="sm:col-span-7">
-                <p className="text-sm leading-relaxed text-gray-700">
-                  {member.bio}
-                </p>
+                <p className="text-sm leading-relaxed text-white/75">{member.bio}</p>
 
                 <div className="mt-5">
-                  <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
+                  <p className="text-xs font-semibold tracking-widest text-white/55 uppercase">
                     Expertise
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
@@ -463,21 +442,24 @@ function ProfileModal({ member, onClose }) {
               </div>
 
               <div className="sm:col-span-5">
-                <div className="rounded-2xl border border-gray-200 bg-white p-5">
-                  <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
+                <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+                  <p className="text-xs font-semibold tracking-widest text-white/55 uppercase">
                     Education
                   </p>
-                  <p className="mt-2 text-sm font-semibold text-collin-navy">{member.school}</p>
+                  <p className="mt-2 text-sm font-semibold text-white">
+                    {member.degree ? `${member.degree}` : null}
+                  </p>
+                  <p className="mt-1 text-sm text-white/75">{member.school}</p>
 
                   {member.strengths?.length ? (
                     <>
-                      <div className="mt-5 h-px w-full bg-gray-200" />
-                      <p className="mt-5 text-xs font-semibold tracking-widest text-gray-500 uppercase">
+                      <div className="mt-5 h-px w-full bg-slate-800" />
+                      <p className="mt-5 text-xs font-semibold tracking-widest text-white/55 uppercase">
                         Delivery style
                       </p>
                       <ul className="mt-3 space-y-2">
                         {member.strengths.map((s) => (
-                          <li key={s} className="flex items-start gap-2 text-sm text-gray-700">
+                          <li key={s} className="flex items-start gap-2 text-sm text-white/75">
                             <CheckIcon className="mt-[2px] h-4 w-4 text-collin-teal" />
                             <span>{s}</span>
                           </li>
@@ -491,11 +473,7 @@ function ProfileModal({ member, onClose }) {
                   <Link href="/#contact" className="cta-primary cta-full">
                     Work with Collinalitics
                   </Link>
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="cta-secondary cta-full"
-                  >
+                  <button type="button" onClick={onClose} className="cta-secondary cta-full">
                     Back to team
                   </button>
                 </div>
@@ -505,8 +483,8 @@ function ProfileModal({ member, onClose }) {
 
           {/* Footer hint */}
           <div className="px-6 pb-7">
-            <p className="text-xs text-gray-500">
-              Tip: Press <span className="font-semibold">ESC</span> to close.
+            <p className="text-xs text-white/55">
+              Tip: Press <span className="font-semibold text-white">ESC</span> to close.
             </p>
           </div>
         </div>
@@ -515,11 +493,11 @@ function ProfileModal({ member, onClose }) {
   );
 }
 
-/* ---------------- UI bits ---------------- */
+/* ---------------- UI bits (Dark) ---------------- */
 
 function Pill({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-gray-200 bg-white/70 px-3 py-1 text-xs font-semibold text-collin-navy">
+    <span className="inline-flex items-center rounded-full border border-slate-800 bg-slate-950/40 px-3 py-1 text-xs font-semibold text-white/85">
       {children}
     </span>
   );
@@ -527,7 +505,7 @@ function Pill({ children }) {
 
 function SoftPill({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-semibold text-collin-navy">
+    <span className="inline-flex items-center rounded-full border border-slate-800 bg-slate-900/60 px-3 py-1 text-xs font-semibold text-white/85">
       {children}
     </span>
   );
@@ -535,7 +513,7 @@ function SoftPill({ children }) {
 
 function Badge({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-collin-teal/10 px-3 py-1 text-xs font-semibold text-collin-teal">
+    <span className="inline-flex items-center rounded-full bg-collin-teal/15 border border-collin-teal/20 px-3 py-1 text-xs font-semibold text-collin-teal">
       {children}
     </span>
   );
@@ -543,7 +521,7 @@ function Badge({ children }) {
 
 function VerifiedBadge() {
   return (
-    <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-xs font-semibold text-collin-navy">
+    <span className="inline-flex items-center gap-1 rounded-full border border-slate-800 bg-slate-900/60 px-2.5 py-1 text-xs font-semibold text-white/90">
       <VerifiedIcon className="h-4 w-4 text-collin-teal" />
       Verified
     </span>
@@ -552,15 +530,15 @@ function VerifiedBadge() {
 
 function Tag({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-collin-navy">
+    <span className="inline-flex items-center rounded-full border border-slate-800 bg-slate-950/35 px-3 py-1 text-xs font-medium text-white/85">
       {children}
     </span>
   );
 }
 
 /**
- * IconButton
- * - If used inside a button card, you can stop propagation
+ * IconButton (dark)
+ * - Optional stopPropagation for use inside clickable cards
  */
 function IconButton({ href, label, title, children, onClickStopPropagation }) {
   return (
@@ -576,10 +554,9 @@ function IconButton({ href, label, title, children, onClickStopPropagation }) {
       className={[
         "inline-flex items-center justify-center",
         "h-10 w-10 rounded-xl",
-        "border border-gray-200 bg-white",
-        "text-collin-navy hover:text-collin-teal",
-        "hover:bg-gray-50 transition",
-        "shadow-sm hover:shadow-md",
+        "border border-slate-800 bg-slate-950/40",
+        "text-white/85 hover:text-collin-teal",
+        "hover:bg-slate-950/60 transition",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/30",
       ].join(" ")}
     >

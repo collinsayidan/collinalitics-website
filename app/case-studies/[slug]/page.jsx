@@ -68,7 +68,7 @@ giving executives instant clarity and enabling proactive performance management.
   },
 };
 
-// ✅ FIX: make it async and unwrap params
+// ✅ Next.js: params is sync in most setups; keep as you had if your build requires await
 export default async function CaseStudyDetail({ params }) {
   const { slug } = await params;
 
@@ -76,34 +76,42 @@ export default async function CaseStudyDetail({ params }) {
   if (!study) return notFound();
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-gray-50 py-20 sm:py-24">
-      {/* Subtle grid */}
+    <section
+      className="relative overflow-hidden py-20 sm:py-24 text-white"
+      aria-label={`${study.title} case study`}
+    >
+      {/* ✅ Dark brand background */}
+      <div className="absolute inset-0 bg-collin-navy-gradient" aria-hidden="true" />
+
+      {/* Grid overlay (subtle) */}
       <div
-        className="absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)] [background-size:72px_72px] pointer-events-none"
+        className="pointer-events-none absolute inset-0 opacity-[0.22]
+        [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)]
+        [background-size:72px_72px]"
         aria-hidden="true"
       />
 
-      {/* Ambient accents */}
+      {/* Glows */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-24 right-[-6rem] h-72 w-72 rounded-full bg-collin-teal-light/18 blur-3xl" />
-        <div className="absolute -bottom-28 left-[-6rem] h-72 w-72 rounded-full bg-collin-teal/10 blur-3xl" />
+        <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-collin-teal/16 blur-[120px]" />
+        <div className="absolute -bottom-28 -right-28 h-72 w-72 rounded-full bg-collin-teal-light/12 blur-[120px]" />
       </div>
 
       <div className="container-wrapper relative z-10">
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="text-sm text-collin-slate mb-10 flex flex-wrap items-center gap-2"
+          className="text-sm text-white/70 mb-10 flex flex-wrap items-center gap-2"
         >
-          <Link href="/" className="hover:text-collin-navy transition font-medium">
+          <Link href="/" className="hover:text-white transition font-medium">
             Home
           </Link>
-          <span className="text-collin-slate/60">/</span>
-          <Link href="/case-studies" className="hover:text-collin-navy transition font-medium">
+          <span className="text-white/30">/</span>
+          <Link href="/case-studies" className="hover:text-white transition font-medium">
             Case Studies
           </Link>
-          <span className="text-collin-slate/60">/</span>
-          <span className="text-collin-navy font-semibold">{study.title}</span>
+          <span className="text-white/30">/</span>
+          <span className="text-white font-semibold">{study.title}</span>
         </nav>
 
         {/* Hero */}
@@ -111,7 +119,7 @@ export default async function CaseStudyDetail({ params }) {
           {/* Image */}
           <div className="lg:col-span-7">
             {study.image && (
-              <div className="rounded-3xl overflow-hidden border border-gray-200 bg-white shadow-xl">
+              <div className="rounded-3xl overflow-hidden border border-white/10 bg-black/20 shadow-2xl">
                 <div className="relative w-full h-64 sm:h-80 md:h-[28rem]">
                   <Image
                     src={study.image}
@@ -122,7 +130,7 @@ export default async function CaseStudyDetail({ params }) {
                     className="object-cover"
                   />
                   <div
-                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/18 via-transparent to-black/5"
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10"
                     aria-hidden="true"
                   />
                 </div>
@@ -131,48 +139,43 @@ export default async function CaseStudyDetail({ params }) {
 
             {/* Results strip */}
             <div className="mt-6 grid gap-4 sm:grid-cols-3">
-              <ResultStat label="Outcome" value={study.outcome} />
-              <ResultStat label="Sector" value={study.sector} />
-              <ResultStat label="Delivery style" value="UK-based • practical • clear" />
+              <ResultStatDark label="Outcome" value={study.outcome} />
+              <ResultStatDark label="Sector" value={study.sector} />
+              <ResultStatDark label="Delivery style" value="UK-based • practical • clear" />
             </div>
           </div>
 
           {/* Sticky summary */}
           <div className="lg:col-span-5 lg:sticky lg:top-24">
-            <div className="rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-8 shadow-xl">
+            <div className="rounded-3xl border border-white/10 bg-black/20 p-7 sm:p-8 shadow-2xl">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center rounded-full border border-collin-teal/20 bg-collin-teal/10 px-4 py-1 text-xs font-semibold text-collin-teal">
+                <span className="inline-flex items-center rounded-full border border-collin-teal/25 bg-collin-teal/10 px-4 py-1 text-xs font-semibold text-collin-teal">
                   {study.sector}
                 </span>
-                <span className="inline-flex items-center rounded-full border border-gray-200 bg-white px-4 py-1 text-xs font-semibold text-collin-navy">
+                <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-semibold text-white/85">
                   Case study
                 </span>
               </div>
 
-              <h1 className="mt-4 text-h2 text-collin-navy leading-tight">{study.title}</h1>
+              <h1 className="mt-4 text-h2 text-white leading-tight">{study.title}</h1>
+              <p className="mt-3 text-bodylg text-white/75 font-medium">{study.outcome}</p>
 
-              <p className="mt-3 text-bodylg text-collin-slate font-medium">{study.outcome}</p>
-
-              <div className="mt-7 rounded-2xl border border-gray-200 bg-white p-6">
-                <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
+              <div className="mt-7 rounded-2xl border border-white/10 bg-black/20 p-6">
+                <p className="text-xs font-semibold tracking-widest text-white/60 uppercase">
                   Engagement summary
                 </p>
 
                 <dl className="mt-4 space-y-4">
                   {(study.highlights || []).map((h) => (
                     <div key={h.label} className="flex items-start justify-between gap-6">
-                      <dt className="text-sm text-gray-500">{h.label}</dt>
-                      <dd className="text-sm font-semibold text-collin-navy text-right">
-                        {h.value}
-                      </dd>
+                      <dt className="text-sm text-white/60">{h.label}</dt>
+                      <dd className="text-sm font-semibold text-white text-right">{h.value}</dd>
                     </div>
                   ))}
 
                   <div className="flex items-start justify-between gap-6">
-                    <dt className="text-sm text-gray-500">Result</dt>
-                    <dd className="text-sm font-semibold text-collin-navy text-right">
-                      {study.outcome}
-                    </dd>
+                    <dt className="text-sm text-white/60">Result</dt>
+                    <dd className="text-sm font-semibold text-white text-right">{study.outcome}</dd>
                   </div>
                 </dl>
               </div>
@@ -186,7 +189,7 @@ export default async function CaseStudyDetail({ params }) {
                 </Link>
               </div>
 
-              <p className="mt-4 text-xs text-gray-500 leading-relaxed">
+              <p className="mt-4 text-xs text-white/60 leading-relaxed">
                 If you’re dealing with manual reporting, inconsistent KPIs, or low confidence in numbers,
                 we can help you build a reliable reporting foundation.
               </p>
@@ -198,34 +201,34 @@ export default async function CaseStudyDetail({ params }) {
         <div className="mt-14 grid lg:grid-cols-12 gap-10 lg:gap-12">
           {/* Overview */}
           <div className="lg:col-span-7">
-            <article className="rounded-3xl border border-gray-200 bg-white/95 p-7 sm:p-9 shadow-xl">
+            <article className="rounded-3xl border border-white/10 bg-black/20 p-7 sm:p-9 shadow-2xl">
               <div className="flex items-center gap-2">
                 <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" />
-                <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
+                <p className="text-xs font-semibold tracking-widest text-white/60 uppercase">
                   Overview
                 </p>
               </div>
 
-              <p className="mt-5 text-sm text-gray-700 leading-relaxed whitespace-pre-line">
+              <p className="mt-5 text-sm text-white/80 leading-relaxed whitespace-pre-line">
                 {study.body}
               </p>
 
-              <div className="mt-10 pt-8 border-t border-gray-200">
-                <h2 className="text-sm font-semibold text-collin-navy uppercase tracking-widest">
+              <div className="mt-10 pt-8 border-t border-white/10">
+                <h2 className="text-sm font-semibold text-white uppercase tracking-widest">
                   What changed
                 </h2>
-                <p className="mt-3 text-sm text-gray-700 leading-relaxed">
+                <p className="mt-3 text-sm text-white/80 leading-relaxed">
                   We replaced manual, fragmented reporting with a structured KPI framework, a reliable reporting
                   layer, and dashboards designed for decision-making.
                 </p>
 
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                  <MiniCallout
+                  <MiniCalloutDark
                     title="Consistency"
                     desc="Shared definitions and repeatable delivery remove KPI confusion."
                     icon={<IconCheck />}
                   />
-                  <MiniCallout
+                  <MiniCalloutDark
                     title="Speed"
                     desc="Automation reduces cycle time and frees teams from manual work."
                     icon={<IconBolt />}
@@ -237,22 +240,22 @@ export default async function CaseStudyDetail({ params }) {
 
           {/* Side blocks */}
           <div className="lg:col-span-5 space-y-8">
-            <InfoBlock title="Challenge" items={study.challenge} icon={<IconAlert />} tone="neutral" />
-            <InfoBlock title="Approach" items={study.approach} icon={<IconTools />} tone="neutral" />
-            <InfoBlock title="Impact" items={study.impact} icon={<IconSpark />} tone="accent" />
+            <InfoBlockDark title="Challenge" items={study.challenge} icon={<IconAlert />} tone="neutral" />
+            <InfoBlockDark title="Approach" items={study.approach} icon={<IconTools />} tone="neutral" />
+            <InfoBlockDark title="Impact" items={study.impact} icon={<IconSpark />} tone="accent" />
           </div>
         </div>
 
         {/* Bottom CTA */}
         <div className="mt-16 sm:mt-20">
-          <div className="relative overflow-hidden rounded-3xl border border-gray-200 bg-white/95 p-8 sm:p-10 shadow-xl text-center">
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/20 p-8 sm:p-10 shadow-2xl text-center">
             <div
-              className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-collin-teal/10 blur-3xl"
+              className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-collin-teal/12 blur-3xl"
               aria-hidden="true"
             />
             <div className="relative z-10 mx-auto max-w-3xl">
-              <h2 className="text-h4 text-collin-navy">Want results like this?</h2>
-              <p className="mt-3 text-body text-collin-slate leading-relaxed">
+              <h2 className="text-h4 text-white">Want results like this?</h2>
+              <p className="mt-3 text-body text-white/75 leading-relaxed">
                 Share what you’re trying to improve — we’ll recommend a practical first step and outline what
                 “good” could look like for your reporting, KPIs, and automation.
               </p>
@@ -266,7 +269,7 @@ export default async function CaseStudyDetail({ params }) {
                 </Link>
               </div>
 
-              <p className="mt-4 text-xs text-gray-500">
+              <p className="mt-4 text-xs text-white/60">
                 UK-based delivery • Clear scope • Practical outcomes
               </p>
             </div>
@@ -277,47 +280,48 @@ export default async function CaseStudyDetail({ params }) {
   );
 }
 
-/* ---------- Small components ---------- */
+/* ---------- Dark small components ---------- */
 
-function ResultStat({ label, value }) {
+function ResultStatDark({ label, value }) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white/85 p-5 backdrop-blur">
-      <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">{label}</p>
-      <p className="mt-2 text-sm font-semibold text-collin-navy leading-snug">{value}</p>
+    <div className="rounded-2xl border border-white/10 bg-black/20 p-5 shadow-[0_18px_60px_rgba(0,0,0,0.35)]">
+      <p className="text-xs font-semibold tracking-widest text-white/60 uppercase">{label}</p>
+      <p className="mt-2 text-sm font-semibold text-white leading-snug">{value}</p>
     </div>
   );
 }
 
-function MiniCallout({ title, desc, icon }) {
+function MiniCalloutDark({ title, desc, icon }) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5">
+    <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
       <div className="flex items-start gap-3">
         <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-collin-teal/10 text-collin-teal">
           {icon}
         </span>
         <div>
-          <p className="text-sm font-semibold text-collin-navy">{title}</p>
-          <p className="mt-1 text-sm text-gray-700 leading-relaxed">{desc}</p>
+          <p className="text-sm font-semibold text-white">{title}</p>
+          <p className="mt-1 text-sm text-white/75 leading-relaxed">{desc}</p>
         </div>
       </div>
     </div>
   );
 }
 
-function InfoBlock({ title, items = [], icon, tone = "neutral" }) {
+function InfoBlockDark({ title, items = [], icon, tone = "neutral" }) {
   const accent = tone === "accent";
 
   return (
     <aside
       className={[
-        "rounded-3xl border bg-white/95 p-7 sm:p-8 shadow-xl",
-        accent ? "border-collin-teal/25" : "border-gray-200",
+        "rounded-3xl border p-7 sm:p-8 shadow-2xl",
+        "bg-black/20",
+        accent ? "border-collin-teal/25" : "border-white/10",
       ].join(" ")}
     >
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">{title}</p>
-          <p className="mt-2 text-sm font-semibold text-collin-navy">
+          <p className="text-xs font-semibold tracking-widest text-white/60 uppercase">{title}</p>
+          <p className="mt-2 text-sm font-semibold text-white">
             {accent ? "What improved" : "Key points"}
           </p>
         </div>
@@ -325,7 +329,7 @@ function InfoBlock({ title, items = [], icon, tone = "neutral" }) {
         <span
           className={[
             "inline-flex h-12 w-12 items-center justify-center rounded-2xl",
-            accent ? "bg-collin-teal/10 text-collin-teal" : "bg-gray-100 text-collin-navy",
+            accent ? "bg-collin-teal/10 text-collin-teal" : "bg-white/5 text-white/85",
           ].join(" ")}
           aria-hidden="true"
         >
@@ -343,7 +347,7 @@ function InfoBlock({ title, items = [], icon, tone = "neutral" }) {
               ].join(" ")}
               aria-hidden="true"
             />
-            <span className="text-sm text-gray-700 leading-relaxed">{it}</span>
+            <span className="text-sm text-white/75 leading-relaxed">{it}</span>
           </li>
         ))}
       </ul>

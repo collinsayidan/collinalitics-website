@@ -92,26 +92,24 @@ export default function BeforeAfterReveal() {
   return (
     <section
       id="before-after"
-      className="relative overflow-hidden text-white py-24 sm:py-28"
+      className="relative overflow-hidden text-white py-24 sm:py-28 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
       aria-labelledby="before-after-heading"
     >
-      {/* ✅ MAIN BG COLOR CONTROL IS HERE */}
-      <div className="absolute inset-0 bg-collin-navy-gradient" aria-hidden="true" />
+      {/* ✅ Services-style BG layers */}
+      <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+        {/* Glows */}
+        <div className="absolute -top-28 right-[-8rem] h-80 w-80 rounded-full bg-collin-teal/14 blur-3xl" />
+        <div className="absolute -bottom-28 left-[-8rem] h-96 w-96 rounded-full bg-collin-lightTeal/10 blur-3xl" />
 
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.30]
-        [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)]
-        [background-size:72px_72px]"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -top-28 -left-28 h-80 w-80 rounded-full bg-collin-teal/20 blur-[120px]"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-collin-teal-light/20 blur-[120px]"
-        aria-hidden="true"
-      />
+        {/* Grid (bluish like your Hero/Services vibe) */}
+        <div className="absolute inset-0 opacity-[0.18]
+          [background-image:linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)]
+          [background-size:72px_72px]"
+        />
+
+        {/* Soft vignette */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/20" />
+      </div>
 
       <div className="container-wrapper relative z-10" ref={containerRef}>
         {/* Header */}
@@ -131,7 +129,7 @@ export default function BeforeAfterReveal() {
 
           <h2 id="before-after-heading" className="mt-6 text-h2 text-white">
             Before &amp; After:{" "}
-            <span className="bg-gradient-to-r from-collin-teal to-collin-teal-light bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-collin-teal to-collin-lightTeal bg-clip-text text-transparent">
               decision-ready
             </span>{" "}
             dashboard
@@ -255,22 +253,20 @@ export default function BeforeAfterReveal() {
               </span>
             </div>
 
-            {/* Handle (also draggable + keyboard slider semantics) */}
+            {/* Handle */}
             <motion.button
               type="button"
               className={[
                 "absolute top-1/2 -translate-y-1/2 -translate-x-1/2",
                 "h-12 w-12 sm:h-14 sm:w-14 rounded-full",
-                "bg-white text-collin-navy",
+                "bg-white text-slate-900",
                 "shadow-xl border border-white/70",
                 "flex items-center justify-center",
-                "transition",
-                "hover:scale-[1.04] active:scale-95",
+                "transition hover:scale-[1.04] active:scale-95",
                 "focus:outline-none focus:ring-2 focus:ring-white/70 focus:ring-offset-2 focus:ring-offset-transparent",
               ].join(" ")}
               style={{ left: handleLeft }}
               onKeyDown={onKeyDown}
-              // ✅ allow dragging from handle too:
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
               onPointerUp={onPointerUp}

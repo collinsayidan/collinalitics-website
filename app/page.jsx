@@ -7,8 +7,6 @@ import UseCase from '../components/UseCase.jsx';
 import WhyUs from '../components/WhyUs.jsx';
 import Contact from '../components/Contact.jsx';
 import Footer from '../components/Footer.jsx';
-import ClientLogos from "../components/sections/ClientLogos";
-import StatsRow from "../components/sections/StatsRow";
 import BeforeAfter from "../components/sections/BeforeAfter";
 import CaseStudiesPreview from "../components/CaseStudiesPreview";
 import TeamSection from "@/components/TeamSection";
@@ -25,11 +23,9 @@ export default function Page() {
         <Services />
         <HowWeWork />
         <UseCase />
-        <CaseStudiesPreview />
         <BeforeAfter />
         <WhyUs />
         <TeamSection />
-        <StatsRow />
         <Contact />
       </main>
       <Footer />

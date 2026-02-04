@@ -2,6 +2,8 @@
 
 import React, { useMemo } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Search, Pencil, Hammer, LifeBuoy, Check, ArrowRight } from "lucide-react";
 
 export default function HowWeWork() {
   const reduce = useReducedMotion();
@@ -13,7 +15,7 @@ export default function HowWeWork() {
         eyebrow: "Align goals + constraints",
         desc: "We understand your goals, current reporting pain points, and the real constraints behind your data and systems.",
         accent: "teal",
-        icon: <SearchIcon />,
+        icon: Search,
         bullets: ["Current-state review", "Stakeholder goals", "Data/system constraints"],
       },
       {
@@ -21,7 +23,7 @@ export default function HowWeWork() {
         eyebrow: "Define what “good” looks like",
         desc: "We define KPIs, metric logic, ownership, and the technical approach to deliver insight that’s consistent and trusted.",
         accent: "lightTeal",
-        icon: <PencilIcon />,
+        icon: Pencil,
         bullets: ["Metric definitions", "Ownership + governance", "Delivery plan"],
       },
       {
@@ -29,7 +31,7 @@ export default function HowWeWork() {
         eyebrow: "Deliver reliably",
         desc: "We develop dashboards, models, and automations that are reliable, maintainable, and easy to use day-to-day.",
         accent: "navy",
-        icon: <BuildIcon />,
+        icon: Hammer,
         bullets: ["Dashboards + models", "Automation + refresh", "Documentation"],
       },
       {
@@ -37,7 +39,7 @@ export default function HowWeWork() {
         eyebrow: "Keep it useful",
         desc: "We refine, extend, and support what we deliver so it stays useful as your organisation evolves.",
         accent: "teal",
-        icon: <SupportIcon />,
+        icon: LifeBuoy,
         bullets: ["Iteration + improvements", "Performance checks", "Ongoing support"],
       },
     ],
@@ -51,6 +53,7 @@ export default function HowWeWork() {
       iconText: "text-collin-teal",
       dot: "bg-collin-teal",
       hover: "hover:border-collin-teal/40",
+      checkRing: "bg-collin-teal/15 text-collin-teal",
     },
     lightTeal: {
       ring: "ring-collin-lightTeal/25",
@@ -58,13 +61,15 @@ export default function HowWeWork() {
       iconText: "text-collin-lightTeal",
       dot: "bg-collin-lightTeal",
       hover: "hover:border-collin-lightTeal/40",
+      checkRing: "bg-collin-lightTeal/25 text-collin-lightTeal",
     },
     navy: {
       ring: "ring-collin-navy/20",
-      iconBg: "bg-collin-navy/15",
+      iconBg: "bg-collin-navy/12",
       iconText: "text-collin-navy",
       dot: "bg-collin-navy",
-      hover: "hover:border-collin-navy/35",
+      hover: "hover:border-collin-navy/30",
+      checkRing: "bg-collin-navy/12 text-collin-navy",
     },
   };
 
@@ -87,29 +92,16 @@ export default function HowWeWork() {
   return (
     <section
       id="how"
-      className="relative overflow-hidden py-24 sm:py-28 md:py-32 text-white"
+      className="section relative overflow-hidden bg-gray-50 py-24 sm:py-28 md:py-32"
       aria-labelledby="how-heading"
     >
-      {/* Background */}
-      <div className="absolute inset-0 bg-collin-navy-gradient" aria-hidden="true" />
+      {/* ✅ Services-style ambient accents */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 right-[-6rem] h-72 w-72 rounded-full bg-collin-lightTeal/25 blur-3xl" />
+        <div className="absolute -bottom-28 left-[-6rem] h-80 w-80 rounded-full bg-collin-teal/10 blur-3xl" />
+      </div>
 
-      {/* Soft grid */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.22] [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:72px_72px]"
-        aria-hidden="true"
-      />
-
-      {/* Ambient glows */}
-      <div
-        className="pointer-events-none absolute -top-28 -left-28 h-80 w-80 rounded-full bg-collin-teal/20 blur-[120px]"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-collin-lightTeal/18 blur-[120px]"
-        aria-hidden="true"
-      />
-
-      <div className="container-wrapper relative z-10">
+      <div className="container-wrapper relative">
         {/* Header */}
         <motion.header
           className="mx-auto max-w-3xl text-center"
@@ -118,23 +110,33 @@ export default function HowWeWork() {
           viewport={{ once: true, amount: 0.25 }}
           variants={container}
         >
-          <motion.div variants={fadeUp} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 backdrop-blur">
+          <motion.div
+            variants={fadeUp}
+            className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/70 px-4 py-2 backdrop-blur"
+          >
             <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" />
-            <p className="text-xs font-semibold tracking-widest text-white/80 uppercase">
+            <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">
               How we work
             </p>
           </motion.div>
 
-          <motion.h2 id="how-heading" variants={fadeUp} className="mt-6 text-h2 text-white">
+          <motion.h2
+            id="how-heading"
+            variants={fadeUp}
+            className="mt-6 text-h2 text-collin-navy"
+          >
             A clear, collaborative process designed for confidence.
           </motion.h2>
 
-          <motion.p variants={fadeUp} className="mt-4 text-bodylg text-white/85 leading-relaxed">
+          <motion.p
+            variants={fadeUp}
+            className="mt-4 text-bodylg text-collin-slate leading-relaxed"
+          >
             Transparent, structured, and aligned with best practice so your reporting becomes easier,
             more reliable, and more useful across the organisation.
           </motion.p>
 
-          {/* Deliverables pills */}
+          {/* Pills */}
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap justify-center gap-2">
             <Pill>Clear KPI definitions</Pill>
             <Pill>Decision-ready dashboards</Pill>
@@ -157,7 +159,7 @@ export default function HowWeWork() {
           <MiniStat variants={fadeUp} label="Support" value="Iterate + improve" />
         </motion.div>
 
-        {/* Stepper / Timeline */}
+        {/* Stepper */}
         <motion.div
           className="mx-auto mt-14 max-w-6xl"
           initial="hidden"
@@ -167,26 +169,23 @@ export default function HowWeWork() {
         >
           {/* Desktop connector */}
           <div className="relative hidden lg:block">
-            <div className="absolute left-0 right-0 top-8 h-px bg-white/15" aria-hidden="true" />
+            <div className="absolute left-0 right-0 top-8 h-px bg-gray-200" aria-hidden="true" />
           </div>
 
           <ol className="grid gap-6 sm:gap-8 lg:grid-cols-4 lg:gap-8">
             {steps.map((s, idx) => {
               const a = accentMap[s.accent] || accentMap.teal;
+              const Icon = s.icon;
 
               return (
-                <motion.li
-                  key={s.title}
-                  variants={fadeUp}
-                  className="relative"
-                >
-                  {/* Desktop dot that sits on the connector line */}
+                <motion.li key={s.title} variants={fadeUp} className="relative">
+                  {/* Desktop dot */}
                   <span
                     className={[
                       "hidden lg:block absolute left-1/2 top-8 -translate-x-1/2",
                       "h-3.5 w-3.5 rounded-full",
                       a.dot,
-                      "shadow-[0_0_0_8px_rgba(255,255,255,0.06)]",
+                      "shadow-[0_0_0_8px_rgba(2,12,27,0.06)]",
                     ].join(" ")}
                     aria-hidden="true"
                   />
@@ -196,16 +195,13 @@ export default function HowWeWork() {
                     whileTap={reduce ? undefined : { scale: 0.99 }}
                     className={[
                       "mt-0 lg:mt-14",
-                      "rounded-3xl border border-white/10 bg-white/95 text-collin-navy",
-                      "shadow-[0_25px_70px_-35px_rgba(0,0,0,0.85)]",
-                      "p-7 sm:p-8",
-                      "transition",
-                      a.hover,
-                      "ring-1",
+                      "rounded-3xl border border-gray-200 bg-white/95 text-collin-navy",
+                      "shadow-[0_22px_70px_rgba(2,12,27,0.10)]",
+                      "p-7 sm:p-8 transition ring-1",
                       a.ring,
+                      a.hover,
                     ].join(" ")}
                   >
-                    {/* Top row: step + icon */}
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
@@ -224,7 +220,7 @@ export default function HowWeWork() {
                         ].join(" ")}
                         aria-hidden="true"
                       >
-                        {s.icon}
+                        <Icon className="h-6 w-6" />
                       </span>
                     </div>
 
@@ -232,20 +228,24 @@ export default function HowWeWork() {
                       {s.title}
                     </h3>
 
-                    <p className="mt-2 text-sm leading-relaxed text-gray-700">
-                      {s.desc}
-                    </p>
+                    <p className="mt-2 text-sm leading-relaxed text-gray-700">{s.desc}</p>
 
-                    {/* Deliverables */}
                     <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-5">
                       <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
                         Outputs
                       </p>
+
                       <ul className="mt-4 space-y-3">
                         {s.bullets.map((b) => (
                           <li key={b} className="flex items-start gap-3">
-                            <span className={["mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-xl", a.iconBg, a.iconText].join(" ")}>
-                              <IconCheck className="h-4 w-4" />
+                            <span
+                              className={[
+                                "mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-xl",
+                                a.checkRing,
+                              ].join(" ")}
+                              aria-hidden="true"
+                            >
+                              <Check className="h-4 w-4" strokeWidth={2.5} />
                             </span>
                             <span className="text-sm text-gray-700 leading-relaxed">{b}</span>
                           </li>
@@ -268,25 +268,33 @@ export default function HowWeWork() {
           transition={baseTransition}
         >
           <div className="max-w-2xl text-center lg:text-left">
-            <h3 className="text-base font-semibold text-white">
+            <h3 className="text-base font-semibold text-collin-navy">
               Ready to improve reporting clarity?
             </h3>
-            <p className="mt-2 text-sm text-white/80 leading-relaxed">
-              We’ll recommend a practical first step based on your current maturity focused on the highest-impact improvements.
+            <p className="mt-2 text-sm text-collin-slate leading-relaxed">
+              We’ll recommend a practical first step based on your current maturity, focused on
+              the highest-impact improvements.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-            <a href="#contact" className="ctaConsultation cta-full" aria-label="Get started with Collinalitics">
+            <Button
+              size="md"
+              className="w-full sm:w-auto"
+              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+            >
               Get Started
-            </a>
-            <a
-              href="#services"
-              className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition w-full sm:w-auto"
-              aria-label="View services"
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+
+            <Button
+              size="md"
+              variant="outline"
+              className="w-full sm:w-auto"
+              onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })}
             >
               View Services
-            </a>
+            </Button>
           </div>
         </motion.div>
       </div>
@@ -298,7 +306,7 @@ export default function HowWeWork() {
 
 function Pill({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur-md">
+    <span className="inline-flex items-center rounded-full border border-gray-200 bg-white/70 px-3 py-1 text-xs font-medium text-collin-navy">
       {children}
     </span>
   );
@@ -308,63 +316,10 @@ function MiniStat({ label, value, variants }) {
   return (
     <motion.div
       variants={variants}
-      className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur"
+      className="rounded-2xl border border-gray-200 bg-white/70 p-5 backdrop-blur"
     >
-      <p className="text-xs font-semibold tracking-widest text-white/70 uppercase">{label}</p>
-      <p className="mt-2 text-sm font-semibold text-white">{value}</p>
+      <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">{label}</p>
+      <p className="mt-2 text-sm font-semibold text-collin-navy">{value}</p>
     </motion.div>
-  );
-}
-
-/* ---------- Icons ---------- */
-
-function IconCheck({ className }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="2.5"
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-    </svg>
-  );
-}
-
-function SearchIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="11" cy="11" r="8" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.3-4.3" />
-    </svg>
-  );
-}
-
-function PencilIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 20h9" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 3.5l4 4L7 21H3v-4L16.5 3.5Z" />
-    </svg>
-  );
-}
-
-function BuildIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 7l-4 4 6 6 4-4-6-6Z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 13l-3 3 6 6 3-3" />
-    </svg>
-  );
-}
-
-function SupportIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M18 10a6 6 0 1 0-12 0v4a6 6 0 1 0 12 0v-4Z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v2" />
-    </svg>
   );
 }
