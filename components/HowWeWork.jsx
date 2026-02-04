@@ -46,30 +46,32 @@ export default function HowWeWork() {
     []
   );
 
+  // Accent colours with light + dark equivalents
   const accentMap = {
     teal: {
-      ring: "ring-collin-teal/25",
-      iconBg: "bg-collin-teal/15",
-      iconText: "text-collin-teal",
-      dot: "bg-collin-teal",
-      hover: "hover:border-collin-teal/40",
-      checkRing: "bg-collin-teal/15 text-collin-teal",
+      ring: "ring-collin-teal/25 dark:ring-teal-400/20",
+      iconBg: "bg-collin-teal/15 dark:bg-teal-500/10",
+      iconText: "text-collin-teal dark:text-teal-300",
+      dot: "bg-collin-teal dark:bg-teal-300",
+      hover: "hover:border-collin-teal/40 dark:hover:border-teal-300/30",
+      checkRing: "bg-collin-teal/15 text-collin-teal dark:bg-teal-500/10 dark:text-teal-300",
     },
     lightTeal: {
-      ring: "ring-collin-lightTeal/25",
-      iconBg: "bg-collin-lightTeal/25",
-      iconText: "text-collin-lightTeal",
-      dot: "bg-collin-lightTeal",
-      hover: "hover:border-collin-lightTeal/40",
-      checkRing: "bg-collin-lightTeal/25 text-collin-lightTeal",
+      ring: "ring-collin-teal-light/25 dark:ring-teal-300/15",
+      iconBg: "bg-collin-teal-light/20 dark:bg-teal-500/10",
+      iconText: "text-collin-teal-light dark:text-teal-200",
+      dot: "bg-collin-teal-light dark:bg-teal-200",
+      hover: "hover:border-collin-teal-light/40 dark:hover:border-teal-200/25",
+      checkRing:
+        "bg-collin-teal-light/20 text-collin-teal-light dark:bg-teal-500/10 dark:text-teal-200",
     },
     navy: {
-      ring: "ring-collin-navy/20",
-      iconBg: "bg-collin-navy/12",
-      iconText: "text-collin-navy",
-      dot: "bg-collin-navy",
-      hover: "hover:border-collin-navy/30",
-      checkRing: "bg-collin-navy/12 text-collin-navy",
+      ring: "ring-collin-navy/15 dark:ring-white/10",
+      iconBg: "bg-collin-navy/10 dark:bg-white/5",
+      iconText: "text-collin-navy dark:text-white/80",
+      dot: "bg-collin-navy dark:bg-white/35",
+      hover: "hover:border-collin-navy/25 dark:hover:border-white/20",
+      checkRing: "bg-collin-navy/10 text-collin-navy dark:bg-white/5 dark:text-white/80",
     },
   };
 
@@ -92,13 +94,34 @@ export default function HowWeWork() {
   return (
     <section
       id="how"
-      className="section relative overflow-hidden bg-gray-50 py-24 sm:py-28 md:py-32"
       aria-labelledby="how-heading"
+      className={[
+        "section relative overflow-hidden py-24 sm:py-28 md:py-32",
+        // ✅ light default
+        "bg-gray-50",
+        // ✅ dark mode
+        "dark:bg-gradient-to-br dark:from-collin-navy-darker dark:via-collin-navy-dark dark:to-collin-navy-darker",
+      ].join(" ")}
     >
-      {/* ✅ Services-style ambient accents */}
+      {/* Ambient accents */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-24 right-[-6rem] h-72 w-72 rounded-full bg-collin-lightTeal/25 blur-3xl" />
-        <div className="absolute -bottom-28 left-[-6rem] h-80 w-80 rounded-full bg-collin-teal/10 blur-3xl" />
+        {/* light */}
+        <div className="absolute -top-24 right-[-6rem] h-72 w-72 rounded-full bg-collin-teal-light/25 blur-3xl dark:hidden" />
+        <div className="absolute -bottom-28 left-[-6rem] h-80 w-80 rounded-full bg-collin-teal/10 blur-3xl dark:hidden" />
+
+        {/* dark */}
+        <div className="absolute -top-24 right-[-6rem] h-72 w-72 rounded-full bg-teal-500/10 blur-3xl hidden dark:block" />
+        <div className="absolute -bottom-28 left-[-6rem] h-80 w-80 rounded-full bg-blue-500/10 blur-3xl hidden dark:block" />
+
+        {/* grid (subtle) */}
+        <div
+          className={[
+            "absolute inset-0",
+            "opacity-[0.18] [background-image:linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)]",
+            "dark:opacity-[0.12] dark:[background-image:linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)]",
+            "[background-size:72px_72px]",
+          ].join(" ")}
+        />
       </div>
 
       <div className="container-wrapper relative">
@@ -112,10 +135,14 @@ export default function HowWeWork() {
         >
           <motion.div
             variants={fadeUp}
-            className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/70 px-4 py-2 backdrop-blur"
+            className={[
+              "inline-flex items-center gap-2 rounded-full border px-4 py-2 backdrop-blur",
+              "border-gray-200 bg-white/70",
+              "dark:border-white/10 dark:bg-white/5",
+            ].join(" ")}
           >
-            <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" />
-            <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase">
+            <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal dark:bg-teal-300" />
+            <p className="text-xs font-semibold tracking-widest text-collin-slate uppercase dark:text-white/70">
               How we work
             </p>
           </motion.div>
@@ -123,14 +150,14 @@ export default function HowWeWork() {
           <motion.h2
             id="how-heading"
             variants={fadeUp}
-            className="mt-6 text-h2 text-collin-navy"
+            className="mt-6 text-h2 text-collin-navy dark:text-white"
           >
             A clear, collaborative process designed for confidence.
           </motion.h2>
 
           <motion.p
             variants={fadeUp}
-            className="mt-4 text-bodylg text-collin-slate leading-relaxed"
+            className="mt-4 text-bodylg leading-relaxed text-collin-slate dark:text-white/70"
           >
             Transparent, structured, and aligned with best practice so your reporting becomes easier,
             more reliable, and more useful across the organisation.
@@ -145,7 +172,7 @@ export default function HowWeWork() {
           </motion.div>
         </motion.header>
 
-        {/* Mini “what you get” row */}
+        {/* Mini stats */}
         <motion.div
           className="mx-auto mt-12 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-4"
           initial="hidden"
@@ -169,7 +196,7 @@ export default function HowWeWork() {
         >
           {/* Desktop connector */}
           <div className="relative hidden lg:block">
-            <div className="absolute left-0 right-0 top-8 h-px bg-gray-200" aria-hidden="true" />
+            <div className="absolute left-0 right-0 top-8 h-px bg-gray-200 dark:bg-white/10" aria-hidden="true" />
           </div>
 
           <ol className="grid gap-6 sm:gap-8 lg:grid-cols-4 lg:gap-8">
@@ -185,7 +212,7 @@ export default function HowWeWork() {
                       "hidden lg:block absolute left-1/2 top-8 -translate-x-1/2",
                       "h-3.5 w-3.5 rounded-full",
                       a.dot,
-                      "shadow-[0_0_0_8px_rgba(2,12,27,0.06)]",
+                      "shadow-[0_0_0_8px_rgba(2,12,27,0.06)] dark:shadow-none",
                     ].join(" ")}
                     aria-hidden="true"
                   />
@@ -195,19 +222,21 @@ export default function HowWeWork() {
                     whileTap={reduce ? undefined : { scale: 0.99 }}
                     className={[
                       "mt-0 lg:mt-14",
-                      "rounded-3xl border border-gray-200 bg-white/95 text-collin-navy",
-                      "shadow-[0_22px_70px_rgba(2,12,27,0.10)]",
-                      "p-7 sm:p-8 transition ring-1",
+                      "rounded-3xl border transition ring-1 p-7 sm:p-8",
+                      // light
+                      "border-gray-200 bg-white/95 text-collin-navy shadow-[0_22px_70px_rgba(2,12,27,0.10)]",
+                      // dark
+                      "dark:border-white/10 dark:bg-white/5 dark:text-white dark:shadow-[0_30px_90px_rgba(0,0,0,0.45)] dark:backdrop-blur",
                       a.ring,
                       a.hover,
                     ].join(" ")}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
+                        <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase dark:text-white/55">
                           Step {idx + 1}
                         </p>
-                        <p className="mt-2 text-xs font-semibold tracking-widest text-collin-slate uppercase">
+                        <p className="mt-2 text-xs font-semibold tracking-widest text-collin-slate uppercase dark:text-white/65">
                           {s.eyebrow}
                         </p>
                       </div>
@@ -224,14 +253,16 @@ export default function HowWeWork() {
                       </span>
                     </div>
 
-                    <h3 className="mt-4 text-h4 font-semibold text-collin-navy leading-snug">
+                    <h3 className="mt-4 text-h4 font-semibold leading-snug text-collin-navy dark:text-white">
                       {s.title}
                     </h3>
 
-                    <p className="mt-2 text-sm leading-relaxed text-gray-700">{s.desc}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-gray-700 dark:text-white/70">
+                      {s.desc}
+                    </p>
 
-                    <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-5">
-                      <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">
+                    <div className="mt-6 rounded-2xl border p-5 border-gray-200 bg-white dark:border-white/10 dark:bg-white/5">
+                      <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase dark:text-white/55">
                         Outputs
                       </p>
 
@@ -247,7 +278,9 @@ export default function HowWeWork() {
                             >
                               <Check className="h-4 w-4" strokeWidth={2.5} />
                             </span>
-                            <span className="text-sm text-gray-700 leading-relaxed">{b}</span>
+                            <span className="text-sm leading-relaxed text-gray-700 dark:text-white/75">
+                              {b}
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -268,10 +301,10 @@ export default function HowWeWork() {
           transition={baseTransition}
         >
           <div className="max-w-2xl text-center lg:text-left">
-            <h3 className="text-base font-semibold text-collin-navy">
+            <h3 className="text-base font-semibold text-collin-navy dark:text-white">
               Ready to improve reporting clarity?
             </h3>
-            <p className="mt-2 text-sm text-collin-slate leading-relaxed">
+            <p className="mt-2 text-sm leading-relaxed text-collin-slate dark:text-white/70">
               We’ll recommend a practical first step based on your current maturity, focused on
               the highest-impact improvements.
             </p>
@@ -281,7 +314,9 @@ export default function HowWeWork() {
             <Button
               size="md"
               className="w-full sm:w-auto"
-              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() =>
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
+              }
             >
               Get Started
               <ArrowRight className="h-4 w-4" />
@@ -291,7 +326,9 @@ export default function HowWeWork() {
               size="md"
               variant="outline"
               className="w-full sm:w-auto"
-              onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() =>
+                document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })
+              }
             >
               View Services
             </Button>
@@ -306,7 +343,13 @@ export default function HowWeWork() {
 
 function Pill({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-gray-200 bg-white/70 px-3 py-1 text-xs font-medium text-collin-navy">
+    <span
+      className={[
+        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium",
+        "border-gray-200 bg-white/70 text-collin-navy",
+        "dark:border-white/10 dark:bg-white/5 dark:text-white/80",
+      ].join(" ")}
+    >
       {children}
     </span>
   );
@@ -316,10 +359,18 @@ function MiniStat({ label, value, variants }) {
   return (
     <motion.div
       variants={variants}
-      className="rounded-2xl border border-gray-200 bg-white/70 p-5 backdrop-blur"
+      className={[
+        "rounded-2xl border p-5 backdrop-blur",
+        "border-gray-200 bg-white/70",
+        "dark:border-white/10 dark:bg-white/5",
+      ].join(" ")}
     >
-      <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase">{label}</p>
-      <p className="mt-2 text-sm font-semibold text-collin-navy">{value}</p>
+      <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase dark:text-white/55">
+        {label}
+      </p>
+      <p className="mt-2 text-sm font-semibold text-collin-navy dark:text-white">
+        {value}
+      </p>
     </motion.div>
   );
 }

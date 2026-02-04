@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Roboto, Roboto_Condensed } from "next/font/google";
+
 import SmoothScrollProvider from "../components/SmoothScrollProvider";
 import AssistantButton from "../components/AssistantButton";
 import AnalyticsLoader from "../components/AnalyticsLoader";
@@ -9,6 +10,7 @@ import CookiePreferencesModal from "../components/cookies/CookiePreferencesModal
 import AssistantTeaser from "@/components/AssistantTeaser";
 import ScrollHomeButton from "@/components/ScrollHomeButton";
 
+import ThemeProvider from "@/components/ThemeProvider";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -59,33 +61,37 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" dir="ltr">
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${roboto.className} ${robotoCondensed.variable} bg-white text-gray-900`}
+        className={[
+          roboto.className,
+          robotoCondensed.variable,
+
+          // ✅ Light / dark base (so toggle is visible sitewide)
+          "min-h-screen bg-white text-gray-900",
+          "dark:bg-collin-navy-darker dark:text-white",
+        ].join(" ")}
       >
-        {/* Skip to content */}
         <a href="#main" className="skip-link">
           Skip to content
         </a>
 
-        {/* Cookie consent must wrap Cookie UI + AnalyticsLoader */}
-        <CookieConsentProvider>
-          {/* Cookie UI sits above everything */}
-          <CookieBanner />
-          <CookiePreferencesModal />
+        <ThemeProvider>
+          <CookieConsentProvider>
+            <CookieBanner />
+            <CookiePreferencesModal />
 
-          {/* Client providers/components */}
-          <SmoothScrollProvider>
-            <main id="main">{children}</main>
-            <AssistantButton />
-            <AssistantTeaser />
-            <ScrollHomeButton />
-          </SmoothScrollProvider>
+            <SmoothScrollProvider>
+              <main id="main">{children}</main>
+              <AssistantButton />
+              <AssistantTeaser />
+              <ScrollHomeButton />
+            </SmoothScrollProvider>
 
-          {/* Optional analytics (should respect consent inside this component) */}
-          <AnalyticsLoader />
-        </CookieConsentProvider>
+            <AnalyticsLoader />
+          </CookieConsentProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

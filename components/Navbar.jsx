@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import ThemeToggle from "@/components/ThemeToggle"; // ✅ add
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -59,6 +59,7 @@ export default function Navbar() {
 
     const ids = ["top", "about", "services", "how", "use-case", "why", "contact"];
     const elements = ids.map((id) => document.getElementById(id)).filter(Boolean);
+
     if (!elements.length || typeof IntersectionObserver === "undefined") return;
 
     const io = new IntersectionObserver(
@@ -115,17 +116,15 @@ export default function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       {/* Backdrop bar */}
-      <div
-        className={[
-          "border-b backdrop-blur-xl",
-          "bg-white/70 border-gray-200",
-          "dark:bg-collin-navy/70 dark:border-white/10",
-        ].join(" ")}
-      >
+      <div className="bg-white/70 backdrop-blur-xl border-b border-gray-200 dark:bg-slate-950/70 dark:border-white/10">
         <div className="container-wrapper">
-          <div className="flex h-16 items-center justify-between gap-3">
+          <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <Link href={isHome ? "#top" : "/#top"} className="flex items-center gap-2" aria-label="Collinalitics home">
+            <Link
+              href={isHome ? "#top" : "/#top"}
+              className="flex items-center gap-2"
+              aria-label="Collinalitics home"
+            >
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-collin-teal text-white font-bold">
                 C
               </span>
@@ -149,13 +148,16 @@ export default function Navbar() {
                       "text-sm font-medium transition",
                       activeNow
                         ? "text-collin-teal"
-                        : "text-collin-slate hover:text-collin-teal dark:text-white/80 dark:hover:text-collin-teal-light",
+                        : "text-collin-slate hover:text-collin-teal dark:text-white/75 dark:hover:text-collin-teal-light",
                     ].join(" ")}
                   >
                     {l.label}
                   </Link>
                 );
               })}
+
+              {/* ✅ Theme toggle */}
+              <ThemeToggle />
 
               <button
                 onClick={openCalendly}
@@ -166,26 +168,18 @@ export default function Navbar() {
                 <CalendarIcon className="h-4 w-4" />
                 Book a free discovery call
               </button>
-
-              {/* ✅ Theme toggle (desktop) */}
-              <ThemeToggle />
             </nav>
 
-            {/* Right side (mobile): toggle + burger */}
-            <div className="md:hidden flex items-center gap-2">
-              {/* ✅ Theme toggle (mobile compact) */}
-              <ThemeToggle compact />
-
-              <button
-                className="inline-flex items-center justify-center rounded-md p-2 text-collin-slate hover:bg-gray-100 transition dark:text-white/80 dark:hover:bg-white/10"
-                aria-label={open ? "Close navigation" : "Open navigation"}
-                aria-expanded={open}
-                onClick={() => setOpen((v) => !v)}
-                type="button"
-              >
-                {open ? <CloseIcon /> : <MenuIcon />}
-              </button>
-            </div>
+            {/* Mobile Menu Toggle */}
+            <button
+              className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-collin-slate hover:bg-gray-100 transition dark:text-white/80 dark:hover:bg-white/10"
+              aria-label={open ? "Close navigation" : "Open navigation"}
+              aria-expanded={open}
+              onClick={() => setOpen((v) => !v)}
+              type="button"
+            >
+              {open ? <CloseIcon /> : <MenuIcon />}
+            </button>
           </div>
         </div>
       </div>
@@ -193,7 +187,6 @@ export default function Navbar() {
       {/* Mobile overlay */}
       {open && (
         <div className="md:hidden">
-          {/* Click outside to close */}
           <button
             className="fixed inset-0 bg-black/25 backdrop-blur-[2px]"
             aria-label="Close menu"
@@ -203,7 +196,7 @@ export default function Navbar() {
 
           <div className="relative">
             <div className="container-wrapper">
-              <div className="mt-3 rounded-2xl border border-gray-200 bg-white/95 p-4 shadow-lg dark:border-white/10 dark:bg-collin-navy/90">
+              <div className="mt-3 card bg-white/95 p-4 dark:bg-slate-950/95 dark:border dark:border-white/10">
                 <div className="grid gap-1">
                   {links.map((l) => {
                     const href = resolveHref(l);
@@ -225,6 +218,14 @@ export default function Navbar() {
                       </Link>
                     );
                   })}
+
+                  {/* ✅ Mobile theme toggle row */}
+                  <div className="mt-2 pt-3 border-t border-gray-200 dark:border-white/10 flex items-center justify-between gap-3">
+                    <span className="text-sm font-medium text-collin-navy dark:text-white">
+                      Theme
+                    </span>
+                    <ThemeToggle compact />
+                  </div>
 
                   <div className="mt-2 pt-3 border-t border-gray-200 dark:border-white/10">
                     <button

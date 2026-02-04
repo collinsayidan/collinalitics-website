@@ -44,22 +44,43 @@ export default function WhyUs() {
     ? undefined
     : {
         y: -8,
-        boxShadow: "0 24px 80px rgba(2, 12, 27, 0.25)",
+        boxShadow: "0 24px 80px rgba(2, 12, 27, 0.18)",
         transition: { type: "spring", stiffness: 260, damping: 22 },
       };
 
   return (
     <section
       id="why"
-      className="relative overflow-hidden py-24 sm:py-28 md:py-32 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
       aria-labelledby="why-heading"
+      className={[
+        "relative overflow-hidden py-24 sm:py-28 md:py-32",
+        // ✅ light default + dark override
+        "bg-white text-collin-navy",
+        "dark:bg-gradient-to-br dark:from-collin-navy-darker dark:via-collin-navy-dark dark:to-collin-navy-darker dark:text-white",
+      ].join(" ")}
     >
-      {/* ✅ Background: glows + grid (Services-style) */}
+      {/* Background: glows + grid (light + dark) */}
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[560px] bg-blue-600/5 rounded-full blur-3xl" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
+        {/* light glows */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-collin-teal/10 rounded-full blur-3xl dark:hidden" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-collin-teal-light/10 rounded-full blur-3xl dark:hidden" />
+
+        {/* dark glows (keep your look) */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl hidden dark:block" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl hidden dark:block" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[560px] bg-blue-600/5 rounded-full blur-3xl hidden dark:block" />
+
+        {/* grid */}
+        <div
+          className={[
+            "absolute inset-0",
+            // light grid
+            "opacity-[0.20] [background-image:linear-gradient(rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.05)_1px,transparent_1px)]",
+            // dark grid
+            "dark:opacity-[0.14] dark:[background-image:linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)]",
+            "bg-[size:60px_60px]",
+          ].join(" ")}
+        />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
@@ -71,25 +92,29 @@ export default function WhyUs() {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="max-w-4xl"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8 bg-teal-500/10 border-teal-500/20">
-            <span className="h-2 w-2 rounded-full bg-teal-300" />
-            <span className="text-teal-300 text-sm font-medium tracking-wide">
-              Why Collinalitics
-            </span>
+          <div
+            className={[
+              "inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8",
+              "border-gray-200 bg-white/80 text-collin-navy shadow-sm",
+              "dark:bg-teal-500/10 dark:border-teal-500/20 dark:text-teal-200 dark:shadow-none",
+            ].join(" ")}
+          >
+            <span className="h-2 w-2 rounded-full bg-collin-teal dark:bg-teal-300" />
+            <span className="text-sm font-medium tracking-wide">Why Collinalitics</span>
           </div>
 
           <h2
             id="why-heading"
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-collin-navy dark:text-white"
           >
             Clarity, practicality, and{" "}
-            <span className="bg-gradient-to-r from-blue-400 via-teal-400 to-blue-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-collin-teal via-collin-teal-light to-collin-teal bg-clip-text text-transparent">
               measurable outcomes
             </span>
             .
           </h2>
 
-          <p className="mt-5 text-lg text-slate-400 leading-relaxed max-w-3xl">
+          <p className="mt-5 text-lg leading-relaxed max-w-3xl text-collin-slate dark:text-white/75">
             We combine analytics engineering, BI, and systems thinking so reporting becomes trusted,
             repeatable, and genuinely useful — not a monthly scramble.
           </p>
@@ -116,15 +141,19 @@ export default function WhyUs() {
               key={o.label}
               variants={fadeUp}
               whileHover={liftHover}
-              className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 transition"
+              className={[
+                "rounded-2xl border p-6 transition",
+                "border-gray-200 bg-white shadow-soft",
+                "dark:border-white/10 dark:bg-white/5 dark:shadow-softDark dark:backdrop-blur",
+              ].join(" ")}
             >
-              <p className="text-sm font-semibold text-white">{o.label}</p>
-              <p className="mt-2 text-sm text-slate-400 leading-relaxed">{o.desc}</p>
+              <p className="text-sm font-semibold text-collin-navy dark:text-white">{o.label}</p>
+              <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-white/70">{o.desc}</p>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Main grid: Differentiators + Proof */}
+        {/* Main grid */}
         <motion.div
           className="mt-10 grid gap-8 lg:grid-cols-2"
           initial="hidden"
@@ -136,20 +165,24 @@ export default function WhyUs() {
           <motion.article
             variants={fadeUp}
             whileHover={liftHover}
-            className="rounded-2xl border border-slate-800 bg-slate-900/60 p-8"
+            className={[
+              "rounded-2xl border p-8",
+              "border-gray-200 bg-white shadow-soft",
+              "dark:border-white/10 dark:bg-white/5 dark:shadow-softDark dark:backdrop-blur",
+            ].join(" ")}
             aria-label="What sets Collinalitics apart"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold tracking-widest text-slate-500 uppercase">
+                <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 dark:text-white/60">
                   What sets us apart
                 </p>
-                <h3 className="mt-3 text-xl font-semibold text-white">
+                <h3 className="mt-3 text-xl font-semibold text-collin-navy dark:text-white">
                   Reporting built for real teams — not dashboards for show.
                 </h3>
               </div>
 
-              <span className="h-12 w-12 rounded-xl bg-teal-500/10 text-teal-300 flex items-center justify-center">
+              <span className="h-12 w-12 rounded-xl bg-collin-teal/10 text-collin-teal flex items-center justify-center dark:bg-teal-500/10 dark:text-teal-300">
                 <CheckCircle2 className="h-6 w-6" />
               </span>
             </div>
@@ -157,19 +190,25 @@ export default function WhyUs() {
             <ul className="mt-7 space-y-4">
               {points.map((p) => (
                 <li key={p} className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-lg bg-teal-500/10 text-teal-300">
+                  <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-lg bg-collin-teal/10 text-collin-teal dark:bg-teal-500/10 dark:text-teal-300">
                     <CheckCircle2 className="h-4 w-4" />
                   </span>
-                  <p className="text-sm text-slate-300 leading-relaxed">{p}</p>
+                  <p className="text-sm leading-relaxed text-gray-700 dark:text-white/75">{p}</p>
                 </li>
               ))}
             </ul>
 
-            <div className="mt-8 rounded-xl border border-slate-800 bg-slate-950/40 p-5">
-              <p className="text-xs font-semibold tracking-widest text-slate-500 uppercase">
+            <div
+              className={[
+                "mt-8 rounded-xl border p-5",
+                "border-gray-200 bg-gray-50",
+                "dark:border-white/10 dark:bg-white/5",
+              ].join(" ")}
+            >
+              <p className="text-xs font-semibold tracking-widest uppercase text-gray-600 dark:text-white/60">
                 Best fit
               </p>
-              <p className="mt-2 text-sm text-slate-300 leading-relaxed">
+              <p className="mt-2 text-sm leading-relaxed text-gray-700 dark:text-white/75">
                 SMEs, charities, and public-sector teams who want KPI clarity, reliable reporting,
                 and less manual effort — without complexity for its own sake.
               </p>
@@ -180,25 +219,29 @@ export default function WhyUs() {
           <motion.aside
             variants={fadeUp}
             whileHover={liftHover}
-            className="rounded-2xl border border-slate-800 bg-slate-900/60 p-8"
+            className={[
+              "rounded-2xl border p-8",
+              "border-gray-200 bg-white shadow-soft",
+              "dark:border-white/10 dark:bg-white/5 dark:shadow-softDark dark:backdrop-blur",
+            ].join(" ")}
             aria-label="Expected outcomes"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold tracking-widest text-slate-500 uppercase">
+                <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 dark:text-white/60">
                   Outcomes
                 </p>
-                <h3 className="mt-3 text-xl font-semibold text-white">
+                <h3 className="mt-3 text-xl font-semibold text-collin-navy dark:text-white">
                   Reporting becomes a driver for decisions — not a chore.
                 </h3>
               </div>
 
-              <span className="h-12 w-12 rounded-xl bg-blue-500/10 text-blue-300 flex items-center justify-center">
+              <span className="h-12 w-12 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center dark:text-blue-300">
                 <Sparkles className="h-6 w-6" />
               </span>
             </div>
 
-            <p className="mt-6 text-sm text-slate-300 leading-relaxed">
+            <p className="mt-6 text-sm leading-relaxed text-gray-700 dark:text-white/75">
               Leaders gain trusted insight, teams get visibility, and reporting becomes repeatable.
               We reduce manual effort, improve metric confidence, and strengthen operational clarity.
             </p>
@@ -210,12 +253,18 @@ export default function WhyUs() {
               <OutcomePill>Clear ownership</OutcomePill>
             </div>
 
-            <div className="mt-8 rounded-xl border border-slate-800 bg-slate-950/40 p-6">
-              <p className="text-sm italic leading-relaxed text-slate-300">
+            <div
+              className={[
+                "mt-8 rounded-xl border p-6",
+                "border-gray-200 bg-gray-50",
+                "dark:border-white/10 dark:bg-white/5",
+              ].join(" ")}
+            >
+              <p className="text-sm italic leading-relaxed text-gray-700 dark:text-white/75">
                 “We moved from scattered spreadsheets to a single source of truth.
                 Leadership finally has clarity and reporting time dropped from days to minutes.”
               </p>
-              <p className="mt-3 text-xs font-semibold tracking-widest text-slate-500 uppercase">
+              <p className="mt-3 text-xs font-semibold tracking-widest uppercase text-gray-600 dark:text-white/60">
                 Senior Operations Manager • UK Public Sector
               </p>
             </div>
@@ -224,20 +273,24 @@ export default function WhyUs() {
 
         {/* Timeline */}
         <motion.div
-          className="mt-14 rounded-2xl border border-slate-800 bg-slate-900/60 p-7 sm:p-8"
+          className={[
+            "mt-14 rounded-2xl border p-7 sm:p-8",
+            "border-gray-200 bg-white shadow-soft",
+            "dark:border-white/10 dark:bg-white/5 dark:shadow-softDark dark:backdrop-blur",
+          ].join(" ")}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.25 }}
           variants={container}
         >
           <motion.div variants={fadeUp} className="text-center">
-            <p className="text-xs font-semibold tracking-widest text-slate-500 uppercase">
+            <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 dark:text-white/60">
               How we work
             </p>
-            <h3 className="mt-3 text-2xl font-semibold text-white">
+            <h3 className="mt-3 text-2xl font-semibold text-collin-navy dark:text-white">
               A simple approach that scales.
             </h3>
-            <p className="mt-3 text-sm text-slate-400 leading-relaxed max-w-2xl mx-auto">
+            <p className="mt-3 text-sm leading-relaxed max-w-2xl mx-auto text-gray-600 dark:text-white/70">
               Clear phases, clear outputs, and documentation built in so the work lasts beyond delivery.
             </p>
           </motion.div>
@@ -247,19 +300,30 @@ export default function WhyUs() {
               <motion.div
                 key={t.step}
                 variants={fadeUp}
-                className="rounded-xl border border-slate-800 bg-slate-950/40 p-5"
+                className={[
+                  "rounded-xl border p-5",
+                  "border-gray-200 bg-gray-50",
+                  "dark:border-white/10 dark:bg-white/5",
+                ].join(" ")}
               >
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/85">
+                  <span
+                    className={[
+                      "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold",
+                      "bg-gray-200 text-gray-700",
+                      "dark:bg-white/10 dark:text-white/85",
+                    ].join(" ")}
+                  >
                     {t.step}
                   </span>
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-teal-500/10 text-teal-300">
+
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-collin-teal/10 text-collin-teal dark:bg-teal-500/10 dark:text-teal-300">
                     <ArrowRight className="h-4 w-4" />
                   </span>
                 </div>
 
-                <p className="mt-4 text-sm font-semibold text-white">{t.title}</p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">{t.desc}</p>
+                <p className="mt-4 text-sm font-semibold text-collin-navy dark:text-white">{t.title}</p>
+                <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-white/70">{t.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -268,14 +332,13 @@ export default function WhyUs() {
           <motion.div variants={fadeUp} className="mt-10 text-center">
             <a
               href="#contact"
-              className="inline-flex items-center justify-center rounded-xl bg-teal-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-teal-500/25 hover:opacity-95 transition"
+              className="inline-flex items-center justify-center rounded-xl bg-collin-teal px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-black/10 hover:opacity-95 transition"
               aria-label="Book a consultation"
             >
-              Book a consultation
-              <span className="ml-2">→</span>
+              Book a consultation <span className="ml-2">→</span>
             </a>
 
-            <p className="mt-3 text-xs text-slate-500">
+            <p className="mt-3 text-xs text-gray-500 dark:text-white/55">
               No pressure — we’ll confirm fit, scope, and next steps.
             </p>
           </motion.div>
@@ -289,7 +352,13 @@ export default function WhyUs() {
 
 function Chip({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-slate-800 bg-slate-900/40 px-3 py-1 text-xs font-medium text-slate-200">
+    <span
+      className={[
+        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium",
+        "border-gray-200 bg-white text-gray-700",
+        "dark:border-white/10 dark:bg-white/5 dark:text-white/80",
+      ].join(" ")}
+    >
       {children}
     </span>
   );
@@ -297,7 +366,13 @@ function Chip({ children }) {
 
 function OutcomePill({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-slate-800 bg-slate-950/40 px-3 py-1 text-xs font-medium text-slate-200">
+    <span
+      className={[
+        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium",
+        "border-gray-200 bg-gray-50 text-gray-700",
+        "dark:border-white/10 dark:bg-white/5 dark:text-white/80",
+      ].join(" ")}
+    >
       {children}
     </span>
   );

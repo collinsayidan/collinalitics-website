@@ -48,20 +48,36 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative overflow-hidden py-24 sm:py-28 md:py-32 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
       aria-labelledby="about-heading"
+      className={[
+        "relative overflow-hidden py-24 sm:py-28 md:py-32",
+        // ✅ Light default
+        "bg-gradient-to-b from-white via-gray-50 to-white",
+        // ✅ Dark override
+        "dark:bg-gradient-to-b dark:from-collin-navy-darker dark:via-collin-navy-dark dark:to-collin-navy-darker",
+      ].join(" ")}
     >
-      {/* Hero-style background */}
+      {/* Background */}
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[560px] bg-blue-600/5 rounded-full blur-3xl" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
+        {/* Blobs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl bg-collin-teal/10 dark:bg-collin-teal/14" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl bg-collin-teal-light/12 dark:bg-collin-teal-light/16" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[560px] rounded-full blur-3xl bg-collin-navy/5 dark:bg-white/5" />
+
+        {/* Grid */}
+        <div
+          className={[
+            "absolute inset-0",
+            "bg-[linear-gradient(rgba(10,37,64,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(10,37,64,0.05)_1px,transparent_1px)]",
+            "dark:bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)]",
+            "bg-[size:72px_72px]",
+          ].join(" ")}
+        />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
-          {/* Left: narrative */}
+          {/* Left */}
           <motion.div
             initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 18 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -69,24 +85,30 @@ export default function About() {
             transition={{ duration: 0.65, ease: "easeOut" }}
             className="lg:col-span-7"
           >
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2">
-              <span className="inline-flex h-2 w-2 rounded-full bg-teal-400" />
-              <p className="text-xs font-semibold tracking-widest text-slate-300 uppercase">
+            <div
+              className={[
+                "inline-flex items-center gap-2 rounded-full border px-4 py-2",
+                "border-gray-200 bg-white/80",
+                "dark:border-white/10 dark:bg-white/5",
+              ].join(" ")}
+            >
+              <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" />
+              <p className="text-xs font-semibold tracking-widest uppercase text-collin-slate dark:text-white/70">
                 About Collinalitics
               </p>
             </div>
 
             <h2
               id="about-heading"
-              className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight"
+              className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-collin-navy dark:text-white"
             >
               We build analytics that leaders{" "}
-              <span className="bg-gradient-to-r from-blue-400 via-teal-400 to-blue-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-collin-teal via-collin-teal-light to-collin-teal bg-clip-text text-transparent">
                 trust.
               </span>
             </h2>
 
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-400">
+            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-collin-slate dark:text-white/70">
               Collinalitics is a UK-based analytics engineering and consulting firm helping teams
               replace fragmented reporting with automated, reliable insight — faster, with confidence,
               and designed to scale.
@@ -101,7 +123,7 @@ export default function About() {
 
             {/* Capability list */}
             <div className="mt-10">
-              <p className="text-xs font-semibold tracking-widest text-slate-500 uppercase">
+              <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 dark:text-white/45">
                 Core capabilities
               </p>
 
@@ -130,7 +152,11 @@ export default function About() {
               <button
                 type="button"
                 onClick={openCalendly}
-                className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 hover:bg-blue-700 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/30"
+                className={[
+                  "inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold transition",
+                  "bg-collin-teal text-white shadow-lg shadow-collin-teal/20 hover:opacity-95",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/30",
+                ].join(" ")}
                 aria-label="Book a free discovery call on Calendly"
               >
                 Book a discovery call
@@ -139,19 +165,24 @@ export default function About() {
 
               <a
                 href="/case-studies"
-                className="inline-flex items-center justify-center rounded-xl border border-slate-700 bg-transparent px-6 py-3 text-sm font-semibold text-slate-200 hover:bg-slate-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/20"
+                className={[
+                  "inline-flex items-center justify-center rounded-xl border px-6 py-3 text-sm font-semibold transition",
+                  "border-gray-200 bg-white text-collin-navy hover:bg-gray-50",
+                  "dark:border-white/12 dark:bg-white/5 dark:text-white dark:hover:bg-white/10",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/20",
+                ].join(" ")}
                 aria-label="View case studies"
               >
                 View case studies
               </a>
             </div>
 
-            <p className="mt-3 text-[11px] text-slate-500">
+            <p className="mt-3 text-[11px] text-gray-500 dark:text-white/45">
               30 minutes • no obligation • clear next steps
             </p>
           </motion.div>
 
-          {/* Right: trust / founder card */}
+          {/* Right */}
           <motion.aside
             initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 18 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -159,24 +190,45 @@ export default function About() {
             transition={{ delay: 0.1, duration: 0.65, ease: "easeOut" }}
             className="lg:col-span-5"
           >
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-7 sm:p-8 shadow-[0_22px_70px_rgba(2,12,27,0.25)]">
+            <div
+              className={[
+                "rounded-3xl border backdrop-blur-xl p-7 sm:p-8",
+                "border-gray-200 bg-white/85 shadow-[0_22px_70px_rgba(2,12,27,0.10)]",
+                "dark:border-white/10 dark:bg-white/5 dark:shadow-softDark",
+              ].join(" ")}
+            >
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-white">Collins Ayidan</p>
-                  <p className="mt-1 text-xs text-slate-400">
+                  <p className="text-sm font-semibold text-collin-navy dark:text-white">
+                    Collins Ayidan
+                  </p>
+                  <p className="mt-1 text-xs text-gray-600 dark:text-white/60">
                     Founder • Lead Analytics Engineer • Edinburgh (UK)
                   </p>
                 </div>
-                <span className="inline-flex items-center rounded-full border border-slate-800 bg-slate-950/40 px-3 py-1 text-xs font-semibold text-slate-200">
+
+                <span
+                  className={[
+                    "inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold",
+                    "border-gray-200 bg-white text-collin-navy",
+                    "dark:border-white/10 dark:bg-white/5 dark:text-white/80",
+                  ].join(" ")}
+                >
                   UK delivery
                 </span>
               </div>
 
-              <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-950/40 p-5">
-                <p className="text-xs font-semibold tracking-widest text-slate-500 uppercase">
+              <div
+                className={[
+                  "mt-6 rounded-2xl border p-5",
+                  "border-gray-200 bg-white",
+                  "dark:border-white/10 dark:bg-white/5",
+                ].join(" ")}
+              >
+                <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 dark:text-white/45">
                   Operating standard
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                <p className="mt-2 text-sm leading-relaxed text-gray-700 dark:text-white/70">
                   Precision in definitions. Reliability in delivery. Maintainability by design.
                   We build foundations that stay useful long after launch.
                 </p>
@@ -192,14 +244,19 @@ export default function About() {
                 <button
                   type="button"
                   onClick={openCalendly}
-                  className="w-full inline-flex items-center justify-center rounded-xl bg-white text-slate-900 px-6 py-3 text-sm font-semibold shadow-lg shadow-black/10 hover:opacity-95 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/25"
+                  className={[
+                    "w-full inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold transition",
+                    "bg-collin-navy text-white shadow-lg shadow-black/10 hover:opacity-95",
+                    "dark:bg-white dark:text-collin-navy",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/25",
+                  ].join(" ")}
                   aria-label="Book a discovery call (Calendly)"
                 >
                   Book with Collins
                   <Calendar className="ml-2 h-4 w-4" />
                 </button>
 
-                <p className="mt-3 text-center text-[11px] text-slate-500">
+                <p className="mt-3 text-center text-[11px] text-gray-500 dark:text-white/45">
                   Direct call • practical advice • next steps
                 </p>
               </div>
@@ -215,10 +272,18 @@ export default function About() {
 
 function ProofPill({ label, sub }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-950/40 px-3 py-1 text-xs font-semibold text-slate-200">
-      <span className="inline-flex h-2 w-2 rounded-full bg-teal-400" aria-hidden="true" />
+    <span
+      className={[
+        "inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold",
+        "border-gray-200 bg-white text-collin-navy",
+        "dark:border-white/10 dark:bg-white/5 dark:text-white/80",
+      ].join(" ")}
+    >
+      <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" aria-hidden="true" />
       <span>{label}</span>
-      <span className="hidden sm:inline text-slate-500 font-medium">• {sub}</span>
+      <span className="hidden sm:inline text-gray-500 dark:text-white/45 font-medium">
+        • {sub}
+      </span>
     </span>
   );
 }
@@ -226,12 +291,14 @@ function ProofPill({ label, sub }) {
 function CapabilityRow({ title, desc }) {
   return (
     <li className="flex items-start gap-3">
-      <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-lg bg-teal-500/10 text-teal-300 border border-teal-500/20">
+      <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-lg border bg-collin-teal/10 text-collin-teal border-collin-teal/20">
         <Check className="h-4 w-4" aria-hidden="true" />
       </span>
       <div>
-        <p className="text-sm font-semibold text-white">{title}</p>
-        <p className="mt-1 text-sm text-slate-400 leading-relaxed">{desc}</p>
+        <p className="text-sm font-semibold text-collin-navy dark:text-white">{title}</p>
+        <p className="mt-1 text-sm leading-relaxed text-collin-slate dark:text-white/70">
+          {desc}
+        </p>
       </div>
     </li>
   );
@@ -239,11 +306,17 @@ function CapabilityRow({ title, desc }) {
 
 function MiniCheck({ text }) {
   return (
-    <div className="flex items-start gap-3 rounded-2xl border border-slate-800 bg-slate-950/40 p-4">
-      <span className="mt-0.5 text-teal-300" aria-hidden="true">
+    <div
+      className={[
+        "flex items-start gap-3 rounded-2xl border p-4",
+        "border-gray-200 bg-white",
+        "dark:border-white/10 dark:bg-white/5",
+      ].join(" ")}
+    >
+      <span className="mt-0.5 text-collin-teal" aria-hidden="true">
         <Check className="h-4 w-4" />
       </span>
-      <p className="text-sm text-slate-300">{text}</p>
+      <p className="text-sm text-gray-700 dark:text-white/70">{text}</p>
     </div>
   );
 }

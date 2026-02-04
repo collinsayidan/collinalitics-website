@@ -92,23 +92,38 @@ export default function BeforeAfterReveal() {
   return (
     <section
       id="before-after"
-      className="relative overflow-hidden text-white py-24 sm:py-28 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
       aria-labelledby="before-after-heading"
+      className={[
+        "relative overflow-hidden py-24 sm:py-28",
+        // ✅ Light mode default
+        "bg-gray-50 text-gray-900",
+        // ✅ Dark mode
+        "dark:bg-gradient-to-br dark:from-collin-navy-darker dark:via-collin-navy-dark dark:to-collin-navy-darker dark:text-white",
+      ].join(" ")}
     >
-      {/* ✅ Services-style BG layers */}
+      {/* Background layers */}
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-        {/* Glows */}
-        <div className="absolute -top-28 right-[-8rem] h-80 w-80 rounded-full bg-collin-teal/14 blur-3xl" />
-        <div className="absolute -bottom-28 left-[-8rem] h-96 w-96 rounded-full bg-collin-lightTeal/10 blur-3xl" />
+        {/* Light glows */}
+        <div className="absolute -top-28 right-[-8rem] h-80 w-80 rounded-full bg-collin-teal/12 blur-3xl dark:hidden" />
+        <div className="absolute -bottom-28 left-[-8rem] h-96 w-96 rounded-full bg-collin-teal-light/18 blur-3xl dark:hidden" />
 
-        {/* Grid (bluish like your Hero/Services vibe) */}
-        <div className="absolute inset-0 opacity-[0.18]
-          [background-image:linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)]
-          [background-size:72px_72px]"
+        {/* Dark glows */}
+        <div className="absolute -top-28 right-[-8rem] h-80 w-80 rounded-full bg-collin-teal/14 blur-3xl hidden dark:block" />
+        <div className="absolute -bottom-28 left-[-8rem] h-96 w-96 rounded-full bg-collin-teal-light/10 blur-3xl hidden dark:block" />
+
+        {/* Grid */}
+        <div
+          className={[
+            "absolute inset-0 opacity-[0.18]",
+            "[background-image:linear-gradient(rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.06)_1px,transparent_1px)]",
+            "dark:opacity-[0.18]",
+            "dark:[background-image:linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)]",
+            "[background-size:72px_72px]",
+          ].join(" ")}
         />
 
-        {/* Soft vignette */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/20" />
+        {/* Vignette */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-transparent to-black/0 dark:from-black/35 dark:to-black/20" />
       </div>
 
       <div className="container-wrapper relative z-10" ref={containerRef}>
@@ -120,29 +135,39 @@ export default function BeforeAfterReveal() {
           viewport={{ once: true, amount: 0.3 }}
           transition={baseTransition}
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 backdrop-blur">
-            <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" />
-            <p className="text-xs font-semibold tracking-widest text-white/80 uppercase">
+          <div
+            className={[
+              "inline-flex items-center gap-2 rounded-full border px-4 py-2 backdrop-blur",
+              "border-gray-200 bg-white/70",
+              "dark:border-white/15 dark:bg-white/5",
+            ].join(" ")}
+          >
+            <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal dark:bg-collin-teal" />
+            <p className="text-xs font-semibold tracking-widest text-gray-600 uppercase dark:text-white/80">
               Visual example
             </p>
           </div>
 
-          <h2 id="before-after-heading" className="mt-6 text-h2 text-white">
+          <h2 id="before-after-heading" className="mt-6 text-h2 text-collin-navy dark:text-white">
             Before &amp; After:{" "}
-            <span className="bg-gradient-to-r from-collin-teal to-collin-lightTeal bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-collin-teal to-collin-teal-light bg-clip-text text-transparent">
               decision-ready
             </span>{" "}
             dashboard
           </h2>
 
-          <p className="text-bodylg text-white/85 mt-4 leading-relaxed">
+          <p className="text-bodylg mt-4 leading-relaxed text-gray-600 dark:text-white/85">
             Drag anywhere to compare or use your arrow keys.
           </p>
         </motion.header>
 
         {/* Glass Card Wrapper */}
         <motion.div
-          className="mt-12 sm:mt-14 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md shadow-2xl"
+          className={[
+            "mt-12 sm:mt-14 rounded-3xl border backdrop-blur-md shadow-2xl",
+            "border-gray-200 bg-white/80",
+            "dark:border-white/10 dark:bg-white/5",
+          ].join(" ")}
           initial={{ opacity: 0, y: prefersReduced ? 0 : 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.25 }}
@@ -151,23 +176,35 @@ export default function BeforeAfterReveal() {
           {/* Top Bar */}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-5 sm:px-7 pt-5 sm:pt-6">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 border border-white/10">
+              <span
+                className={[
+                  "inline-flex h-10 w-10 items-center justify-center rounded-2xl border",
+                  "bg-gray-900/5 border-gray-200",
+                  "dark:bg-white/10 dark:border-white/10",
+                ].join(" ")}
+              >
                 <IconCompare />
               </span>
               <div>
-                <p className="text-sm font-semibold text-white">Drag to compare</p>
-                <p className="text-xs text-white/70">
+                <p className="text-sm font-semibold text-collin-navy dark:text-white">Drag to compare</p>
+                <p className="text-xs text-gray-600 dark:text-white/70">
                   Click/drag anywhere • ← → for fine control • Home/End to jump
                 </p>
               </div>
             </div>
 
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-4 py-2">
-              <span className="text-xs font-semibold text-white/70">Before</span>
-              <span className="text-sm font-semibold text-white">{beforePct}%</span>
-              <span className="text-white/40">•</span>
-              <span className="text-xs font-semibold text-white/70">After</span>
-              <span className="text-sm font-semibold text-white">{afterPct}%</span>
+            <div
+              className={[
+                "inline-flex items-center gap-2 rounded-full border px-4 py-2",
+                "border-gray-200 bg-white/70",
+                "dark:border-white/10 dark:bg-black/20",
+              ].join(" ")}
+            >
+              <span className="text-xs font-semibold text-gray-600 dark:text-white/70">Before</span>
+              <span className="text-sm font-semibold text-collin-navy dark:text-white">{beforePct}%</span>
+              <span className="text-gray-400 dark:text-white/40">•</span>
+              <span className="text-xs font-semibold text-gray-600 dark:text-white/70">After</span>
+              <span className="text-sm font-semibold text-collin-navy dark:text-white">{afterPct}%</span>
             </div>
           </div>
 
@@ -178,9 +215,10 @@ export default function BeforeAfterReveal() {
               "relative mt-5 sm:mt-6",
               "w-full aspect-[16/9] md:aspect-[18/9]",
               "rounded-3xl overflow-hidden",
-              "border border-white/10",
+              "border",
               "mx-5 sm:mx-7",
-              "shadow-[0_25px_70px_-35px_rgba(0,0,0,0.85)]",
+              "shadow-[0_25px_70px_-35px_rgba(0,0,0,0.35)] dark:shadow-[0_25px_70px_-35px_rgba(0,0,0,0.85)]",
+              "border-gray-200 dark:border-white/10",
             ].join(" ")}
             initial={{ opacity: 0, scale: prefersReduced ? 1 : 0.99 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -204,11 +242,7 @@ export default function BeforeAfterReveal() {
             />
 
             {/* BEFORE (clipped overlay) */}
-            <div
-              className="absolute inset-y-0 left-0 overflow-hidden"
-              style={{ width: `${percent}%` }}
-              aria-hidden="true"
-            >
+            <div className="absolute inset-y-0 left-0 overflow-hidden" style={{ width: `${percent}%` }} aria-hidden="true">
               <Image
                 src="/images/project_01.jpg"
                 alt="Before: manual spreadsheet reporting"
@@ -218,15 +252,15 @@ export default function BeforeAfterReveal() {
               />
             </div>
 
-            {/* Premium depth overlay */}
+            {/* Depth overlay */}
             <div
-              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-black/5 dark:from-black/25 dark:to-black/10"
               aria-hidden="true"
             />
 
-            {/* Divider glow + line */}
+            {/* Divider */}
             <div
-              className="pointer-events-none absolute top-0 bottom-0 w-[2px] bg-white/80"
+              className="pointer-events-none absolute top-0 bottom-0 w-[2px] bg-white/70 dark:bg-white/80"
               style={{ left: handleLeft, transform: "translateX(-1px)" }}
               aria-hidden="true"
             />
@@ -236,19 +270,19 @@ export default function BeforeAfterReveal() {
                 left: handleLeft,
                 transform: "translateX(-50%)",
                 background:
-                  "radial-gradient(circle, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 70%)",
+                  "radial-gradient(circle, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 70%)",
               }}
               aria-hidden="true"
             />
 
             {/* Labels */}
             <div className="absolute left-4 top-4">
-              <span className="inline-flex items-center rounded-md bg-black/35 px-2 py-1 text-xs sm:text-sm font-medium text-white/90 border border-white/10">
+              <span className="inline-flex items-center rounded-md bg-black/25 px-2 py-1 text-xs sm:text-sm font-medium text-white/90 border border-white/10">
                 Before
               </span>
             </div>
             <div className="absolute right-4 top-4">
-              <span className="inline-flex items-center rounded-md bg-black/35 px-2 py-1 text-xs sm:text-sm font-medium text-white/90 border border-white/10">
+              <span className="inline-flex items-center rounded-md bg-black/25 px-2 py-1 text-xs sm:text-sm font-medium text-white/90 border border-white/10">
                 After
               </span>
             </div>
@@ -259,11 +293,13 @@ export default function BeforeAfterReveal() {
               className={[
                 "absolute top-1/2 -translate-y-1/2 -translate-x-1/2",
                 "h-12 w-12 sm:h-14 sm:w-14 rounded-full",
-                "bg-white text-slate-900",
-                "shadow-xl border border-white/70",
                 "flex items-center justify-center",
                 "transition hover:scale-[1.04] active:scale-95",
-                "focus:outline-none focus:ring-2 focus:ring-white/70 focus:ring-offset-2 focus:ring-offset-transparent",
+                "focus:outline-none focus:ring-2 focus:ring-collin-teal/40 focus:ring-offset-2 focus:ring-offset-transparent",
+                // light
+                "bg-white text-slate-900 border border-gray-200 shadow-xl",
+                // dark
+                "dark:border-white/70 dark:shadow-xl",
               ].join(" ")}
               style={{ left: handleLeft }}
               onKeyDown={onKeyDown}
@@ -282,9 +318,7 @@ export default function BeforeAfterReveal() {
               whileHover={prefersReduced ? undefined : { y: -1 }}
               transition={{ duration: 0.25 }}
             >
-              <span className="sr-only">
-                Use left and right arrow keys to adjust comparison.
-              </span>
+              <span className="sr-only">Use left and right arrow keys to adjust comparison.</span>
 
               <div className="absolute inset-0 rounded-full ring-2 ring-collin-teal/25" aria-hidden="true" />
               <svg
@@ -341,23 +375,26 @@ function InfoCard({ title, subtitle, points, accent }) {
   return (
     <div
       className={[
-        "rounded-2xl border border-white/10 bg-black/20 backdrop-blur",
-        "p-5 sm:p-6",
+        "rounded-2xl border backdrop-blur p-5 sm:p-6",
+        // light
+        "border-gray-200 bg-white/70",
+        // dark
+        "dark:border-white/10 dark:bg-black/20",
         accent ? "ring-1 ring-collin-teal/25" : "",
       ].join(" ")}
     >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-semibold text-white">{title}</p>
-          <p className="mt-1 text-xs text-white/70">{subtitle}</p>
+          <p className="text-sm font-semibold text-collin-navy dark:text-white">{title}</p>
+          <p className="mt-1 text-xs text-gray-600 dark:text-white/70">{subtitle}</p>
         </div>
 
         <span
           className={[
-            "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold",
+            "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold border",
             accent
-              ? "bg-collin-teal/20 text-white border border-collin-teal/30"
-              : "bg-white/10 text-white/85 border border-white/10",
+              ? "bg-collin-teal/15 text-collin-navy border-collin-teal/25 dark:bg-collin-teal/20 dark:text-white dark:border-collin-teal/30"
+              : "bg-gray-900/5 text-gray-700 border-gray-200 dark:bg-white/10 dark:text-white/85 dark:border-white/10",
           ].join(" ")}
         >
           {accent ? "Outcome" : "Problem"}
@@ -366,7 +403,7 @@ function InfoCard({ title, subtitle, points, accent }) {
 
       <ul className="mt-4 space-y-2">
         {points.map((p) => (
-          <li key={p} className="flex items-start gap-2 text-sm text-white/85">
+          <li key={p} className="flex items-start gap-2 text-sm text-gray-700 dark:text-white/85">
             <span className="mt-0.5 text-collin-teal" aria-hidden="true">
               <IconCheck />
             </span>
@@ -404,7 +441,7 @@ function IconCompare() {
       viewBox="0 0 24 24"
       strokeWidth="2.2"
       stroke="currentColor"
-      className="h-5 w-5 text-white/90"
+      className="h-5 w-5 text-collin-navy dark:text-white/90"
       aria-hidden="true"
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4V6Z" />

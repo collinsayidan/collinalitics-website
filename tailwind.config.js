@@ -2,7 +2,7 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  /** ✅ REQUIRED for theme toggle */
+  // ✅ REQUIRED for theme toggle (next-themes uses the "dark" class on <html>)
   darkMode: "class",
 
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
@@ -24,7 +24,7 @@ export default {
           slate: "#4A4A4A",
           white: "#FFFFFF",
 
-          /** ✅ Dark-surface tokens (NEW) */
+          // ✅ Dark-surface tokens
           "navy-dark": "#071B35",
           "navy-darker": "#061225",
           "slate-light": "#9CA3AF",
@@ -45,7 +45,7 @@ export default {
         "collin-navy-gradient":
           "linear-gradient(135deg, #0A2540 0%, #0D315A 100%)",
 
-        /** ✅ Dark hero / section gradient */
+        // ✅ Dark hero / section gradient
         "collin-navy-gradient-dark":
           "linear-gradient(135deg, #071B35 0%, #061225 100%)",
       },
@@ -62,7 +62,7 @@ export default {
         soft: "0 10px 30px rgba(2,12,27,0.06)",
         lift: "0 18px 50px rgba(2,12,27,0.10)",
 
-        /** ✅ Dark equivalents */
+        // ✅ Dark equivalents
         softDark: "0 12px 40px rgba(0,0,0,0.45)",
         liftDark: "0 22px 70px rgba(0,0,0,0.55)",
 
@@ -91,8 +91,5 @@ export default {
     },
   },
 
-  plugins: [
-    require("@tailwindcss/typography"),
-    require("@tailwindcss/forms"),
-  ],
+  plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
 };

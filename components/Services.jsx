@@ -53,34 +53,45 @@ const services = [
   },
 ];
 
+/**
+ * Accent styles: provide light + dark variants
+ */
 const accent = {
   blue: {
-    pill: "bg-blue-500/10 border-blue-500/20 text-blue-400",
-    ring: "bg-blue-500/10 text-blue-400",
-    glow: "group-hover:shadow-[0_0_0_6px_rgba(59,130,246,0.12)]",
-    gradient: "group-hover:from-blue-500/10 group-hover:to-teal-500/10",
+    pill: "bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-300",
+    ring:
+      "bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/15 dark:border-blue-500/20",
+    glow:
+      "group-hover:shadow-[0_0_0_6px_rgba(59,130,246,0.12)] dark:group-hover:shadow-[0_0_0_6px_rgba(59,130,246,0.18)]",
+    gradient:
+      "group-hover:from-blue-500/10 group-hover:to-teal-500/10 dark:group-hover:from-blue-500/10 dark:group-hover:to-teal-500/10",
   },
   teal: {
-    pill: "bg-teal-500/10 border-teal-500/20 text-teal-300",
-    ring: "bg-teal-500/10 text-teal-300",
-    glow: "group-hover:shadow-[0_0_0_6px_rgba(45,212,191,0.14)]",
-    gradient: "group-hover:from-teal-500/10 group-hover:to-blue-500/10",
+    pill: "bg-teal-500/10 border-teal-500/20 text-teal-700 dark:text-teal-300",
+    ring:
+      "bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/15 dark:border-teal-500/20",
+    glow:
+      "group-hover:shadow-[0_0_0_6px_rgba(45,212,191,0.14)] dark:group-hover:shadow-[0_0_0_6px_rgba(45,212,191,0.20)]",
+    gradient:
+      "group-hover:from-teal-500/10 group-hover:to-blue-500/10 dark:group-hover:from-teal-500/10 dark:group-hover:to-blue-500/10",
   },
   violet: {
-    pill: "bg-violet-500/10 border-violet-500/20 text-violet-300",
-    ring: "bg-violet-500/10 text-violet-300",
-    glow: "group-hover:shadow-[0_0_0_6px_rgba(139,92,246,0.14)]",
-    gradient: "group-hover:from-violet-500/10 group-hover:to-blue-500/10",
+    pill:
+      "bg-violet-500/10 border-violet-500/20 text-violet-700 dark:text-violet-300",
+    ring:
+      "bg-violet-500/10 text-violet-700 dark:text-violet-300 border border-violet-500/15 dark:border-violet-500/20",
+    glow:
+      "group-hover:shadow-[0_0_0_6px_rgba(139,92,246,0.14)] dark:group-hover:shadow-[0_0_0_6px_rgba(139,92,246,0.20)]",
+    gradient:
+      "group-hover:from-violet-500/10 group-hover:to-blue-500/10 dark:group-hover:from-violet-500/10 dark:group-hover:to-blue-500/10",
   },
 };
 
 export default function Services() {
   const shouldReduceMotion = useReducedMotion();
 
-  // ✅ Calendly link (30 min)
   const calendlyUrl = "https://calendly.com/collinsayidan-collinalitics/30min";
 
-  // ✅ Opens Calendly popup + loads script/CSS once
   const openCalendlyPopup = useCallback(() => {
     if (typeof window === "undefined") return;
 
@@ -118,15 +129,31 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="relative overflow-hidden py-24 sm:py-28 md:py-32 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
       aria-labelledby="services-heading"
+      className={[
+        "relative overflow-hidden py-24 sm:py-28 md:py-32",
+        // ✅ light + dark backgrounds
+        "bg-white dark:bg-gradient-to-br dark:from-collin-navy-darker dark:via-collin-navy-dark dark:to-collin-navy-darker",
+      ].join(" ")}
     >
-      {/* Background: glows + grid (Hero-style) */}
+      {/* Background: glows + grid (light + dark) */}
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[560px] bg-blue-600/5 rounded-full blur-3xl" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
+        {/* Glows */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl dark:bg-blue-500/10" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl dark:bg-teal-500/10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[560px] bg-blue-600/5 rounded-full blur-3xl dark:bg-blue-600/5" />
+
+        {/* Grid */}
+        <div
+          className={[
+            "absolute inset-0",
+            // light grid
+            "bg-[linear-gradient(rgba(15,23,42,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.045)_1px,transparent_1px)]",
+            // dark grid override
+            "dark:bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)]",
+            "bg-[size:60px_60px]",
+          ].join(" ")}
+        />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
@@ -139,23 +166,23 @@ export default function Services() {
           className="max-w-4xl"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8 bg-blue-500/10 border-blue-500/20">
-            <span className="text-blue-400 text-sm font-medium tracking-wide">
+            <span className="text-blue-700 dark:text-blue-300 text-sm font-medium tracking-wide">
               Services
             </span>
           </div>
 
           <h2
             id="services-heading"
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-collin-navy dark:text-white"
           >
             Practical analytics services built for{" "}
-            <span className="bg-gradient-to-r from-blue-400 via-teal-400 to-blue-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-500 via-teal-500 to-blue-500 bg-clip-text text-transparent">
               clarity, reliability, and scale
             </span>
             .
           </h2>
 
-          <p className="mt-5 text-lg text-slate-400 leading-relaxed max-w-3xl">
+          <p className="mt-5 text-lg leading-relaxed max-w-3xl text-collin-slate dark:text-white/70">
             We modernise reporting, strengthen data foundations, and design dashboards
             that stakeholders actually use — without unnecessary complexity.
           </p>
@@ -188,13 +215,19 @@ export default function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ delay: 0.15, duration: 0.6 }}
-          className="mt-14 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-8"
+          className={[
+            "mt-14 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 rounded-2xl border p-8",
+            // light
+            "border-gray-200 bg-white shadow-soft",
+            // dark
+            "dark:border-white/10 dark:bg-white/5 dark:shadow-softDark dark:backdrop-blur-xl",
+          ].join(" ")}
         >
           <div className="max-w-2xl">
-            <h3 className="text-base font-semibold text-white">
+            <h3 className="text-base font-semibold text-collin-navy dark:text-white">
               Not sure what you need yet?
             </h3>
-            <p className="mt-2 text-sm text-slate-400 leading-relaxed">
+            <p className="mt-2 text-sm leading-relaxed text-collin-slate dark:text-white/70">
               We’ll help you pinpoint the quickest path to impact — KPI clarity,
               reporting automation, or strengthening your data foundations.
             </p>
@@ -213,7 +246,11 @@ export default function Services() {
 
             <a
               href="/case-studies"
-              className="inline-flex items-center justify-center rounded-xl border border-slate-700 bg-transparent px-6 py-3 text-sm font-semibold text-slate-200 hover:bg-slate-800 transition"
+              className={[
+                "inline-flex items-center justify-center rounded-xl border px-6 py-3 text-sm font-semibold transition",
+                "border-gray-200 bg-white text-collin-navy hover:bg-gray-50",
+                "dark:border-white/10 dark:bg-transparent dark:text-white/85 dark:hover:bg-white/10",
+              ].join(" ")}
               aria-label="View case studies"
             >
               View examples
@@ -227,7 +264,7 @@ export default function Services() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ delay: 0.25, duration: 0.6 }}
-          className="text-center text-slate-500 mt-12"
+          className="text-center mt-12 text-gray-500 dark:text-white/45"
         >
           Supporting SMEs, charities, and public-sector teams across the UK.
         </motion.p>
@@ -256,7 +293,7 @@ function ServiceCard({
     ? undefined
     : {
         y: -8,
-        boxShadow: "0 24px 80px rgba(2, 12, 27, 0.25)",
+        boxShadow: "0 24px 80px rgba(2, 12, 27, 0.18)",
         transition: { type: "spring", stiffness: 260, damping: 22 },
       };
 
@@ -271,7 +308,10 @@ function ServiceCard({
       whileTap={reduce ? undefined : { scale: 0.99 }}
       className={[
         "group relative rounded-2xl border overflow-hidden transition-all duration-500",
-        "bg-slate-900/60 backdrop-blur-xl border-slate-800",
+        // light
+        "bg-white border-gray-200 shadow-soft",
+        // dark
+        "dark:bg-white/5 dark:border-white/10 dark:shadow-softDark dark:backdrop-blur-xl",
         palette.glow,
         featured ? "ring-1 ring-teal-400/20" : "",
       ].join(" ")}
@@ -292,34 +332,45 @@ function ServiceCard({
       )}
 
       <div className="relative z-10 p-7 sm:p-8">
-        <div className={["h-12 w-12 sm:h-14 sm:w-14 rounded-xl flex items-center justify-center", palette.ring].join(" ")}>
+        <div
+          className={[
+            "h-12 w-12 sm:h-14 sm:w-14 rounded-xl flex items-center justify-center",
+            palette.ring,
+          ].join(" ")}
+        >
           <Icon className="h-7 w-7" aria-hidden="true" />
         </div>
 
-        <h3 className="mt-6 text-xl font-semibold text-white leading-snug">
+        <h3 className="mt-6 text-xl font-semibold leading-snug text-collin-navy dark:text-white">
           {title}
         </h3>
 
-        <p className="mt-3 text-sm text-slate-400 leading-relaxed">{subtitle}</p>
+        <p className="mt-3 text-sm leading-relaxed text-collin-slate dark:text-white/70">
+          {subtitle}
+        </p>
 
-        <ul className="mt-6 space-y-4 text-slate-300 leading-relaxed">
+        <ul className="mt-6 space-y-4 leading-relaxed">
           {items.map((it) => (
             <li key={it} className="flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 mt-0.5 flex-shrink-0 text-teal-300" />
-              <span className="text-sm">{it}</span>
+              <CheckCircle2 className="h-5 w-5 mt-0.5 flex-shrink-0 text-collin-teal" />
+              <span className="text-sm text-gray-700 dark:text-white/75">{it}</span>
             </li>
           ))}
         </ul>
 
-        <div className="mt-7 pt-6 border-t border-slate-800">
-          <p className="text-xs font-semibold tracking-widest text-slate-500 uppercase">
+        <div className="mt-7 pt-6 border-t border-gray-200 dark:border-white/10">
+          <p className="text-xs font-semibold tracking-widest text-gray-500 dark:text-white/45 uppercase">
             Typical outcomes
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {outcomes.map((o) => (
               <span
                 key={o}
-                className="inline-flex items-center rounded-full border border-slate-800 bg-slate-950/40 px-3 py-1 text-xs font-medium text-slate-200"
+                className={[
+                  "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium",
+                  "border-gray-200 bg-gray-50 text-gray-700",
+                  "dark:border-white/10 dark:bg-white/5 dark:text-white/75",
+                ].join(" ")}
               >
                 {o}
               </span>
@@ -333,7 +384,13 @@ function ServiceCard({
 
 function Chip({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-slate-800 bg-slate-900/40 px-3 py-1 text-xs font-medium text-slate-200">
+    <span
+      className={[
+        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium",
+        "border-gray-200 bg-gray-50 text-gray-700",
+        "dark:border-white/10 dark:bg-white/5 dark:text-white/75",
+      ].join(" ")}
+    >
       {children}
     </span>
   );

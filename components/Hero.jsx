@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button"; // <-- If alias fails, use "../components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
   Zap,
@@ -179,16 +179,31 @@ export default function Hero() {
       aria-labelledby="hero-title"
       onPointerMove={onPointerMoveBg}
       onPointerLeave={onPointerLeaveBg}
-      className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
+      className={[
+        "relative min-h-screen flex items-center overflow-hidden",
+        // ✅ Light mode background
+        "bg-gradient-to-b from-white via-gray-50 to-white",
+        // ✅ Dark mode background
+        "dark:bg-gradient-to-b dark:from-collin-navy-darker dark:via-collin-navy-dark dark:to-collin-navy-darker",
+      ].join(" ")}
       style={{ backgroundPosition: "var(--bg-x, 50%) var(--bg-y, 50%)" }}
     >
-      {/* Abstract data visualization background (HeroSection style) */}
+      {/* Background system */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-3xl" />
+        {/* Blobs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl bg-collin-teal/10 dark:bg-collin-teal/14" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl bg-collin-teal-light/12 dark:bg-collin-teal-light/16" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[620px] h-[620px] rounded-full blur-3xl bg-collin-navy/5 dark:bg-white/5" />
 
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
+        {/* Grid */}
+        <div
+          className={[
+            "absolute inset-0",
+            "bg-[linear-gradient(rgba(10,37,64,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(10,37,64,0.05)_1px,transparent_1px)]",
+            "dark:bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)]",
+            "bg-[size:72px_72px]",
+          ].join(" ")}
+        />
 
         {/* Parallax highlight overlay */}
         <div
@@ -196,7 +211,7 @@ export default function Hero() {
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(900px circle at var(--bg-x,50%) var(--bg-y,50%), rgba(56,189,248,0.10), transparent 55%)",
+              "radial-gradient(900px circle at var(--bg-x,50%) var(--bg-y,50%), rgba(15,181,186,0.14), transparent 55%)",
           }}
         />
       </div>
@@ -209,36 +224,53 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-8">
-              <span className="text-blue-400 text-sm font-medium tracking-wide">
+            <div
+              className={[
+                "inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8",
+                "bg-collin-teal/10 border-collin-teal/20",
+                "dark:bg-white/5 dark:border-white/10",
+              ].join(" ")}
+            >
+              <span className="text-collin-navy dark:text-white/85 text-sm font-medium tracking-wide">
                 Analytics Engineering • BI • Systems
               </span>
             </div>
 
             <h1
               id="hero-title"
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight mb-6"
+              className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.08] tracking-tight mb-6 text-collin-navy dark:text-white"
             >
               Turn complex data into{" "}
-              <span className="bg-gradient-to-r from-blue-400 via-teal-400 to-blue-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-collin-teal via-collin-teal-light to-collin-teal bg-clip-text text-transparent">
                 clear decisions
               </span>{" "}
               your team can act on.
             </h1>
 
-            <p className="text-lg text-slate-400 leading-relaxed mb-10 max-w-xl">
+            <p className="text-lg leading-relaxed mb-10 max-w-xl text-collin-slate dark:text-white/70">
               We help UK organisations replace manual reporting with reliable metrics,
               decision-ready dashboards, and scalable data foundations built for long-term clarity.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <Button size="lg" onClick={openCalendly}>
+              {/* Primary */}
+              <Button size="lg" onClick={openCalendly} className="gap-2">
                 <Calendar className="h-5 w-5" />
                 Free Strategy Call
                 <ArrowRight className="h-5 w-5" />
               </Button>
 
-              <Button size="lg" variant="outline" type="button" onClick={scrollToServices}>
+              {/* Secondary */}
+              <Button
+                size="lg"
+                variant="outline"
+                type="button"
+                onClick={scrollToServices}
+                className={[
+                  "border-gray-200 text-collin-navy hover:bg-gray-50",
+                  "dark:border-white/15 dark:text-white dark:hover:bg-white/5",
+                ].join(" ")}
+              >
                 View Services
               </Button>
             </div>
@@ -254,10 +286,10 @@ export default function Hero() {
                   initial={{ opacity: 0, y: reduceMotion ? 0 : 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 + i * 0.1, duration: 0.5 }}
-                  className="flex items-center gap-2 text-slate-400"
+                  className="flex items-center gap-2 text-collin-slate dark:text-white/70"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center">
-                    <item.icon className="w-4 h-4 text-teal-400" />
+                  <div className="w-8 h-8 rounded-lg bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 flex items-center justify-center">
+                    <item.icon className="w-4 h-4 text-collin-teal" />
                   </div>
                   <span className="text-sm font-medium">{item.label}</span>
                 </motion.div>
@@ -277,7 +309,11 @@ export default function Hero() {
                 ref={cardRef}
                 onPointerMove={onPointerMoveTilt}
                 onPointerLeave={resetTilt}
-                className="bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-slate-800 p-6 shadow-2xl transition-transform duration-200 ease-out will-change-transform"
+                className={[
+                  "rounded-2xl border p-6 shadow-2xl transition-transform duration-200 ease-out will-change-transform backdrop-blur-xl",
+                  "bg-white/85 border-gray-200",
+                  "dark:bg-white/5 dark:border-white/10 dark:shadow-softDark",
+                ].join(" ")}
               >
                 <div className="flex items-center gap-2 mb-6">
                   <div className="w-3 h-3 rounded-full bg-red-500/80" />
@@ -292,15 +328,18 @@ export default function Hero() {
                       { label: "Efficiency", value: "94%", change: "+8%" },
                       { label: "Reports", value: "847", change: "+23%" },
                     ].map((stat) => (
-                      <div key={stat.label} className="bg-slate-800/50 rounded-xl p-4">
-                        <p className="text-slate-500 text-xs mb-1">{stat.label}</p>
-                        <p className="text-white font-semibold text-lg">{stat.value}</p>
-                        <p className="text-teal-400 text-xs">{stat.change}</p>
+                      <div
+                        key={stat.label}
+                        className="rounded-xl p-4 bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10"
+                      >
+                        <p className="text-gray-500 dark:text-white/55 text-xs mb-1">{stat.label}</p>
+                        <p className="text-collin-navy dark:text-white font-semibold text-lg">{stat.value}</p>
+                        <p className="text-collin-teal text-xs">{stat.change}</p>
                       </div>
                     ))}
                   </div>
 
-                  <div className="bg-slate-800/50 rounded-xl p-4">
+                  <div className="rounded-xl p-4 bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10">
                     <div className="flex items-end gap-2 h-32">
                       {[40, 65, 45, 80, 55, 90, 70, 85, 60, 95, 75, 88].map((h, i) => (
                         <motion.div
@@ -308,16 +347,18 @@ export default function Hero() {
                           initial={{ height: 0 }}
                           animate={{ height: `${h}%` }}
                           transition={{ delay: 0.5 + i * 0.05, duration: 0.5 }}
-                          className="flex-1 bg-gradient-to-t from-blue-600 to-teal-500 rounded-sm"
+                          className="flex-1 rounded-sm bg-gradient-to-t from-collin-navy to-collin-teal"
                         />
                       ))}
                     </div>
                   </div>
 
-                  <div className="bg-slate-800/50 rounded-xl p-4">
-                    <p className="text-slate-400 text-sm font-medium mb-3">What we deliver</p>
+                  <div className="rounded-xl p-4 bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10">
+                    <p className="text-collin-slate dark:text-white/80 text-sm font-medium mb-3">
+                      What we deliver
+                    </p>
 
-                    <ul className="space-y-2 text-sm text-slate-300">
+                    <ul className="space-y-2 text-sm text-gray-700 dark:text-white/70">
                       {[
                         "Decision-ready dashboards",
                         "KPI governance & ownership",
@@ -325,8 +366,8 @@ export default function Hero() {
                         "Reporting automation",
                       ].map((t) => (
                         <li key={t} className="flex items-start gap-2">
-                          <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-lg bg-slate-800 border border-slate-700">
-                            <Check className="h-4 w-4 text-teal-400" strokeWidth={2.5} />
+                          <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-lg bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10">
+                            <Check className="h-4 w-4 text-collin-teal" strokeWidth={2.5} />
                           </span>
                           <span>{t}</span>
                         </li>
@@ -335,7 +376,7 @@ export default function Hero() {
 
                     <a
                       href="#about"
-                      className="mt-4 inline-flex items-center text-sm font-medium text-teal-300 hover:text-teal-200 transition"
+                      className="mt-4 inline-flex items-center text-sm font-medium text-collin-teal hover:opacity-90 transition"
                     >
                       Why Collinalitics
                       <ArrowUpRight className="ml-1 h-4 w-4" />
@@ -344,20 +385,21 @@ export default function Hero() {
                 </div>
               </div>
 
+              {/* Floating badges */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1, duration: 0.5 }}
-                className="absolute -left-8 top-1/4 bg-white rounded-xl px-4 py-3 shadow-xl"
+                className="absolute -left-8 top-1/4 rounded-xl px-4 py-3 shadow-xl bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10"
               >
-                <p className="text-slate-900 font-semibold text-sm">UK-based delivery</p>
+                <p className="text-collin-navy dark:text-white font-semibold text-sm">UK-based delivery</p>
               </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.1, duration: 0.5 }}
-                className="absolute -right-4 bottom-1/4 bg-teal-500 rounded-xl px-4 py-3 shadow-xl"
+                className="absolute -right-4 bottom-1/4 rounded-xl px-4 py-3 shadow-xl bg-collin-teal"
               >
                 <p className="text-white font-semibold text-sm">Automation-first</p>
               </motion.div>
