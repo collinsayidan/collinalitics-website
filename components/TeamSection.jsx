@@ -5,8 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 /**
- * Dark Premium Team Section (no glass reflections)
- * - Solid dark cards (no backdrop blur)
+ * Premium Team Section (Light + Dark)
+ * - Light mode default
+ * - Dark mode matches your current dark premium design
  * - Featured leader card
  * - Card click opens modal
  * - ESC closes
@@ -89,34 +90,63 @@ export default function TeamSection() {
   return (
     <section
       id="team"
-      className="relative overflow-hidden py-20 sm:py-24 text-white bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
       aria-labelledby="team-heading"
+      className={[
+        "relative overflow-hidden py-20 sm:py-24",
+        // ✅ Light default
+        "bg-gray-50 text-gray-900",
+        // ✅ Dark mode (keeps your current look)
+        "dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 dark:text-white",
+      ].join(" ")}
     >
-      {/* Background: glows + grid (no blur borders on cards) */}
+      {/* Background: glows + grid */}
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-3xl" />
+        {/* Light glows */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl dark:hidden" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl dark:hidden" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-3xl dark:hidden" />
 
-        <div className="absolute inset-0 opacity-[0.18] [background-image:linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)] [background-size:72px_72px]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
+        {/* Dark glows */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl hidden dark:block" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl hidden dark:block" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-3xl hidden dark:block" />
+
+        {/* Grid */}
+        <div
+          className={[
+            "absolute inset-0 opacity-[0.14]",
+            "[background-image:linear-gradient(rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.06)_1px,transparent_1px)]",
+            "dark:opacity-[0.18]",
+            "dark:[background-image:linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)]",
+            "[background-size:72px_72px]",
+          ].join(" ")}
+        />
+
+        {/* Vignette */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-transparent to-black/0 dark:from-black/45 dark:to-black/10" />
       </div>
 
       <div className="container-wrapper relative">
         {/* Header */}
         <header className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-950/40 px-4 py-2">
+          <div
+            className={[
+              "inline-flex items-center gap-2 rounded-full border px-4 py-2",
+              "border-gray-200 bg-white/70",
+              "dark:border-slate-800 dark:bg-slate-950/40",
+            ].join(" ")}
+          >
             <span className="inline-flex h-2 w-2 rounded-full bg-collin-teal" />
-            <p className="text-xs font-semibold tracking-widest text-white/80 uppercase">
+            <p className="text-xs font-semibold tracking-widest text-gray-600 uppercase dark:text-white/80">
               Team
             </p>
           </div>
 
-          <h2 id="team-heading" className="mt-5 text-h2 text-white">
+          <h2 id="team-heading" className="mt-5 text-h2 text-collin-navy dark:text-white">
             Specialist delivery. Executive-grade clarity.
           </h2>
 
-          <p className="mt-4 text-bodylg text-white/75 leading-relaxed">
+          <p className="mt-4 text-bodylg text-gray-700/90 dark:text-white/75 leading-relaxed">
             We combine analytics engineering, BI, and consulting to deliver reporting leaders trust
             with maintainable foundations and measurable outcomes.
           </p>
@@ -145,7 +175,7 @@ export default function TeamSection() {
                 </div>
               ))}
             </div>
-            <p className="mt-2 text-xs text-white/60">Swipe to explore →</p>
+            <p className="mt-2 text-xs text-gray-600 dark:text-white/60">Swipe to explore →</p>
           </div>
 
           {/* Desktop grid */}
@@ -157,13 +187,19 @@ export default function TeamSection() {
         </div>
 
         {/* CTA */}
-        <div className="mt-14 rounded-3xl border border-slate-800 bg-slate-900/70 p-6 sm:p-8 shadow-[0_18px_70px_rgba(0,0,0,0.35)]">
+        <div
+          className={[
+            "mt-14 rounded-3xl border p-6 sm:p-8",
+            "border-gray-200 bg-white/70 shadow-[0_18px_70px_rgba(2,12,27,0.10)]",
+            "dark:border-slate-800 dark:bg-slate-900/70 dark:shadow-[0_18px_70px_rgba(0,0,0,0.35)]",
+          ].join(" ")}
+        >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm font-semibold text-white">
+              <p className="text-sm font-semibold text-collin-navy dark:text-white">
                 Want a recommended first step?
               </p>
-              <p className="mt-1 text-sm text-white/70">
+              <p className="mt-1 text-sm text-gray-700 dark:text-white/70">
                 Share your reporting or KPI challenge — we’ll propose a practical approach.
               </p>
             </div>
@@ -189,17 +225,29 @@ export default function TeamSection() {
 
 function FeaturedLeader({ member, onOpen }) {
   return (
-    <article className="relative overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/70 shadow-[0_18px_70px_rgba(0,0,0,0.35)]">
+    <article
+      className={[
+        "relative overflow-hidden rounded-3xl border",
+        "border-gray-200 bg-white/80 shadow-[0_18px_70px_rgba(2,12,27,0.10)]",
+        "dark:border-slate-800 dark:bg-slate-900/70 dark:shadow-[0_18px_70px_rgba(0,0,0,0.35)]",
+      ].join(" ")}
+    >
       {/* top accent rail */}
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-collin-teal via-collin-lightTeal to-collin-teal"
+        className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-collin-teal via-collin-teal-light to-collin-teal"
       />
 
       <div className="relative p-7 sm:p-9">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
           <div className="lg:col-span-4">
-            <div className="relative aspect-square w-24 sm:w-28 lg:w-full lg:max-w-[260px] overflow-hidden rounded-3xl bg-slate-950/30 border border-slate-800">
+            <div
+              className={[
+                "relative aspect-square w-24 sm:w-28 lg:w-full lg:max-w-[260px] overflow-hidden rounded-3xl border",
+                "bg-gray-100 border-gray-200",
+                "dark:bg-slate-950/30 dark:border-slate-800",
+              ].join(" ")}
+            >
               <Image
                 src={member.image}
                 alt={`${member.name} headshot`}
@@ -221,8 +269,8 @@ function FeaturedLeader({ member, onOpen }) {
 
             <div className="mt-4 flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <h3 className="text-h3 text-white">{member.name}</h3>
-                <p className="mt-2 text-body text-white/70">{member.role}</p>
+                <h3 className="text-h3 text-collin-navy dark:text-white">{member.name}</h3>
+                <p className="mt-2 text-body text-gray-700 dark:text-white/70">{member.role}</p>
               </div>
 
               {member.linkedin ? (
@@ -232,12 +280,12 @@ function FeaturedLeader({ member, onOpen }) {
               ) : null}
             </div>
 
-            <p className="mt-4 text-sm text-white/75">
-              <span className="font-semibold text-white">School:</span>{" "}
+            <p className="mt-4 text-sm text-gray-700 dark:text-white/75">
+              <span className="font-semibold text-collin-navy dark:text-white">School:</span>{" "}
               {member.degree ? `${member.degree} • ${member.school}` : member.school}
             </p>
 
-            <p className="mt-4 text-sm text-white/75 leading-relaxed">{member.bio}</p>
+            <p className="mt-4 text-sm text-gray-700 dark:text-white/75 leading-relaxed">{member.bio}</p>
 
             <div className="mt-5 flex flex-wrap gap-2">
               {member.expertise?.slice(0, 5).map((t) => (
@@ -249,7 +297,12 @@ function FeaturedLeader({ member, onOpen }) {
               <button
                 type="button"
                 onClick={onOpen}
-                className="inline-flex items-center justify-center rounded-xl bg-slate-950/60 border border-slate-800 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-950/75 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/30"
+                className={[
+                  "inline-flex items-center justify-center rounded-xl border px-5 py-3 text-sm font-semibold transition",
+                  "bg-white border-gray-200 text-collin-navy hover:bg-gray-50",
+                  "dark:bg-slate-950/60 dark:border-slate-800 dark:text-white dark:hover:bg-slate-950/75",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/30",
+                ].join(" ")}
               >
                 View profile <ArrowRightIcon className="ml-2 h-4 w-4" />
               </button>
@@ -275,25 +328,36 @@ function TeamCard({ member, onOpen }) {
     <button
       type="button"
       onClick={onOpen}
-      className="group relative w-full text-left overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/70 shadow-[0_14px_55px_rgba(0,0,0,0.30)] transition hover:bg-slate-900/85 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/25"
+      className={[
+        "group relative w-full text-left overflow-hidden rounded-3xl border transition",
+        "border-gray-200 bg-white/80 shadow-[0_14px_55px_rgba(2,12,27,0.10)] hover:bg-white hover:-translate-y-0.5",
+        "dark:border-slate-800 dark:bg-slate-900/70 dark:shadow-[0_14px_55px_rgba(0,0,0,0.30)] dark:hover:bg-slate-900/85",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/25",
+      ].join(" ")}
       aria-label={`Open profile for ${member.name}`}
     >
       {/* accent rail */}
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-collin-teal/70 via-collin-lightTeal/70 to-collin-teal/70 opacity-80"
+        className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-collin-teal/70 via-collin-teal-light/70 to-collin-teal/70 opacity-80"
       />
 
       <div className="relative p-6">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-4 min-w-0">
-            <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-950/40 border border-slate-800">
+            <div
+              className={[
+                "relative h-14 w-14 overflow-hidden rounded-2xl border",
+                "bg-gray-100 border-gray-200",
+                "dark:bg-slate-950/40 dark:border-slate-800",
+              ].join(" ")}
+            >
               <Image src={member.image} alt={`${member.name} headshot`} fill sizes="56px" className="object-cover" />
             </div>
 
             <div className="min-w-0">
-              <h3 className="text-base font-semibold text-white truncate">{member.name}</h3>
-              <p className="mt-0.5 text-sm text-white/70 truncate">{member.role}</p>
+              <h3 className="text-base font-semibold text-collin-navy dark:text-white truncate">{member.name}</h3>
+              <p className="mt-0.5 text-sm text-gray-700 dark:text-white/70 truncate">{member.role}</p>
             </div>
           </div>
 
@@ -321,12 +385,12 @@ function TeamCard({ member, onOpen }) {
           ) : null}
         </div>
 
-        <p className="mt-4 text-sm text-white/75">
-          <span className="font-semibold text-white">School:</span>{" "}
+        <p className="mt-4 text-sm text-gray-700 dark:text-white/75">
+          <span className="font-semibold text-collin-navy dark:text-white">School:</span>{" "}
           {member.degree ? `${member.degree} • ${member.school}` : member.school}
         </p>
 
-        <p className="mt-3 text-sm text-white/75 leading-relaxed line-clamp-3">
+        <p className="mt-3 text-sm text-gray-700 dark:text-white/75 leading-relaxed line-clamp-3">
           {member.bio}
         </p>
 
@@ -337,8 +401,8 @@ function TeamCard({ member, onOpen }) {
         </div>
 
         <div className="mt-5 flex items-center justify-between">
-          <span className="text-xs font-semibold text-white">View profile</span>
-          <ArrowRightIcon className="h-4 w-4 text-white/60 group-hover:text-collin-teal transition" />
+          <span className="text-xs font-semibold text-collin-navy dark:text-white">View profile</span>
+          <ArrowRightIcon className="h-4 w-4 text-gray-400 dark:text-white/60 group-hover:text-collin-teal transition" />
         </div>
       </div>
     </button>
@@ -373,33 +437,44 @@ function ProfileModal({ member, onClose }) {
           aria-modal="true"
           aria-label={`${member.name} profile`}
           className={[
-            "relative w-full sm:max-w-2xl",
-            "rounded-t-3xl sm:rounded-3xl",
-            "border border-slate-800 bg-slate-950",
-            "shadow-[0_30px_90px_rgba(0,0,0,0.60)]",
-            "overflow-hidden",
+            "relative w-full sm:max-w-2xl overflow-hidden",
+            "rounded-t-3xl sm:rounded-3xl border",
+            "border-gray-200 bg-white shadow-[0_30px_90px_rgba(2,12,27,0.20)]",
+            "dark:border-slate-800 dark:bg-slate-950 dark:shadow-[0_30px_90px_rgba(0,0,0,0.60)]",
           ].join(" ")}
         >
           {/* top rail */}
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-collin-teal via-collin-lightTeal to-collin-teal"
+            className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-collin-teal via-collin-teal-light to-collin-teal"
           />
 
           {/* Header */}
-          <div className="px-6 pt-7 pb-5 border-b border-slate-800 bg-slate-950">
+          <div
+            className={[
+              "px-6 pt-7 pb-5 border-b",
+              "border-gray-200 bg-white",
+              "dark:border-slate-800 dark:bg-slate-950",
+            ].join(" ")}
+          >
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-4 min-w-0">
-                <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-900 border border-slate-800">
+                <div
+                  className={[
+                    "relative h-14 w-14 overflow-hidden rounded-2xl border",
+                    "bg-gray-100 border-gray-200",
+                    "dark:bg-slate-900 dark:border-slate-800",
+                  ].join(" ")}
+                >
                   <Image src={member.image} alt={`${member.name} headshot`} fill sizes="56px" className="object-cover" />
                 </div>
 
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-lg font-semibold text-white">{member.name}</h3>
+                    <h3 className="text-lg font-semibold text-collin-navy dark:text-white">{member.name}</h3>
                     {member.featured ? <VerifiedBadge /> : null}
                   </div>
-                  <p className="mt-1 text-sm text-white/70">{member.role}</p>
+                  <p className="mt-1 text-sm text-gray-700 dark:text-white/70">{member.role}</p>
                 </div>
               </div>
 
@@ -413,7 +488,12 @@ function ProfileModal({ member, onClose }) {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="inline-flex items-center justify-center h-10 w-10 rounded-xl border border-slate-800 bg-slate-900 text-white hover:bg-slate-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/25"
+                  className={[
+                    "inline-flex items-center justify-center h-10 w-10 rounded-xl border transition",
+                    "border-gray-200 bg-white text-gray-700 hover:bg-gray-50",
+                    "dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-800",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/25",
+                  ].join(" ")}
                   aria-label="Close modal"
                   title="Close"
                 >
@@ -427,10 +507,10 @@ function ProfileModal({ member, onClose }) {
           <div className="px-6 py-6">
             <div className="grid gap-6 sm:grid-cols-12">
               <div className="sm:col-span-7">
-                <p className="text-sm leading-relaxed text-white/75">{member.bio}</p>
+                <p className="text-sm leading-relaxed text-gray-700 dark:text-white/75">{member.bio}</p>
 
                 <div className="mt-5">
-                  <p className="text-xs font-semibold tracking-widest text-white/55 uppercase">
+                  <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase dark:text-white/55">
                     Expertise
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
@@ -442,24 +522,30 @@ function ProfileModal({ member, onClose }) {
               </div>
 
               <div className="sm:col-span-5">
-                <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-                  <p className="text-xs font-semibold tracking-widest text-white/55 uppercase">
+                <div
+                  className={[
+                    "rounded-2xl border p-5",
+                    "border-gray-200 bg-gray-50",
+                    "dark:border-slate-800 dark:bg-slate-900/60",
+                  ].join(" ")}
+                >
+                  <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase dark:text-white/55">
                     Education
                   </p>
-                  <p className="mt-2 text-sm font-semibold text-white">
+                  <p className="mt-2 text-sm font-semibold text-collin-navy dark:text-white">
                     {member.degree ? `${member.degree}` : null}
                   </p>
-                  <p className="mt-1 text-sm text-white/75">{member.school}</p>
+                  <p className="mt-1 text-sm text-gray-700 dark:text-white/75">{member.school}</p>
 
                   {member.strengths?.length ? (
                     <>
-                      <div className="mt-5 h-px w-full bg-slate-800" />
-                      <p className="mt-5 text-xs font-semibold tracking-widest text-white/55 uppercase">
+                      <div className="mt-5 h-px w-full bg-gray-200 dark:bg-slate-800" />
+                      <p className="mt-5 text-xs font-semibold tracking-widest text-gray-500 uppercase dark:text-white/55">
                         Delivery style
                       </p>
                       <ul className="mt-3 space-y-2">
                         {member.strengths.map((s) => (
-                          <li key={s} className="flex items-start gap-2 text-sm text-white/75">
+                          <li key={s} className="flex items-start gap-2 text-sm text-gray-700 dark:text-white/75">
                             <CheckIcon className="mt-[2px] h-4 w-4 text-collin-teal" />
                             <span>{s}</span>
                           </li>
@@ -483,8 +569,8 @@ function ProfileModal({ member, onClose }) {
 
           {/* Footer hint */}
           <div className="px-6 pb-7">
-            <p className="text-xs text-white/55">
-              Tip: Press <span className="font-semibold text-white">ESC</span> to close.
+            <p className="text-xs text-gray-500 dark:text-white/55">
+              Tip: Press <span className="font-semibold text-gray-800 dark:text-white">ESC</span> to close.
             </p>
           </div>
         </div>
@@ -493,11 +579,17 @@ function ProfileModal({ member, onClose }) {
   );
 }
 
-/* ---------------- UI bits (Dark) ---------------- */
+/* ---------------- UI bits (Theme-aware) ---------------- */
 
 function Pill({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-slate-800 bg-slate-950/40 px-3 py-1 text-xs font-semibold text-white/85">
+    <span
+      className={[
+        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold",
+        "border-gray-200 bg-white/70 text-gray-700",
+        "dark:border-slate-800 dark:bg-slate-950/40 dark:text-white/85",
+      ].join(" ")}
+    >
       {children}
     </span>
   );
@@ -505,7 +597,13 @@ function Pill({ children }) {
 
 function SoftPill({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-slate-800 bg-slate-900/60 px-3 py-1 text-xs font-semibold text-white/85">
+    <span
+      className={[
+        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold",
+        "border-gray-200 bg-white text-gray-700",
+        "dark:border-slate-800 dark:bg-slate-900/60 dark:text-white/85",
+      ].join(" ")}
+    >
       {children}
     </span>
   );
@@ -521,7 +619,13 @@ function Badge({ children }) {
 
 function VerifiedBadge() {
   return (
-    <span className="inline-flex items-center gap-1 rounded-full border border-slate-800 bg-slate-900/60 px-2.5 py-1 text-xs font-semibold text-white/90">
+    <span
+      className={[
+        "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-semibold",
+        "border-gray-200 bg-white text-gray-700",
+        "dark:border-slate-800 dark:bg-slate-900/60 dark:text-white/90",
+      ].join(" ")}
+    >
       <VerifiedIcon className="h-4 w-4 text-collin-teal" />
       Verified
     </span>
@@ -530,14 +634,20 @@ function VerifiedBadge() {
 
 function Tag({ children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-slate-800 bg-slate-950/35 px-3 py-1 text-xs font-medium text-white/85">
+    <span
+      className={[
+        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium",
+        "border-gray-200 bg-white text-gray-700",
+        "dark:border-slate-800 dark:bg-slate-950/35 dark:text-white/85",
+      ].join(" ")}
+    >
       {children}
     </span>
   );
 }
 
 /**
- * IconButton (dark)
+ * IconButton (theme-aware)
  * - Optional stopPropagation for use inside clickable cards
  */
 function IconButton({ href, label, title, children, onClickStopPropagation }) {
@@ -552,11 +662,9 @@ function IconButton({ href, label, title, children, onClickStopPropagation }) {
         if (onClickStopPropagation) e.stopPropagation();
       }}
       className={[
-        "inline-flex items-center justify-center",
-        "h-10 w-10 rounded-xl",
-        "border border-slate-800 bg-slate-950/40",
-        "text-white/85 hover:text-collin-teal",
-        "hover:bg-slate-950/60 transition",
+        "inline-flex items-center justify-center h-10 w-10 rounded-xl border transition",
+        "border-gray-200 bg-white text-gray-700 hover:text-collin-teal hover:bg-gray-50",
+        "dark:border-slate-800 dark:bg-slate-950/40 dark:text-white/85 dark:hover:bg-slate-950/60",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-collin-teal/30",
       ].join(" ")}
     >
@@ -569,7 +677,15 @@ function IconButton({ href, label, title, children, onClickStopPropagation }) {
 
 function ArrowRightIcon({ className }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="2"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 5l7 7-7 7" />
     </svg>
   );
